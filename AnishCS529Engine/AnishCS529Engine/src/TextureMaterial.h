@@ -21,6 +21,7 @@ public:
   TextureMaterial() {
     // 0b0001 is the renderMask for the default lighting pass
     defaultRenderMask = RenderMask::DefaultLit;
+    setProperty("useTexture", 1);
   };
 
   TextureMaterial(

@@ -87,6 +87,7 @@ public:
 	void LoadLevel4();
 	void LoadLevel5();
 	void LoadLevel6();
+	void LoadLevel7();
 
 	bool GameComplete();
 

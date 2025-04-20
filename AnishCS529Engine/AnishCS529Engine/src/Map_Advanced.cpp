@@ -50,26 +50,43 @@ void MapLoader::advanced(float offsetX, float offsetY, float offsetZ,
         20.0f, 
         Vector3(1.0f), 
         10000.0f));*/
-    /*sceneGraph.addPointLight(
+    sceneGraph.addPointLight(
       PointLight(
-        Vector3(-100.0f, 180.0f, 100.0f),
-        10000.0f,
+        Vector3(-110.5f + offsetX, 50.0f + offsetY, -120.0f + offsetZ),
+        2.0f,
         Vector3(1.0f),
-        2000.0f));
+        50.0f));
 
-    for (int i = 0; i < 1000; ++i) {
+    Vector3 initialPos = Vector3(
+      -110.5f + offsetX, 10.0f + 0.25f + offsetY, -120.0f + offsetZ);
+
+    for (int i = 0; i < 980; ++i) {
       auto lightPosition = Vector3(
-        EngineMath::Random::boundedFloat(-145, -100),
-        EngineMath::Random::boundedFloat(0, 50),
-        EngineMath::Random::boundedFloat(-125, 40));
-      auto lightIntensity = EngineMath::Random::boundedFloat(1.0f, 10.0f);
+        EngineMath::Random::boundedFloat(initialPos.x - 10, initialPos.x + 10),
+        EngineMath::Random::boundedFloat(initialPos.y, initialPos.y + 20),
+        EngineMath::Random::boundedFloat(initialPos.z - 10, initialPos.z + 10));
+      auto lightIntensity = EngineMath::Random::boundedFloat(2.0f, 4.0f);
       auto lightColor = Vector3(
         EngineMath::Random::boundedFloat(0.5f, 1.0f),
         EngineMath::Random::boundedFloat(0.5f, 1.0f),
         EngineMath::Random::boundedFloat(0.5f, 1.0f));
-      auto lightRange = EngineMath::Random::boundedFloat(1.0f, 50.0f);
+      auto lightRange = EngineMath::Random::boundedFloat(10.0f, 20.0f);
       sceneGraph.addPointLight(PointLight(lightPosition , lightIntensity , lightColor , lightRange));
-    }*/
+    }
+
+    for (int i = 0; i < 20; ++i) {
+      auto lightPosition = Vector3(
+        EngineMath::Random::boundedFloat(initialPos.x - 50, initialPos.x + 50),
+        EngineMath::Random::boundedFloat(initialPos.y-20, initialPos.y + 80),
+        EngineMath::Random::boundedFloat(initialPos.z - 50, initialPos.z + 50));
+      auto lightIntensity = 100.0f;
+      auto lightColor = Vector3(
+        EngineMath::Random::boundedFloat(0.5f, 1.0f),
+        EngineMath::Random::boundedFloat(0.5f, 1.0f),
+        EngineMath::Random::boundedFloat(0.5f, 1.0f));
+      auto lightRange = EngineMath::Random::boundedFloat(50.0f, 100.0f);
+      sceneGraph.addPointLight(PointLight(lightPosition, lightIntensity, lightColor, lightRange));
+    }
 
     // Walls
     createWall("LeftWall", Vector3(-width / 2.0f, height / 2.0f, 0.0f), Vector3(wallThickness, height, depth));
@@ -138,6 +155,57 @@ void MapLoader::advanced(float offsetX, float offsetY, float offsetZ,
             ->setStatic(true)
             ->registerToPhysicsManager(PhysicsManager::Instance());
         rigidBody->initialize();
+    }
+
+    // Todo: Add model load here
+    {
+      auto bunny = std::make_shared<GameObject>("bunny");
+      sceneGraph.addNode(bunny);
+      bunny->setLocalPosition(Vector3(-110.5f + offsetX, 10.0f + offsetY, -120.0f + offsetZ));
+      bunny->setLocalScaling(Vector3(20.0f, 20.0f, 20.0f));
+      bunny->setLocalRotation(Quaternion::fromEuler(Vector3(0.0f, PI, 0.0f)));
+      auto renderComp = bunny->addComponent<Render3D>();
+      auto bunnyMesh = Mesh::loadMesh("media/models/bun_zipper.ply");
+      renderComp->setMesh(bunnyMesh)->setMaterial(cracksMaterial);
+    }
+
+    {
+      auto bunny = std::make_shared<GameObject>("bunny2");
+      sceneGraph.addNode(bunny);
+      bunny->setLocalPosition(Vector3(-115.5f + offsetX, 10.0f + offsetY, -120.0f + offsetZ));
+      bunny->setLocalScaling(Vector3(20.0f, 20.0f, 20.0f));
+      bunny->setLocalRotation(Quaternion::fromEuler(Vector3(0.0f, -PI/2.0f, 0.0f)));
+      auto renderComp = bunny->addComponent<Render3D>();
+      auto bunnyMesh = Mesh::loadMesh("media/models/bun_zipper.ply");
+      renderComp->setMesh(bunnyMesh)->setMaterial(cracksMaterial);
+    }
+
+    {
+      auto bunny = std::make_shared<GameObject>("bunny3");
+      sceneGraph.addNode(bunny);
+      bunny->setLocalPosition(Vector3(-105.5f + offsetX, 10.0f + offsetY, -120.0f + offsetZ));
+      bunny->setLocalScaling(Vector3(20.0f, 20.0f, 20.0f));
+      bunny->setLocalRotation(Quaternion::fromEuler(Vector3(0.0f, PI / 2.0f, 0.0f)));
+      auto renderComp = bunny->addComponent<Render3D>();
+      auto bunnyMesh = Mesh::loadMesh("media/models/bun_zipper.ply");
+      renderComp->setMesh(bunnyMesh)->setMaterial(cracksMaterial);
+    }
+
+    {
+      auto bunnyFloor = std::make_shared<GameObject>("bunnyFloor");
+      sceneGraph.addNode(bunnyFloor);
+      bunnyFloor->setLocalPosition(Vector3(-110.5f + offsetX, 10.2f + offsetY, -120.0f + offsetZ));
+      bunnyFloor->setLocalScaling(Vector3(15.0f, 1.0f, 15.0f));
+      auto renderComp = bunnyFloor->addComponent<Render3D>();
+      renderComp->setMesh(boxMesh)->setMaterial(BlueConcrete);
+      auto shape = std::make_shared<OBB>();
+      auto rigidBody = bunnyFloor->addComponent<RigidBody>();
+      rigidBody->setMass(0.0f)
+        ->setDrag(1.0f)
+        ->setShape(shape)
+        ->setStatic(true)
+        ->registerToPhysicsManager(PhysicsManager::Instance());
+      rigidBody->initialize();
     }
 
     // Wall for wall running
@@ -454,9 +522,6 @@ void MapLoader::advanced(float offsetX, float offsetY, float offsetZ,
         platformAnimate->setAnimateFunction(
                 [currentTime = 0.0f, initialPos = extraRoad->getLocalPosition().y, phase = 1.0f](std::shared_ptr<GameObject> self, float deltaTime) mutable {
 
-
-                    deltaTime *= timeScale;
-
                     /* Affine Transformation Variables */
                     float affineSpeed = 5.0f;
                     float affinePosVarianceZ = 5.0f;
@@ -692,9 +757,6 @@ void MapLoader::advanced(float offsetX, float offsetY, float offsetZ,
         auto platformAnimate = MovingPlatform->addComponent<Animate>();
         platformAnimate->setAnimateFunction(
                 [currentTime = 0.0f, initialPos = MovingPlatform->getLocalPosition().y, phase = 1.0f](std::shared_ptr<GameObject> self, float deltaTime) mutable {
-
-
-                    deltaTime *= timeScale;
 
                     /* Affine Transformation Variables */
                     float affineSpeed = 5.0f;

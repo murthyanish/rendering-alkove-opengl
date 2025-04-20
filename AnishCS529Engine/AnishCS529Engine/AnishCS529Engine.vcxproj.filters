@@ -189,12 +189,6 @@
     <ClCompile Include="src\Vector3.cpp">
       <Filter>Engine\Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\VectorTemplated.cpp">
-      <Filter>Engine\Source Files\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TrianglePrimitive.cpp">
-      <Filter>Engine\Source Files\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="src\SceneGraph.cpp">
       <Filter>Engine\Source Files\Systems</Filter>
     </ClCompile>
@@ -206,12 +200,6 @@
     </ClCompile>
     <ClCompile Include="src\Node.cpp">
       <Filter>Engine\Source Files\ObjectResources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RenderableNode.cpp">
-      <Filter>Engine\Source Files\ObjectResources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\glad.c">
-      <Filter>Engine\Source Files\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Input.cpp">
       <Filter>Engine\Source Files\Systems</Filter>
@@ -237,35 +225,11 @@
     <ClCompile Include="src\PhysicsManager.cpp">
       <Filter>Engine\Source Files\Systems\PhysicsSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\TriangleTest.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PhysicsTest.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RectanglePrimitive.cpp">
-      <Filter>Engine\Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TankBattle.cpp">
-      <Filter>SphereJump</Filter>
-    </ClCompile>
     <ClCompile Include="src\Component.cpp">
       <Filter>Engine\Source Files\Systems\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\RendererOld.cpp">
-      <Filter>Engine\Source Files\Deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\GameWindow.cpp">
       <Filter>Engine\Source Files\OpenGL\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameWindowOld.cpp">
-      <Filter>Engine\Source Files\Deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\InputOld.cpp">
-      <Filter>Engine\Source Files\Deprecated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameObjectOld.cpp">
-      <Filter>Engine\Source Files\Deprecated</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject.cpp">
       <Filter>Engine\Source Files\Objects\Components</Filter>
@@ -276,41 +240,14 @@
     <ClCompile Include="src\Render2D.cpp">
       <Filter>Engine\Source Files\ObjectResources\Components</Filter>
     </ClCompile>
-    <ClCompile Include="src\PhysicsBodyOld.cpp">
-      <Filter>Engine\Source Files\Deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\PhysicsBody.cpp">
       <Filter>Engine\Source Files\Systems\PhysicsSystem\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tank.cpp">
-      <Filter>SphereJump\Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Bullet.cpp">
-      <Filter>SphereJump\Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BulletHitListener.cpp">
-      <Filter>SphereJump\Source Files\Listeners</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wall.cpp">
-      <Filter>SphereJump\Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Movement.cpp">
-      <Filter>SphereJump\Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Shoot.cpp">
-      <Filter>SphereJump\Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer.cpp">
       <Filter>Engine\Source Files\Systems\RenderingSystem</Filter>
     </ClCompile>
-    <ClCompile Include="src\MaterialDeprecated.cpp">
-      <Filter>Engine\Source Files\Deprecated</Filter>
-    </ClCompile>
     <ClCompile Include="src\Material.cpp">
       <Filter>Engine\Source Files\ObjectResources\Materials/Meshes</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GraphicsTest.cpp">
-      <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="src\RendererStateSaver.cpp">
       <Filter>Engine\Source Files\Systems\RenderingSystem</Filter>
@@ -330,40 +267,7 @@
     <ClCompile Include="src\TextureMaterial.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Movement3D.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\EngineDemo.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\backends\imgui_impl_glfw.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\backends\imgui_impl_opengl3.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_demo.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_draw.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_widgets.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Audio.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MainTestMaterial.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rply.c">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\simplexnoise.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="precompiled.cpp">
@@ -372,26 +276,11 @@
     <ClCompile Include="src\MapLoader.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Ray.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RaycastHit.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\RaycastManager.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EngineMath.cpp">
-      <Filter>Engine\Source Files\Math</Filter>
-    </ClCompile>
     <ClCompile Include="src\FirstPersonControllerComponent.cpp">
       <Filter>Engine\Source Files\Systems\PhysicsSystem\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FPCDemo.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ReparentingTest.cpp">
-      <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\RigidBody.cpp">
       <Filter>Engine\Source Files\Systems\PhysicsSystem\Components</Filter>
@@ -401,9 +290,6 @@
     </ClCompile>
     <ClCompile Include="src\Quaternion.cpp">
       <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TimeControlTest.cpp">
-      <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="src\Animate.cpp">
       <Filter>Engine\Source Files</Filter>
@@ -480,9 +366,6 @@
     <ClCompile Include="src\UIPass.cpp">
       <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClCompile>
-    <ClCompile Include="src\SkydomePass.cpp">
-      <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
-    </ClCompile>
     <ClCompile Include="src\LocalLightsPass.cpp">
       <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClCompile>
@@ -496,6 +379,12 @@
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Map_Intermediate3.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EngineMath.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapGraphics.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -518,14 +407,8 @@
     <ClInclude Include="src\Transform.h">
       <Filter>Engine\Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\RenderableNode.h">
-      <Filter>Engine\Header Files\ObjectResources</Filter>
-    </ClInclude>
     <ClInclude Include="src\SceneGraph.h">
       <Filter>Engine\Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TrianglePrimitive.h">
-      <Filter>Engine\Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="src\Input.h">
       <Filter>Engine\Header Files\Systems</Filter>
@@ -572,29 +455,11 @@
     <ClInclude Include="src\PhysicsManager.h">
       <Filter>Engine\Header Files\Systems\PhysicsSystem</Filter>
     </ClInclude>
-    <ClInclude Include="src\RectanglePrimitive.h">
-      <Filter>Engine\Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EngineTests.h">
-      <Filter>Tests</Filter>
-    </ClInclude>
     <ClInclude Include="src\Component.h">
       <Filter>Engine\Header Files\Systems\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\RendererOld.h">
-      <Filter>Engine\Header Files\Deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="src\GameWindow.h">
       <Filter>Engine\Header Files\OpenGL\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameWindowOld.h">
-      <Filter>Engine\Header Files\Deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="src\InputOld.h">
-      <Filter>Engine\Header Files\Deprecated</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GameObjectOld.h">
-      <Filter>Engine\Header Files\Deprecated</Filter>
     </ClInclude>
     <ClInclude Include="src\GameObject.h">
       <Filter>Engine\Header Files\Objects\Components</Filter>
@@ -608,32 +473,8 @@
     <ClInclude Include="src\Node.h">
       <Filter>Engine\Header Files\ObjectResources\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="src\PhysicsBodyOld.h">
-      <Filter>Engine\Header Files\Deprecated</Filter>
-    </ClInclude>
     <ClInclude Include="src\PhysicsBody.h">
       <Filter>Engine\Header Files\Systems\PhysicsSystem\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BulletSpawnEvent.h">
-      <Filter>SphereJump\Header Files\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Movement.h">
-      <Filter>SphereJump\Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tank.h">
-      <Filter>SphereJump\Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Bullet.h">
-      <Filter>SphereJump\Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\BulletHitListener.h">
-      <Filter>SphereJump\Header Files\Listeners</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wall.h">
-      <Filter>SphereJump\Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Shoot.h">
-      <Filter>SphereJump\Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer.h">
       <Filter>Engine\Header Files\Systems\RenderingSystem</Filter>
@@ -643,9 +484,6 @@
     </ClInclude>
     <ClInclude Include="src\Material.h">
       <Filter>Engine\Header Files\ObjectResources\Materials/Meshes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MaterialDeprecated.h">
-      <Filter>Engine\Header Files\Deprecated</Filter>
     </ClInclude>
     <ClInclude Include="src\RendererStateSaver.h">
       <Filter>Engine\Header Files\Systems\RenderingSystem</Filter>
@@ -665,41 +503,14 @@
     <ClInclude Include="src\RenderPass.h">
       <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClInclude>
-    <ClInclude Include="src\BasicRenderPass.h">
-      <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
-    </ClInclude>
     <ClInclude Include="src\ShaderManager.h">
       <Filter>Engine\Header Files\Systems\RenderingSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DebugPass.h">
-      <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="src\DebugMaterial.h">
-      <Filter>Engine\Header Files\ObjectResources\Materials/Meshes</Filter>
     </ClInclude>
     <ClInclude Include="src\Material.inl">
       <Filter>Engine\Source Files\ObjectResources\Materials/Meshes</Filter>
     </ClInclude>
     <ClInclude Include="src\TextureMaterial.h">
       <Filter>Engine\Header Files\ObjectResources\Materials/Meshes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SolidColorMaterial.h">
-      <Filter>Engine\Header Files\ObjectResources\Materials/Meshes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Movement3D.h">
-      <Filter>Engine\Header Files\ObjectResources\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\rply.h">
-      <Filter>Tests\TestLibraries</Filter>
-    </ClInclude>
-    <ClInclude Include="src\simplexnoise.h">
-      <Filter>Tests\TestLibraries</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TestPass.h">
-      <Filter>Tests\TestRenderPasses</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MainTestMaterial.h">
-      <Filter>Tests\TestMaterials</Filter>
     </ClInclude>
     <ClInclude Include="src\Audio.h">
       <Filter>Engine\Header Files</Filter>
@@ -739,9 +550,6 @@
     </ClInclude>
     <ClInclude Include="src\RaycastHit.h">
       <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineMath.h">
-      <Filter>Engine\Header Files\Math</Filter>
     </ClInclude>
     <ClInclude Include="src\RaycastManager.h">
       <Filter>Engine\Header Files</Filter>
@@ -821,38 +629,20 @@
     <ClInclude Include="src\UIPass.h">
       <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClInclude>
+    <ClInclude Include="src\EngineMath.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FreeCamera.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SolidColorMaterial.h">
+      <Filter>Engine\Header Files\ObjectResources\Materials/Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UntexturedLightingPass.h">
+      <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\main_vertex_shader.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\main_fragment_shader.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\physics_test_vertex_shader.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\physics_test_fragment_shader.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\factory_vertex_shader.vert.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\factory_frag_shader.frag.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\basic_render.vert.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\basic_render.frag.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\debug.frag.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\debug.vert.glsl">
-      <Filter>Engine\Shaders</Filter>
-    </None>
     <None Include="shaders\skydome.frag">
       <Filter>Engine\Shaders</Filter>
     </None>
@@ -890,12 +680,6 @@
       <Filter>Resource Files\Models</Filter>
     </None>
     <None Include="shaders\lighting.frag">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\untextured_lighting.vert">
-      <Filter>Engine\Shaders</Filter>
-    </None>
-    <None Include="shaders\untextured_lighting.frag">
       <Filter>Engine\Shaders</Filter>
     </None>
     <None Include="media\Map\Turret.fbx">

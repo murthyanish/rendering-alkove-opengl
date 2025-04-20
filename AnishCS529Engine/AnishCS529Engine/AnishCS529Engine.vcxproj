@@ -47,6 +47,7 @@
     <ClCompile Include="src\LightingPass.cpp" />
     <ClCompile Include="src\LMMain.cpp" />
     <ClCompile Include="src\LocalLightsPass.cpp" />
+    <ClCompile Include="src\MapGraphics.cpp" />
     <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\FirstPersonControllerComponent.cpp" />
     <ClCompile Include="src\Map_Advanced.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="src\ShaderManager.h" />
     <ClInclude Include="src\RigidBody.h" />
     <ClInclude Include="src\SkydomePass.h" />
+    <ClInclude Include="src\SolidColorMaterial.h" />
     <ClInclude Include="src\Sphere.h" />
     <ClInclude Include="src\CollisionEvent.h" />
     <ClInclude Include="src\CollisionGenerator.h" />
@@ -172,6 +174,7 @@
     <ClInclude Include="src\TimeControlledRB.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\UIPass.h" />
+    <ClInclude Include="src\UntexturedLightingPass.h" />
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\VectorTemplated.h" />
   </ItemGroup>
@@ -223,8 +226,6 @@
     <None Include="shaders\skydome.vert" />
     <None Include="shaders\ui.frag" />
     <None Include="shaders\ui.vert" />
-    <None Include="shaders\untextured_lighting.frag" />
-    <None Include="shaders\untextured_lighting.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="media\beach.jpg" />
@@ -432,7 +433,8 @@
       <AdditionalDependencies>xinput.lib;glfw3.lib;glad.lib;opengl32.lib;fmodL_vc.lib;fmodstudioL_vc.lib;imgui.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)\AnishCS529Engine\x64\Debug\*.dll" "$(OutDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugAdditionalFeatures|x64'">
@@ -480,7 +482,8 @@
       <AdditionalDependencies>xinput.lib;glfw3.lib;glad.lib;opengl32.lib;fmod_vc.lib;fmodstudio_vc.lib;imgui.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)\AnishCS529Engine\x64\Debug\*.dll" "$(OutDir)"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

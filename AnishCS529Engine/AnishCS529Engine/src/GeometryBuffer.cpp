@@ -15,6 +15,8 @@
 #include "precompiled.h"
 #include "GeometryBuffer.h"
 
+GLuint GeometryBuffer::boundVAO = 0;
+
 /*!****************************************************************************
  * \brief GeometryBuffer Object Factory
  * 
@@ -132,7 +134,11 @@ GeometryBuffer& GeometryBuffer::operator=(GeometryBuffer&& other) noexcept {
  * 
  *****************************************************************************/
 void GeometryBuffer::bind() const {
-  glBindVertexArray(vao);
+  if (vao != boundVAO)
+  {
+    glBindVertexArray(vao);
+    boundVAO = vao;
+  }
 }
 
 /*!****************************************************************************

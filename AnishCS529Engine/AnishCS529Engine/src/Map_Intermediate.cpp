@@ -219,7 +219,6 @@ void MapLoader::intermediate(
             float direction = (i == 5) ? -1.0f : 1.0f;
             platformAnimate->setAnimateFunction(
                 [currentTime = 0.0f, initialPos = platform->getLocalPosition().x, phase = direction](std::shared_ptr<GameObject> self, float deltaTime) mutable {
-                    deltaTime *= timeScale;
                     float affineSpeed = 5.0f;
                     float affinePosVarianceX = 5.0f;
 
@@ -249,9 +248,6 @@ void MapLoader::intermediate(
             auto platformAnimate = platform->addComponent<Animate>();
             platformAnimate->setAnimateFunction(
                   [currentTime = 0.0f, initialPos = platform->getLocalPosition().y, phase = 1.0f](std::shared_ptr<GameObject> self, float deltaTime) mutable {
-
-
-                      deltaTime *= timeScale;
 
                       /* Affine Transformation Variables */
                       float affineSpeed = 5.0f;

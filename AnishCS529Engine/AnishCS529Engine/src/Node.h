@@ -64,6 +64,8 @@ public:
   void addChild(SharedNode node);
   SharedNode findNode(unsigned int id);
   SharedNode findNodeFast(unsigned int id);
+  SharedNode findNode(const std::string& name);
+  SharedNode findNodeFast(const std::string& name);
 
   unsigned int getID() const { return id; }
   std::string getName() const { return name; }

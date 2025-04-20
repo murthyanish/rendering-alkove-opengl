@@ -590,22 +590,25 @@ void FirstPersonControllerComponent::update(float deltaTime)
 #pragma region Camera
 	//Get Mouse State Data
 	const MouseState mouseState = input->getMouseState();
-	if (mouseState.deltaX != 0) {
-		mouseXDelta = static_cast<float>(mouseState.deltaX) * mouseXSensitivity;
-		//Rotate Body
-		const Quaternion currentBodyRotation = body->getLocalRotation();
-		const Quaternion mouseRotation = Quaternion::axisAngleToQuaternion(Vector3(0.0f, 1.0f, 0.0f), (-mouseXDelta * 3.14159265f / 180.0f));
-		body->setLocalRotation(currentBodyRotation * mouseRotation);
+	if (input->isKeyDown(KEY_M)) {
+		if (mouseState.deltaX != 0) {
+			mouseXDelta = static_cast<float>(mouseState.deltaX) * mouseXSensitivity;
+			//Rotate Body
+			const Quaternion currentBodyRotation = body->getLocalRotation();
+			const Quaternion mouseRotation = Quaternion::axisAngleToQuaternion(Vector3(0.0f, 1.0f, 0.0f), (-mouseXDelta * 3.14159265f / 180.0f));
+			body->setLocalRotation(currentBodyRotation * mouseRotation);
+		}
+		if (mouseState.deltaY != 0) {
+			mouseYDelta = static_cast<float>(mouseState.deltaY) * mouseYSensitivity;
+			//Rotate Camera
+			const Vector3 currentEuler = camera->getLocalRotation().toEuler();
+			float newPitch = currentEuler.x + (-mouseYDelta * 3.14159265f / 180.0f);
+			newPitch = std::clamp(newPitch, -pitchLimit * (3.14159265f / 180.0f), pitchLimit * (3.14159265f / 180.0f)); // Convert degrees to radians
+			const Quaternion newCameraRotation = Quaternion::fromEuler(Vector3(newPitch, currentEuler.y, currentEuler.z));
+			camera->setLocalRotation(newCameraRotation);
+		}
 	}
-	if (mouseState.deltaY != 0) {
-		mouseYDelta = static_cast<float>(mouseState.deltaY) * mouseYSensitivity;
-		//Rotate Camera
-		const Vector3 currentEuler = camera->getLocalRotation().toEuler();
-		float newPitch = currentEuler.x + (-mouseYDelta * 3.14159265f / 180.0f);
-		newPitch = std::clamp(newPitch, -pitchLimit * (3.14159265f / 180.0f), pitchLimit * (3.14159265f / 180.0f)); // Convert degrees to radians
-		const Quaternion newCameraRotation = Quaternion::fromEuler(Vector3(newPitch, currentEuler.y, currentEuler.z));
-		camera->setLocalRotation(newCameraRotation);
-	}
+	
 	//Reset Mouse Delta
 	input->resetMouseDelta();
 #pragma endregion

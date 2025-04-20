@@ -177,6 +177,8 @@ private:
   /** Number of Indices */
   GLsizei indexCount;
 
+  static GLuint boundVAO;
+
   /**
    * Offsets for each attribute
    * 
