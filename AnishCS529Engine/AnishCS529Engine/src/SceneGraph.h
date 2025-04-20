@@ -82,6 +82,9 @@ public:
   std::shared_ptr<Node> findNode(unsigned int id);
   std::shared_ptr<Node> findNodeFast(unsigned int id);
 
+  std::shared_ptr<Node> findNode(const std::string& name);
+  std::shared_ptr<Node> findNodeFast(const std::string& name);
+
   void update(float deltaTime);
   void updateNode(const std::shared_ptr<Node>& node, float deltaTime);
   void draw(std::shared_ptr<Shader> shader, uint32_t renderMask);

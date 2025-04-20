@@ -26,6 +26,7 @@ uniform vec3 diffuse;   // Kd
 uniform vec3 specular;  // Ks
 uniform float shininess; // alpha exponent
 
+uniform bool useTexture;
 uniform sampler2D mainTexture;
 uniform vec2 mainTextureScale;
 
@@ -59,8 +60,10 @@ void main()
 
     vec2 scaledTexCoord = uv * mainTextureScale;
       
-    vec4 color = texture(mainTexture, scaledTexCoord);
-    Kd = color.rgb;
+    if (useTexture) {
+      vec4 color = texture(mainTexture, scaledTexCoord);
+      Kd = color.rgb;
+    }
 
     // The normal map calc ...
     if (useNormalMap) {

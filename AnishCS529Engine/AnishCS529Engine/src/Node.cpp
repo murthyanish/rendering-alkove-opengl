@@ -86,6 +86,51 @@ Node::SharedNode Node::findNodeFast(unsigned int id) {
 }
 
 /*!****************************************************************************
+ * \brief Find a node by passing the node id to be found
+ * 
+ * \param id ID of the node to be found.
+ * \return \b Node::SharedNode pointer to the found node.
+ *****************************************************************************/
+Node::SharedNode Node::findNode(const std::string& name) {
+  if (this->name == name) {
+    return shared_from_this();
+  }
+  for (auto& child : children) {
+    auto found = child->findNode(name);
+    if (found) return found;
+  }
+  return nullptr;
+}
+
+/*!****************************************************************************
+ * \brief Find a node by passing the node id to be found, but fast
+ *
+ * \param id ID of the node to be found.
+ * \return \b Node::SharedNode pointer to the found node.
+ *****************************************************************************/
+Node::SharedNode Node::findNodeFast(const std::string& name) {
+  std::stack<Node*> nodeStack;
+  nodeStack.push(this);
+
+  while (!nodeStack.empty()) {
+    Node* currentNode = nodeStack.top();
+    nodeStack.pop();
+
+    if (currentNode->name == name) return currentNode->shared_from_this();
+
+    for (
+      auto it = currentNode->children.rbegin(); 
+      it != currentNode->children.rend(); 
+      it++) {
+      nodeStack.push(it->get());
+    }
+
+  }
+
+  return nullptr;
+}
+
+/*!****************************************************************************
  * \brief Update sibling numbers of the children when one child is removed
  * 
  * Will change the index of all proceeding children to the approriate index.

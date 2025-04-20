@@ -108,6 +108,9 @@ void MapLoader::loadMap(int mapId, float offsetX, float offsetY, float offsetZ,
     case 6:
         victory(offsetX, offsetY, offsetZ, sceneGraph);
         break;
+    case 7:
+      graphics(offsetX, offsetY, offsetZ, sceneGraph);
+      break;
 
     default:
         std::cerr << "[MapLoader] Map ID " << mapId << " is not recognized.\n";

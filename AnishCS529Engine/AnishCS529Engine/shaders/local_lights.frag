@@ -87,11 +87,12 @@ void main()
     float quadratic = 1.8;
 
 
+//    float attenuation = 
+//      1.0 / (constant + linear * lightDistance + quadratic * (lightDistance * lightDistance));
+
     float attenuation = 
-      1.0 / (constant + linear * lightDistance + quadratic * (lightDistance * lightDistance));
+      (1/pow(lightDistance, 2) - 1/pow(radius, 2));
 
 
-    FragColor *= attenuation;//(1/pow(lightDistance, 2) - 1/pow(radius, 2));
-
-    //FragColor = vec3(0.1,0.1,0.1);
+    FragColor *= attenuation;
 }

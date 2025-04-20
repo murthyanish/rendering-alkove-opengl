@@ -37,9 +37,7 @@
 #include "OBB.h"
 #include "Animate.h"
 #include "TimeControlledRB.h"
-#include "RenderGraph.h" 
-
-#include "GlobalVariables.h"
+#include "RenderGraph.h"
 
 
 class MapLoader {
@@ -114,6 +112,9 @@ SceneGraph& sceneGraph);
              SceneGraph& sceneGraph);
 
     void victory(float offsetX, float offsetY, float offsetZ,
+      SceneGraph& sceneGraph);
+    
+    void graphics(float offsetX, float offsetY, float offsetZ,
       SceneGraph& sceneGraph);
 
     void writeLetter(SceneGraph& sceneGraph, const std::string& meshPath, const Vector3& position,

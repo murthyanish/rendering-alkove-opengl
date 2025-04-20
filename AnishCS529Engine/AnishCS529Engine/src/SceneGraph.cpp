@@ -43,6 +43,14 @@ std::shared_ptr<Node> SceneGraph::findNodeFast(unsigned int id) {
   return root->findNode(id);
 }
 
+std::shared_ptr<Node> SceneGraph::findNode(const std::string& name) {
+  return root->findNode(name);
+}
+
+std::shared_ptr<Node> SceneGraph::findNodeFast(const std::string& name) {
+  return root->findNode(name);
+}
+
 void SceneGraph::update(float deltaTime) {
   updateNode(root, deltaTime);
 
@@ -75,11 +83,19 @@ void SceneGraph::drawNode(
     nodeDrawStack.pop();
     
     auto gameObjectNode = std::dynamic_pointer_cast<GameObject>( currNode );
-    if ( gameObjectNode )
+    if (gameObjectNode) {
       gameObjectNode->draw(shader, renderMask);
 
-    for ( auto child : currNode->getChildren() ) {
-      nodeDrawStack.push(child);
+      if (gameObjectNode->isEnabled()) {
+        for (auto child : currNode->getChildren()) {
+          nodeDrawStack.push(child);
+        }
+      }
+    }
+    else {
+      for (auto child : currNode->getChildren()) {
+        nodeDrawStack.push(child);
+      }
     }
   }
 }
