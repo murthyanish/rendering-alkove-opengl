@@ -160,7 +160,7 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
       intensity, Vector3(1.0f, 1.0f, 0.5f), range)
   );*/
 
-  for (int i = 0; i < 1000; ++i) {
+  /*for (int i = 0; i < 1000; ++i) {
     auto lightPosition = Vector3(
       EngineMath::Random::boundedFloat(initialPosition.x - lightWidth, initialPosition.x + lightWidth),
       EngineMath::Random::boundedFloat(initialPosition.y - lightHeight, initialPosition.y + lightHeight),
@@ -172,7 +172,16 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
       EngineMath::Random::boundedFloat(0.5f, 1.0f));
     auto lightRange = EngineMath::Random::boundedFloat(2.0f, range);
     sceneGraph.addPointLight(PointLight(lightPosition, lightIntensity, lightColor, lightRange));
-  }
+  }*/
+
+
+  sceneGraph.addPointLight(
+    PointLight(
+      initialPosition + Vector3(0.0f, 20.0f, 0.0f),
+      2000.0f, Vector3(1.0f, 1.0f, 1.0f), 1000.0f,
+      1
+      )
+  );
 
 
   // Objects
@@ -185,7 +194,7 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
     bunny->setLocalRotation(Quaternion::fromEuler(Vector3(0.0f, PI, 0.0f)));
     auto renderComp = bunny->addComponent<Render3D>();
     auto bunnyMesh = Mesh::loadMesh("media/models/bun_zipper.ply");
-    renderComp->setMesh(bunnyMesh)->setMaterial(bunnyMaterial);
+    renderComp->setMesh(bunnyMesh)->setMaterial(bunnyMaterial)->setRenderMask(RenderMask::ShadowLit);
   }
 
   {
@@ -196,7 +205,7 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
     bunny->setLocalRotation(Quaternion::fromEuler(Vector3(0.0f, PI, 0.0f)));
     auto renderComp = bunny->addComponent<Render3D>();
     auto bunnyMesh = Mesh::loadMesh("media/models/bun_zipper.ply");
-    renderComp->setMesh(bunnyMesh)->setMaterial(bunnyMaterial2);
+    renderComp->setMesh(bunnyMesh)->setMaterial(bunnyMaterial2)->setRenderMask(RenderMask::ShadowLit);
   }
 
   {
@@ -207,7 +216,7 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
     bunny->setLocalRotation(Quaternion::fromEuler(Vector3(0.0f, PI, 0.0f)));
     auto renderComp = bunny->addComponent<Render3D>();
     auto bunnyMesh = Mesh::loadMesh("media/models/bun_zipper.ply");
-    renderComp->setMesh(bunnyMesh)->setMaterial(bunnyMaterial3);
+    renderComp->setMesh(bunnyMesh)->setMaterial(bunnyMaterial3)->setRenderMask(RenderMask::ShadowLit);
   }
 
   {
@@ -216,7 +225,7 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
     bunnyFloor->setLocalPosition(Vector3(0.0f, 3.1f, 0.0f));
     bunnyFloor->setLocalScaling(Vector3(6.0f, 0.5f, 6.0f));
     auto renderComp = bunnyFloor->addComponent<Render3D>();
-    renderComp->setMesh(boxMesh)->setMaterial(BlueConcrete);
+    renderComp->setMesh(boxMesh)->setMaterial(BlueConcrete)->setRenderMask(RenderMask::ShadowLit);
     auto shape = std::make_shared<OBB>();
     auto rigidBody = bunnyFloor->addComponent<RigidBody>();
     rigidBody->setMass(0.0f)

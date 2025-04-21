@@ -28,6 +28,11 @@ struct PointLight {
   float intensity;
   Vector3 color;
   float range;
+  int castShadow = 0;
+  int shadowIndex = -1;
+  // Struct size is 40, so we need to pad after to align next struct to 16 byte
+  // boundary.
+  int padding[2];
 };
 
 struct AmbientLight {

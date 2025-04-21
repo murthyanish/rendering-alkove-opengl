@@ -181,7 +181,7 @@ TextureManager::TextureID TextureManager::createOpenGLTexture(
   if (textureInfo.format == TEXTURE_RGB || textureInfo.format == TEXTURE_RGB32F)
     format = TEXTURE_RGB;
   else if (textureInfo.format == TEXTURE_RGBA || textureInfo.format == TEXTURE_RGBA32F)
-    format = TEXTURE_RGBA;
+     format = TEXTURE_RGBA;
   else {
     std::cout << "WARNING::TEXTUREMANAGER::CREATETEXTURE::INVALIDFORMAT" 
       << "::Defaulting to TEXTURE_RGBA" << std::endl;

@@ -23,6 +23,11 @@ struct Light {
   float intensity;
   vec3 color;
   float radius;
+
+  int castShadow;
+  int shadowIndex;
+
+  int padding[2];
 };
 
 layout(std430, binding = 2) buffer LightBuffer {
@@ -38,6 +43,9 @@ uniform sampler2D GBuffer_normal;
 uniform sampler2D GBuffer_diffuse;
 uniform sampler2D GBuffer_specular;
 
+uniform mat4 ShadowMatrix;
+uniform sampler2D ShadowMap;
+
 out vec3 FragColor;
 
 void main()
@@ -46,14 +54,34 @@ void main()
     
     vec3 worldPos = texture(GBuffer_position, gBufferPosition).xyz;
 
-    vec3 L = lights[lightIndex].position - worldPos;
-    float radius = lights[lightIndex].radius;
+    const Light light = lights[lightIndex];
+
+    vec3 L = light.position - worldPos;
+    float radius = light.radius;
     float lightDistance = length(L);
 
     if ( lightDistance > radius ) {
       FragColor = vec3(0);
       discard;
       return;
+    }
+
+    if (light.castShadow > 0) {
+      const vec4 shadowCoord = ShadowMatrix * vec4(worldPos, 1.0f);
+      
+      vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
+      if (shadowCoord.w > 0 && 
+        shadowIndex.x >= 0.0f && shadowIndex.x < 1.0f &&
+        shadowIndex.y >= 0.0f && shadowIndex.y < 1.0f){
+          float lightDepth = texture(ShadowMap, shadowIndex).x;
+          if (lightDepth != 0.0) {
+            float pixelDepth = shadowCoord.w;
+            if ( pixelDepth > (lightDepth + 1.6f) ) {
+              discard;
+              return;
+            }
+          }
+      }
     }
 
     vec3 eyeVec = (inverseView*vec4(0,0,0,1)).xyz-worldPos;

@@ -13,7 +13,6 @@
 #include "precompiled.h"
 #include "LocalLightsPass.h"
 #include "Renderer.h"
-#include "RendererStateSaver.h"
 
 LocalLightsPass::LocalLightsPass() :
   RenderPass(), sphereMesh(Mesh::createSphereMesh("lightSphere", 8)) {
@@ -46,8 +45,6 @@ void LocalLightsPass::draw(
   if (lightCount == 0)
     return;
 
-  Renderer::StateSaver savedState(*(renderGraphBuilder->getRenderer()));
-
   Renderer::Viewport viewport = renderGraphBuilder->getRenderer()->getCurrentState().viewport;
   
   renderGraphBuilder->getRenderer()->setDepthState(Renderer::DepthState(false));
@@ -67,15 +64,32 @@ void LocalLightsPass::draw(
 
   shader->setUInt("lightIndex", 0);
   //shader->setMat4("ModelMatrix", Transform(currentLight.position, Quaternion(), currentLight.range).getLocalMatrix());
+  const int shadowIndex = sceneGraph->getLights()->pointLights[0].shadowIndex;
+  if (shadowIndex > -1) {
+    renderGraphBuilder->getShadowManager()->useShadow(shadowIndex, shader.get());
+  }
 
   sphereMesh->draw();
 
+  if (shadowIndex > -1) {
+    shader->unbindTexture(0);
+  }
+
+  // The reason this is 1 is because we are drawing the first element separately then reusing the mesh for future calls.
   for ( unsigned int lightIndex = 1; lightIndex < lightCount; ++lightIndex) {
     //auto currentLight = lights->pointLights[lightIndex];
     shader->setUInt("lightIndex", lightIndex);
     //shader->setMat4("ModelMatrix", Transform(currentLight.position, Quaternion(), currentLight.range).getLocalMatrix());
+    const int shadowIndex = sceneGraph->getLights()->pointLights[lightIndex].shadowIndex;
+    if (shadowIndex > -1) {
+      renderGraphBuilder->getShadowManager()->useShadow(shadowIndex, shader.get());
+    }
 
     sphereMesh->drawEBOTrisWithoutBind();
+
+    if (shadowIndex > -1) {
+      shader->unbindTexture(0);
+    }
   }
 
   unbindTextures();

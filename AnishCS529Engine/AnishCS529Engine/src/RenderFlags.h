@@ -25,20 +25,26 @@ namespace RenderMask {
   constexpr uint32_t SkydomePass        = 1 << 0;
   /** Prepass for advanced lighting */
   constexpr uint32_t GBufferPrepass     = 1 << 1;
+
   /** Shadow processing pass */
   constexpr uint32_t ShadowPass         = 1 << 2;
+  /** Moment Shadow Map pass */
+  constexpr uint32_t MomentShadowMapPass = 1 << 3;
+
   /** Debug pass for solid color or GL_LINES */
-  constexpr uint32_t DebugPass          = 1 << 3;
+  constexpr uint32_t DebugPass          = 1 << 4;
   /** Textured object render pass with BRDF */
-  constexpr uint32_t LightingPass = 1 << 4;
+  constexpr uint32_t LightingPass = 1 << 5;
   /** Lights pass to render all the lights in the scene */
-  constexpr uint32_t LocalLightsPass = 1 << 5;
+  constexpr uint32_t LocalLightsPass = 1 << 6;
+
   /** Pass specifically for 2D UI elements with no lighting or 3D
   * considerations, should always be last. */
-  constexpr uint32_t UIPass             = 1 << 6;
+  constexpr uint32_t UIPass             = 1 << 7;
 
   /** Default lit object passes */
-  constexpr uint32_t DefaultLit         = GBufferPrepass | LightingPass | ShadowPass;
+  constexpr uint32_t DefaultLit         = GBufferPrepass | LightingPass;
+  constexpr uint32_t ShadowLit         = GBufferPrepass | LightingPass | ShadowPass;
 
   static std::vector<uint32_t> RenderPassOrder;
 }

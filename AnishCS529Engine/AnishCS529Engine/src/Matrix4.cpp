@@ -149,7 +149,7 @@ Matrix4 Matrix4::operator*(const float scalar) const
  * \param other Matrix4 object to be multiplied with.
  * \return \b Matrix4 The result of the multiplication.
  *****************************************************************************/
-Matrix4 Matrix4::operator*(const Matrix4 &other)
+Matrix4 Matrix4::operator*(const Matrix4 &other) const
 {
   Matrix4 result;
   for (int i = 0; i < 4; i++)

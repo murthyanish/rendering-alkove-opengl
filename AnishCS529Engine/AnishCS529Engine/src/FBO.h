@@ -24,10 +24,17 @@ class Renderer;
 
 class FBO {
 public:
+  struct Viewport {
+    int x;
+    int y;
+    int width;
+    int height;
+  };
+
   unsigned int fboID;
   std::vector<unsigned int> textureIDs;
-  int width, height;  // Size of the Buffer
-  int x, y;  // Offset of the Buffer
+  Viewport viewport;  // Size of the Buffer
+  GLuint depthBuffer;
   unsigned int attachedTextures = 0;
 
   ~FBO() = default;
@@ -39,7 +46,7 @@ public:
     const int _x, const int _y,
     const int _width, const int _height);
 
-  void updateViewport();
+  void updateTextures();
   void updateViewport(
     const int _x, const int _y,
     const int _width, const int _height);
@@ -47,6 +54,9 @@ public:
   void addScreenSizeBufferUpdateCallback(Renderer* renderer);
 
   void attachTexture(TextureManager::TextureID textureID);
+
+  // Don't use this unless you have cached the screen viewport.
+  void useViewport();
 
   // Bind this FBO to receive the output of the graphics pipeline.
   void bind();

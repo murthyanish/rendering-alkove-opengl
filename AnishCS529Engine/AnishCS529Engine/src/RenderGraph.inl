@@ -26,7 +26,7 @@ std::shared_ptr<T> RenderGraph::addPass() {
   }
 
   auto pass = std::make_shared<T>();
-  pass->setRenderGraphBuilder(renderGraphBuilder);
+  pass->setRenderGraphBuilder(renderGraphBuilder.get());
   pass->initialize();
   addedPassTypes.insert(type);
   renderStack.push_back(pass);

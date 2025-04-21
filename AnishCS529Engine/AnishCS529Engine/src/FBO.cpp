@@ -19,13 +19,13 @@ void FBO::initialize() {
   glBindFramebuffer(GL_FRAMEBUFFER, fboID);
 
   // Create a render buffer, and attach it to FBO's depth attachment
-  unsigned int depthBuffer;
   glGenRenderbuffers(1, &depthBuffer);
   glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,
-    width, height);
+    viewport.width, viewport.height);
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
     GL_RENDERBUFFER, depthBuffer);
+  glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
   // Check for completeness/correctness
   int status = (int)glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -38,9 +38,6 @@ void FBO::initialize() {
 
 void FBO::finalize() {
   glBindFramebuffer(GL_FRAMEBUFFER, fboID);
-
-  glViewport(x, y, width, height);
-  glClearColor(0.0, 0.0, 0.0, 0.0);
 
   std::vector<GLenum> attachments;
   for (int i = 0; i <= attachedTextures; i++) {
@@ -58,19 +55,19 @@ void FBO::finalize() {
 void FBO::setViewport(
   const int _x, const int _y,
   const int _width, const int _height) {
-  x = _x;
-  y = _y;
-  width = _width;
-  height = _height;
+  viewport = { _x, _y, _width, _height };
 }
 
-void FBO::updateViewport() {
-  glBindFramebuffer(GL_FRAMEBUFFER, fboID);
-  glViewport(x, y, width, height);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+void FBO::updateTextures() {
+
+  glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT,
+    viewport.width, viewport.height);
+  glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
   for (const auto& textureID : textureIDs)
-    TextureManager::getInstance().resizeTexture(textureID, width, height);
+    TextureManager::getInstance().resizeTexture(
+      textureID, viewport.width, viewport.height);
 }
 
 void FBO::updateViewport(
@@ -78,7 +75,7 @@ void FBO::updateViewport(
   const int _width, const int _height)
 {
   setViewport(_x, _y, _width, _height);
-  updateViewport();
+  updateTextures();
 }
 
 void FBO::addScreenSizeBufferUpdateCallback(Renderer* renderer)
@@ -110,6 +107,13 @@ void FBO::attachTexture(TextureManager::TextureID textureID) {
   attachedTextures++;
 }
 
-void FBO::bind() { glBindFramebuffer(GL_FRAMEBUFFER, fboID); }
+void FBO::useViewport() {
+  glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+}
+
+void FBO::bind() {
+  useViewport();
+  glBindFramebuffer(GL_FRAMEBUFFER, fboID);
+}
 void FBO::unbind() { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
 void FBO::clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }

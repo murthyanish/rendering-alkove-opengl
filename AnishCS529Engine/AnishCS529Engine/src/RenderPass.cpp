@@ -74,7 +74,13 @@ void RenderPass::applyProperties() const
   * took half an hour to realise.
   */
 
-  unsigned int textureUnit = 0;
+  /*
+  * Texture Units 0-9 are reserved.
+  * Here's a list of the reserved textures:
+  * 0 - shadow
+  */
+
+  unsigned int textureUnit = 10;
 
   for (const auto& [name, value] : properties) {
     if (auto item = std::get_if<unsigned int>(&value)) {
@@ -108,7 +114,7 @@ void RenderPass::unbindTextures() const
   * iterate every property just to unbind textures.
   */
 
-  unsigned int textureUnit = 0;
+  unsigned int textureUnit = 10;
 
   for (const auto& [name, value] : properties) {
     if (auto item = std::get_if<TextureManager::TextureID>(&value)) {

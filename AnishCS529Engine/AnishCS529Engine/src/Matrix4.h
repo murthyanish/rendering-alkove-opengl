@@ -59,7 +59,7 @@ public:
 
   // Multiplication: * Operator Overloads
   Matrix4 operator*(const float scalar) const;
-  Matrix4 operator*(const Matrix4 &other);
+  Matrix4 operator*(const Matrix4 &other) const;
   Vector3 operator*(const Vector3& vec) const;
   VectorTemplated<float, 4> operator*(const VectorTemplated<float,4>& vec) const;
 

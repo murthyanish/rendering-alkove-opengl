@@ -36,11 +36,18 @@ void GBufferPrepass::initialize() {
 }
 
 void GBufferPrepass::draw(std::shared_ptr<Camera> camera, SceneGraph* sceneGraph) const {
+
+  Renderer::Viewport viewport = renderGraphBuilder->getRenderer()->getCurrentState().viewport;
+
   gbuffer->bind();
+
+  gbuffer->useViewport();
 
   gbuffer->clear();
 
   RenderPass::draw(camera, sceneGraph);
+
+  renderGraphBuilder->getRenderer()->setViewport(viewport);
 
   gbuffer->unbind();
 }
