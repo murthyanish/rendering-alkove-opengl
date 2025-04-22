@@ -18,15 +18,7 @@ class MomentShadowMapPass : public RenderPass {
 public:
   MomentShadowMapPass();
 
-  /*virtual void initialize() override;
-
-  virtual void draw(
-    std::shared_ptr<Camera> camera,
-    SceneGraph* sceneGraph) const override;*/
-
-private:
-  FBO* gbuffer;
-
+  virtual void initialize() override;
 };
 
 #endif // !MOMENT_SHADOW_MAP_PASS_H

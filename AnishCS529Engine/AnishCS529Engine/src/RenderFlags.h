@@ -23,14 +23,14 @@ namespace RenderMask {
   /** Skydome render pass, this doesn't render any objects other than
   * the skydome so should be first. */
   constexpr uint32_t SkydomePass        = 1 << 0;
-  /** Prepass for advanced lighting */
-  constexpr uint32_t GBufferPrepass     = 1 << 1;
 
   /** Shadow processing pass */
-  constexpr uint32_t ShadowPass         = 1 << 2;
+  constexpr uint32_t ShadowPass         = 1 << 1;
   /** Moment Shadow Map pass */
-  constexpr uint32_t MomentShadowMapPass = 1 << 3;
+  constexpr uint32_t MomentShadowMapPass = 1 << 2;
 
+  /** Prepass for advanced lighting */
+  constexpr uint32_t GBufferPrepass = 1 << 3;
   /** Debug pass for solid color or GL_LINES */
   constexpr uint32_t DebugPass          = 1 << 4;
   /** Textured object render pass with BRDF */

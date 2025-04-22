@@ -102,9 +102,11 @@ public:
 
   bool isHDR(TextureID id);
 
+  const TextureInfo& getTextureInfo(TextureManager::TextureID id);
+
 private:
   TextureManager() = default;
-  std::unordered_map<GLuint, TextureInfo> textures;
+  std::unordered_map<TextureID, TextureInfo> textures;
   std::unordered_map<std::string,TextureID> loadedFiles;
 
   TextureID loadHDRFile(const std::string& filepath);

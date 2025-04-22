@@ -30,12 +30,14 @@ void ShadowManager::update(SceneGraph* scene, Lights* lights)
         const int shadowIndex = addShadow(i, lights->pointLights[i], ShadowParams());
 
         updateShadow(scene, shadows[shadowIndex], light.position);
+        updateMomentShadowMap(shadows[shadowIndex]);
       }
       else {
         // Update shadows if any of the lights have moved.
         const int shadowIndex = light.shadowIndex;
         if ((shadows[shadowIndex].lastLightPosition - light.position).magnitudSquared() > epsilon) {
           updateShadow(scene, shadows[shadowIndex], light.position);
+          updateMomentShadowMap(shadows[shadowIndex]);
         }
       }
     }
@@ -60,6 +62,11 @@ int ShadowManager::addShadow(
     {
       "shadow_" + std::to_string(light.shadowIndex)
     },
+    params.resolution, params.resolution);
+
+  // For now we will always create a Moment Shadow Map.
+  fboInfo.momentTextureID = renderGraphBuilder->createTexture(
+    "moment_shadow_" + std::to_string(light.shadowIndex),
     params.resolution, params.resolution);
 
   ShadowInfo shadowInfo = {
@@ -108,4 +115,19 @@ void ShadowManager::useShadow(int index, Shader* shader) const
   shader->bindTexture(0, "ShadowMap", shadow.fboInfo.textureID);
 
   shader->setMat4("ShadowMatrix", shadow.shadowMatrix);
+}
+
+void ShadowManager::updateMomentShadowMap(ShadowInfo& shadow)
+{
+  glBindImageTexture(
+    0, shadow.fboInfo.momentTextureID, 0,
+    GL_FALSE, 0,
+    GL_WRITE_ONLY,
+    TextureManager::getInstance().getTextureInfo(
+      shadow.fboInfo.momentTextureID).format
+  );
+
+  momentShadowMapPass.setProperty("ShadowMap", shadow.fboInfo.textureID);
+  momentShadowMapPass.setProperty("alpha", alpha);
+  momentShadowMapPass.compute(shadow.params.resolution);
 }

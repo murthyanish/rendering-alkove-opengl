@@ -37,6 +37,8 @@ void LightingPass::draw(
     std::shared_ptr<Camera> camera,
     SceneGraph* scene) const {
 
+  glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
   shader->use();
 
   applyProperties();

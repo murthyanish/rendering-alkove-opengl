@@ -148,3 +148,15 @@ void RenderPass::disable() {
 bool RenderPass::isEnabled() const {
   return enabled;
 }
+
+void RenderPass::compute(ComputeDispatchSize dispatchSize)
+{
+  shader->use();
+
+  applyProperties();
+
+  glDispatchCompute(dispatchSize.x, dispatchSize.y, dispatchSize.z);
+
+  unbindTextures();
+  shader->unuse();
+}

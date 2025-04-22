@@ -91,6 +91,11 @@ bool TextureManager::isHDR(TextureID id)
   return (textures[id].format == TEXTURE_RGBA32F);
 }
 
+const TextureManager::TextureInfo& TextureManager::getTextureInfo(TextureManager::TextureID id)
+{
+  return textures[id];
+}
+
 TextureManager::TextureID TextureManager::loadHDRFile(const std::string& filepath)
 {
   TextureParameters textureParameters = TextureParameters(10, 

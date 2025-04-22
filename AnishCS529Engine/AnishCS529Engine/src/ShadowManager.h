@@ -16,6 +16,7 @@
 
 #include "Lights.h"
 #include "ShadowPass.h"
+#include "MomentShadowMapPass.h"
 #include "RenderGraphBuilder.h"
 
 struct PointLight;
@@ -36,6 +37,7 @@ public:
   struct ShadowFBOInfo {
      FBO* fbo;
      TextureManager::TextureID textureID;
+     TextureManager::TextureID momentTextureID = -1;
   };
 
   struct ShadowInfo {
@@ -59,12 +61,15 @@ public:
 
   void useShadow(int index, Shader* shader) const;
 
-private:
+  void updateMomentShadowMap(ShadowInfo& shadow);
 
+private:
+  const float alpha = 0.001;
   std::vector<ShadowInfo> shadows;
   RenderGraphBuilder* renderGraphBuilder;
 
   ShadowPass shadowPass;
+  MomentShadowMapPass momentShadowMapPass;
 };
 
 #endif // !SHADOW_MANAGER_H
