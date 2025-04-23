@@ -58,6 +58,7 @@
     <ClCompile Include="src\Map_Tutorial.cpp" />
     <ClCompile Include="src\Map_Tutorial2.cpp" />
     <ClCompile Include="src\Map_Victory.cpp" />
+    <ClCompile Include="src\MomentShadowMapPass.cpp" />
     <ClCompile Include="src\PauseMenu.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\GamePad.cpp" />
@@ -82,6 +83,8 @@
     <ClCompile Include="src\RenderPass.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderManager.cpp" />
+    <ClCompile Include="src\ShadowManager.cpp" />
+    <ClCompile Include="src\ShadowPass.cpp" />
     <ClCompile Include="src\Sphere.cpp" />
     <ClCompile Include="src\CollisionGenerator.cpp" />
     <ClCompile Include="src\CollisionListener.cpp" />
@@ -130,6 +133,7 @@
     <ClInclude Include="src\LightingPass.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\MomentShadowMapPass.h" />
     <ClInclude Include="src\PauseMenu.h" />
     <ClInclude Include="src\PhysicsBody.h" />
     <ClInclude Include="src\Quaternion.h" />
@@ -148,6 +152,8 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\ShaderManager.h" />
     <ClInclude Include="src\RigidBody.h" />
+    <ClInclude Include="src\ShadowManager.h" />
+    <ClInclude Include="src\ShadowPass.h" />
     <ClInclude Include="src\SkydomePass.h" />
     <ClInclude Include="src\SolidColorMaterial.h" />
     <ClInclude Include="src\Sphere.h" />
@@ -174,7 +180,6 @@
     <ClInclude Include="src\TimeControlledRB.h" />
     <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\UIPass.h" />
-    <ClInclude Include="src\UntexturedLightingPass.h" />
     <ClInclude Include="src\Vector3.h" />
     <ClInclude Include="src\VectorTemplated.h" />
   </ItemGroup>
@@ -203,6 +208,7 @@
     <None Include="media\Map\Turret.fbx">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
+    <None Include="shaders\gaussean_blur_vert.comp" />
     <None Include="shaders\gbuffer.frag" />
     <None Include="shaders\gbuffer.vert" />
     <None Include="shaders\lighting.frag">
@@ -222,6 +228,9 @@
     <ClInclude Include="src\RenderGraph.inl">
       <FileType>Document</FileType>
     </ClInclude>
+    <None Include="shaders\gaussean_blur_hor.comp" />
+    <None Include="shaders\shadow.frag" />
+    <None Include="shaders\shadow.vert" />
     <None Include="shaders\skydome.frag" />
     <None Include="shaders\skydome.vert" />
     <None Include="shaders\ui.frag" />

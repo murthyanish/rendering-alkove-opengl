@@ -68,6 +68,12 @@ public:
   void unbindTexture(
     unsigned int textureUnit) const;
 
+  // Image Textures
+  void bindImageTexture(
+    unsigned int bindingUnit,
+    TextureManager::TextureID textureID,
+    GLenum access) const;
+
   unsigned int getId() { return programID; };
 
   void setDrawMode(GLenum _drawMode);

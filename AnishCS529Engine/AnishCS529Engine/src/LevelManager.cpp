@@ -679,7 +679,7 @@ void LevelManager::createPlayerObject()
   mainSceneGraph.addAmbientLight(
     AmbientLight(Vector3(1, 1, 1), 0.05f));
   mainSceneGraph.addDirectionalLight(
-    DirectionalLight(LightDirection, 0.5f, Vector3(1.0f, 1.0f, 1.0f)));
+    DirectionalLight(LightDirection, 0.0f, Vector3(1.0f, 1.0f, 1.0f)));
 
 #pragma region PlayerBox
 

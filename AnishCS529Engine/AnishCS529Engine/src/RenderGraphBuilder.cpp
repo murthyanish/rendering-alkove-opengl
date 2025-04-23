@@ -16,9 +16,17 @@
 
 FBO* RenderGraphBuilder::createScreenSizeFBO(
   const std::string& name, std::vector<std::string> attachments) {
-  FBO* fbo = new FBO();
+
   Renderer::Viewport viewport = renderer->getCurrentState().viewport;
-  fbo->setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+
+  return createFBO(name, attachments, viewport.width, viewport.height);
+}
+
+FBO* RenderGraphBuilder::createFBO(const std::string& name, std::vector<std::string> attachments, int width, int height)
+{
+  FBO* fbo = new FBO();
+
+  fbo->setViewport(0, 0, width, height);
   fbo->initialize();
   fbos[name] = fbo;
 
@@ -34,10 +42,16 @@ FBO* RenderGraphBuilder::createScreenSizeFBO(
 
 TextureManager::TextureID RenderGraphBuilder::createScreenSizeTexture(
   const std::string& name) {
-  TextureManager::TextureInfo textureInfo = TextureManager::TextureInfo();
+
   Renderer::Viewport viewport = renderer->getCurrentState().viewport;
-  textureInfo.width = viewport.width;
-  textureInfo.height = viewport.height;
+  return createTexture(name, viewport.width, viewport.height);
+}
+
+TextureManager::TextureID RenderGraphBuilder::createTexture(const std::string& name, int width, int height)
+{
+  TextureManager::TextureInfo textureInfo = TextureManager::TextureInfo();
+  textureInfo.width = width;
+  textureInfo.height = height;
   textureInfo.format = TEXTURE_RGBA32F;
   TextureManager::TextureParameters textureParameters = TextureManager::TextureParameters();
   textureParameters.max_level = 0;

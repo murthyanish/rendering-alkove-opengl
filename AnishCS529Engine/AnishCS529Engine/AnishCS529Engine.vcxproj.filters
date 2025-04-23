@@ -384,7 +384,16 @@
     <ClCompile Include="src\EngineMath.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ShadowPass.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\MapGraphics.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowManager.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MomentShadowMapPass.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -635,10 +644,16 @@
     <ClInclude Include="src\FreeCamera.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ShadowManager.h">
+      <Filter>Engine\Header Files\Systems\RenderingSystem</Filter>
+    </ClInclude>
     <ClInclude Include="src\SolidColorMaterial.h">
       <Filter>Engine\Header Files\ObjectResources\Materials/Meshes</Filter>
     </ClInclude>
-    <ClInclude Include="src\UntexturedLightingPass.h">
+    <ClInclude Include="src\ShadowPass.h">
+      <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MomentShadowMapPass.h">
       <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClInclude>
   </ItemGroup>
@@ -701,6 +716,14 @@
       <Filter>Engine\Shaders</Filter>
     </None>
     <None Include="shaders\ui.frag">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\shadow.frag" />
+    <None Include="shaders\shadow.vert" />
+    <None Include="shaders\gaussean_blur_hor.comp">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\gaussean_blur_vert.comp">
       <Filter>Engine\Shaders</Filter>
     </None>
   </ItemGroup>

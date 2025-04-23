@@ -355,8 +355,8 @@ void Shader::setMat4(const std::string& name, const Matrix4& value) const {
 }
 
 void Shader::bindTexture(
-  unsigned int textureUnit, 
-  const std::string& name, 
+  unsigned int textureUnit,
+  const std::string& name,
   TextureManager::TextureID textureID) const
 {
   glActiveTexture(GL_TEXTURE0 + textureUnit);
@@ -369,4 +369,13 @@ void Shader::unbindTexture(unsigned int textureUnit) const
 {
   glActiveTexture(GL_TEXTURE0 + textureUnit);
   glBindTexture(TEXTURE_2D, 0);
+}
+
+void Shader::bindImageTexture(
+  unsigned int bindingUnit,
+  TextureManager::TextureID textureID,
+  GLenum access) const
+{
+  glBindImageTexture(
+    bindingUnit, textureID, 0, GL_FALSE, 0, access, TextureManager::getInstance().getTextureInfo(textureID).format);
 }

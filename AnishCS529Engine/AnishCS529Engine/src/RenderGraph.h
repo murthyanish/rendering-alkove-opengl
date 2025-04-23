@@ -22,6 +22,7 @@
 #include "SceneGraph.h"
 #include "RenderPass.h"
 #include "RenderGraphBuilder.h"
+#include "ShadowManager.h"
 
 class Renderer;
 class GameWindow;
@@ -29,7 +30,6 @@ class GameWindow;
 class RenderGraph {
 public:
   RenderGraph() = default;
-  ~RenderGraph() { delete renderGraphBuilder; }
 
   void initialize();
   void shutdown();
@@ -54,7 +54,9 @@ public:
   bool lightsSet = false;
 private:
   Renderer* renderer;
-  RenderGraphBuilder* renderGraphBuilder;
+  std::shared_ptr<RenderGraphBuilder> renderGraphBuilder;
+
+  std::shared_ptr<ShadowManager> shadowManager;
 
   std::vector<std::shared_ptr<RenderPass>> renderStack;
   unsigned int uboLights;
@@ -68,8 +70,8 @@ private:
   void initializeLightBuffers();
   void initializeCameraUBO();
 
-  void updateLightBuffers(Lights lights);
-  void updateCameraUBO(std::shared_ptr<Camera> camera);
+  void updateLightBuffers(const Lights& lights) const;
+  void updateCameraUBO(std::shared_ptr<Camera> camera) const;
 };
 
 #include "RenderGraph.inl"

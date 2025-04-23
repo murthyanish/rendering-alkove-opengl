@@ -13,6 +13,9 @@
 #include "precompiled.h"
 #include "RenderGraph.h"
 
+#include "Renderer.h"
+#include "RendererStateSaver.h"
+
 /*!****************************************************************************
  * \brief Initialize the RenderGraph
  * 
@@ -22,7 +25,10 @@
  *****************************************************************************/
 void RenderGraph::initialize()
 {
-  renderGraphBuilder = new RenderGraphBuilder(renderer);
+  renderGraphBuilder = std::make_shared<RenderGraphBuilder>(renderer);
+  shadowManager = std::make_shared<ShadowManager>(renderGraphBuilder.get());
+  
+  renderGraphBuilder->setShadowManager(shadowManager.get());
 
   for (size_t i = 0; i < RenderMask::RenderPassOrder.size(); ++i) {
     maskSortIndex[RenderMask::RenderPassOrder[i]] = i;
@@ -33,9 +39,7 @@ void RenderGraph::initialize()
 }
 
 void RenderGraph::shutdown()
-{
-  delete renderGraphBuilder;
-}
+{}
 
 void RenderGraph::clear()
 {
@@ -55,9 +59,12 @@ void RenderGraph::draw(SceneGraph* scene)
     if (!lightsSet) {
       updateLightBuffers(*(scene->getLights()));
       lightsSet = true;
+      shadowManager->update(scene, scene->getLights());
     }
 
     for (const auto& pass : renderStack) {
+      // Using state saver so I can reset state after without doing manual effort.
+      Renderer::StateSaver savedState(*(renderer));
       pass->draw(camera, scene);
     }
   }
@@ -112,7 +119,7 @@ void RenderGraph::initializeCameraUBO()
   glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboCamera, 0, sizeof(Matrix4) * 2);
 }
 
-void RenderGraph::updateLightBuffers(Lights lights)
+void RenderGraph::updateLightBuffers(const Lights& lights) const
 {
   LightingPassLights lpLights = { lights.sunLight, lights.ambientLight };
   glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
@@ -126,7 +133,7 @@ void RenderGraph::updateLightBuffers(Lights lights)
   glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
-void RenderGraph::updateCameraUBO(std::shared_ptr<Camera> camera)
+void RenderGraph::updateCameraUBO(std::shared_ptr<Camera> camera) const
 {
   glBindBuffer(GL_UNIFORM_BUFFER, uboCamera);
   glBufferSubData(GL_UNIFORM_BUFFER,

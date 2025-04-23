@@ -71,6 +71,15 @@ public:
       unsigned int, int, float, VectorTemplated<float, 2>, Vector3, Matrix4, TextureManager::TextureID>
   >;
 
+  struct ComputeDispatchSize {
+    unsigned int x;
+    unsigned int y;
+    unsigned int z;
+
+    ComputeDispatchSize(unsigned int s) : x(s), y(s), z(s) {};
+    ComputeDispatchSize(unsigned int _x, unsigned int _y, unsigned int _z) : x(_x), y(_y), z(_z) {};
+  };
+
   RenderPass() = default;
   virtual ~RenderPass() = default;
 
@@ -114,6 +123,10 @@ public:
   void enable();
   void disable();
   bool isEnabled() const;
+
+  /* Compute specific */
+  virtual void compute(
+      ComputeDispatchSize dispatchSize);
 
 protected:
   bool enabled;

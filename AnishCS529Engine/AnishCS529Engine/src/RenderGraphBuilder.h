@@ -20,14 +20,21 @@
 #include "FBO.h"
 
 class Renderer;
+class ShadowManager;
 
 class RenderGraphBuilder {
 public:
   RenderGraphBuilder(Renderer* _renderer) : renderer(_renderer) {}
   ~RenderGraphBuilder() { clear(); };
   
-  FBO* createScreenSizeFBO(const std::string& name, std::vector<std::string> attachments);
-  TextureManager::TextureID createScreenSizeTexture(const std::string& name);
+  FBO* createScreenSizeFBO
+  (const std::string& name, std::vector<std::string> attachments);
+  FBO* createFBO(
+    const std::string& name, std::vector<std::string> attachments, int width, int height);
+  TextureManager::TextureID createScreenSizeTexture(
+    const std::string& name);
+  TextureManager::TextureID createTexture(
+    const std::string& name, int width, int height);
 
   FBO* getFBO(const std::string& name);
   TextureManager::TextureID getTexture(const std::string& name);
@@ -37,9 +44,12 @@ public:
   void clear();
 
   Renderer* getRenderer() { return renderer; };
+  void setShadowManager(ShadowManager* _shadowManager) { shadowManager = _shadowManager; };
+  ShadowManager* getShadowManager() { return shadowManager; };
 
 private:
   Renderer* renderer;
+  ShadowManager* shadowManager;
   std::unordered_map<std::string, TextureManager::TextureID> textures;
   std::unordered_map<std::string, FBO*> fbos;
 };

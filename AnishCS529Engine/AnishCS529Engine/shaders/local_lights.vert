@@ -24,6 +24,11 @@ struct Light {
   float intensity;
   vec3 color;
   float radius;
+
+  int castShadow;
+  int shadowIndex;
+
+  int padding[2];
 };
 
 layout(std430, binding = 2) buffer LightBuffer {
@@ -36,9 +41,9 @@ void main()
 {
     // Computes world position at a pixel used for
     // light and eye vector calculations
-    vec3 worldPos=(vertex.xyz * lights[lightIndex].radius) + lights[lightIndex].position;
+    const vec4 worldPos=vec4((vertex.xyz * lights[lightIndex].radius) + lights[lightIndex].position, 1.0f);
 
     // Computes the point’s projection on the screen
-    gl_Position = projection * view * vec4(worldPos,1.0f);
+    gl_Position = projection * view * worldPos;
     //gl_Position = projection*view*vec4( ((vertex.xyz * lights[lightIndex].radius) + lights[lightIndex].position), 1.0 );
 }

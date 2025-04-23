@@ -14,9 +14,10 @@
 #include "RenderFlags.h"
 
 static std::vector<uint32_t> RenderPassOrder = {
-    RenderMask::GBufferPrepass,
     RenderMask::SkydomePass,
     RenderMask::ShadowPass,
+    RenderMask::MomentShadowMapPass,
+    RenderMask::GBufferPrepass,
     RenderMask::DebugPass,
     RenderMask::LightingPass,
     RenderMask::LocalLightsPass,

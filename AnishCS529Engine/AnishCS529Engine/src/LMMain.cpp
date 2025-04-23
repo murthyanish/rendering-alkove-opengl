@@ -25,7 +25,7 @@ int main()
 {
 
     LevelManager::Instance().initialize();
-    LevelManager::Instance().DisplayLogos();
+    //LevelManager::Instance().DisplayLogos();
 
     //Main Loop
     while (!LevelManager::Instance().GameComplete()) {
