@@ -188,13 +188,13 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
   }*/
 
 
-  sceneGraph.addPointLight(
+  /*sceneGraph.addPointLight(
     PointLight(
       initialPosition + Vector3(0.0f, 20.0f, 0.0f),
       2000.0f, Vector3(1.0f, 1.0f, 1.0f), 1000.0f,
       1
       )
-  );
+  );*/
 
 
   // Objects
@@ -248,6 +248,18 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
       ->registerToPhysicsManager(PhysicsManager::Instance());
     rigidBody->initialize();
   }
+
+  {
+    auto teapot = std::make_shared<GameObject>("teapot");
+    sceneGraph.addNode(teapot);
+    teapot->setLocalPosition(Vector3(0.0f, 5.0f, 0.0f));
+    teapot->setLocalScaling(Vector3(1.0f, 1.0f, 1.0f));
+    teapot->setLocalRotation(Quaternion::fromEuler(Vector3(-PI/2.0f, 0.0f, 0.0f)));
+    auto renderComp = teapot->addComponent<Render3D>();
+    auto teapotMesh = Mesh::createTeapotMesh("teapot");
+    renderComp->setMesh(teapotMesh)->setMaterial(cracksMaterial)->setRenderMask(RenderMask::ShadowLit);
+  }
+
 
   auto autoBunnyParent = std::make_shared<GameObject>("autoBunnyParent");
   sceneGraph.addNode(autoBunnyParent);

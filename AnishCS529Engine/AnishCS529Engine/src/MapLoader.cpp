@@ -31,8 +31,8 @@ void MapLoader::initializeResources() {
 
   // Cracks Material
   cracksMaterial = Material::getMaterial<TextureMaterial>("cracks");
-  cracksMaterial->setProperty("specular", Vector3(0.009f, 0.009f, 0.009f));
-  cracksMaterial->setProperty("shininess", 10.0f);
+  cracksMaterial->setProperty("specular", Vector3(1.0f));
+  cracksMaterial->setProperty("shininess", 128.0f);
   cracksMaterial->addTexture("media/textures/cracks.png");
 
   // Additional Materials

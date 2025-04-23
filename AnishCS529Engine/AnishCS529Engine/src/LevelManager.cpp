@@ -813,7 +813,8 @@ void LevelManager::initalizePlayerInLevel()
 
     mainRenderer->getRenderGraph()->addPass<GBufferPrepass>();
 
-    mainRenderer->getRenderGraph()->addPass<LightingPass>();
+    auto lightingPass = mainRenderer->getRenderGraph()->addPass<LightingPass>();
+    lightingPass->addIrradianceMap("media/textures/skys/Newport_Loft_Ref.irr.hdr");
 
     mainRenderer->getRenderGraph()->addPass<LocalLightsPass>();
 

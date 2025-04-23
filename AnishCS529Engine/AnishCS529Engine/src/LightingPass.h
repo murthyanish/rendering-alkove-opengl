@@ -24,6 +24,9 @@ public:
 
   void initialize();
 
+  void addIrradianceMap(TextureManager::TextureID textureID);
+  void addIrradianceMap(const std::string& texturePath);
+
   void draw(
     std::shared_ptr<Camera> camera,
     SceneGraph* scene) const override;

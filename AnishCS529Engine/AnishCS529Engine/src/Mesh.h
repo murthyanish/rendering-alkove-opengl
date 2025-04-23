@@ -95,6 +95,7 @@ public:
   void drawEBOTrisWithoutBind();
 
   /* Mesh factory */
+  static void pushquad(std::vector<unsigned int>& Tri, int i, int j, int k, int l);
   static std::shared_ptr<Mesh> loadMesh(const std::string& filename);
   static std::pair<Attributes, std::vector<unsigned int>> createFace(const Transform& tr);
 
@@ -103,6 +104,7 @@ public:
   static std::shared_ptr<Mesh> createSquareMesh(const std::string& name, float scale = 1.0f);
   static std::shared_ptr<Mesh> createCubeMesh(const std::string& name);
   static std::shared_ptr<Mesh> getShapeMesh(Type type);
+  static std::shared_ptr<Mesh> createTeapotMesh(const std::string& name, const int n = 12);
 
 private:
   std::shared_ptr<GeometryBuffer> geometryBuffer;

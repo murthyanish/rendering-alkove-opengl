@@ -399,6 +399,9 @@
     <ClCompile Include="src\SkydomePass.cpp">
       <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClCompile>
+    <ClCompile Include="src\TeapotMesh.cpp">
+      <Filter>Engine\Source Files\ObjectResources\Materials/Meshes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Matrix4.h">

@@ -101,6 +101,7 @@
       <FileType>Document</FileType>
     </ClInclude>
     <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\TeapotMesh.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\TextureMaterial.cpp" />
     <ClCompile Include="src\TimeControlledRB.cpp" />

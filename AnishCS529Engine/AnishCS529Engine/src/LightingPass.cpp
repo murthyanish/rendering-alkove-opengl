@@ -18,6 +18,7 @@ LightingPass::LightingPass() :
   RenderPass(), screenQuad(Mesh::createSquareMesh("screenQuad", 1.0f)) {
   this->addShader("shaders/lighting.vert\nshaders/lighting.frag");
 
+  setProperty("enableIrradiance", 0);
   renderMask = RenderMask::LightingPass;
 }
 
@@ -31,6 +32,18 @@ void LightingPass::initialize()
     "GBuffer_diffuse", renderGraphBuilder->getTexture("GBuffer_diffuse"));
   setProperty(
     "GBuffer_specular", renderGraphBuilder->getTexture("GBuffer_specular"));
+}
+
+void LightingPass::addIrradianceMap(TextureManager::TextureID textureID)
+{
+  setProperty("enableIrradiance", 1);
+  setProperty("IrradianceMap", textureID);
+}
+
+void LightingPass::addIrradianceMap(const std::string& texturePath)
+{
+  setProperty("enableIrradiance", 1);
+  setProperty("IrradianceMap", TextureManager::getInstance().loadFile(texturePath));
 }
 
 void LightingPass::draw(

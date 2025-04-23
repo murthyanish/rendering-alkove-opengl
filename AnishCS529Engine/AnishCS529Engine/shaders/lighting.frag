@@ -45,6 +45,10 @@ uniform sampler2D GBuffer_normal;
 uniform sampler2D GBuffer_diffuse;
 uniform sampler2D GBuffer_specular;
 
+// Irradiance Map
+uniform int enableIrradiance;
+uniform sampler2D IrradianceMap;
+
 out vec3 FragColor;
 
 vec3 toSRGB(vec3 color) {
@@ -91,7 +95,15 @@ void main()
     float VN = max(dot(V,N),0.0);
     float LH = max(dot(L,H),0.0);
 
-    vec3 ambientDiffuse = Ia*Kd;
+    vec3 ambientDiffuse;
+
+    if (enableIrradiance > 0) {
+      vec2 uv = vec2(-atan(-N.z,-N.x)/(2.0f*pi), acos(N.y)/pi);
+      ambientDiffuse = 5.0 * Kd * (texture(IrradianceMap, uv).xyz) / M_PI;
+    }
+    else {
+      ambientDiffuse = Ia*Kd;
+    }
 
     // BRDF
     vec3 F = Ks + (((1,1,1)-Ks)*pow((1-LH),5.0));
