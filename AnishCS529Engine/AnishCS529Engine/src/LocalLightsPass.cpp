@@ -40,6 +40,8 @@ void LocalLightsPass::draw(
   std::shared_ptr<Camera> camera,
   SceneGraph* sceneGraph) const {
 
+  glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
   unsigned int lightCount = sceneGraph->getLights()->pointLights.size();
 
   if (lightCount == 0)

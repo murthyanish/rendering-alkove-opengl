@@ -37,7 +37,7 @@ public:
   struct ShadowFBOInfo {
      FBO* fbo;
      TextureManager::TextureID textureID;
-     TextureManager::TextureID momentTextureID = -1;
+     TextureManager::TextureID momentTextureID;
   };
 
   struct ShadowInfo {

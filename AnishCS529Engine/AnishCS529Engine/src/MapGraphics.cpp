@@ -239,7 +239,7 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
   auto autoBunnyParent = std::make_shared<GameObject>("autoBunnyParent");
   sceneGraph.addNode(autoBunnyParent);
 
-  auto autoBunnyMaterial = Material::getMaterial<SolidColorMaterial>("autoBunnyMaterial");
+  /*auto autoBunnyMaterial = Material::getMaterial<SolidColorMaterial>("autoBunnyMaterial");
   autoBunnyMaterial->setProperty("diffuse", Vector3(0.0f));
   autoBunnyMaterial->setProperty("specular", Vector3(0.8f));
   autoBunnyMaterial->setProperty("shininess", 128.0f);
@@ -260,6 +260,6 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
     auto renderComp = bunny->addComponent<Render3D>();
     auto bunnyMesh = Mesh::loadMesh("media/models/bun_zipper.ply");
     renderComp->setMesh(bunnyMesh)->setMaterial(autoBunnyMaterial);
-  }
+  }*/
 
 }

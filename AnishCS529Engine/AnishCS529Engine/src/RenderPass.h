@@ -77,6 +77,7 @@ public:
     unsigned int z;
 
     ComputeDispatchSize(unsigned int s) : x(s), y(s), z(s) {};
+    ComputeDispatchSize(unsigned int _x, unsigned int _y, unsigned int _z) : x(_x), y(_y), z(_z) {};
   };
 
   RenderPass() = default;

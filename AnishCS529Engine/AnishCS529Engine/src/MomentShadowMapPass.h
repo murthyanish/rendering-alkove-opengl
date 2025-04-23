@@ -18,7 +18,11 @@ class MomentShadowMapPass : public RenderPass {
 public:
   MomentShadowMapPass();
 
-  virtual void initialize() override;
+  void computeHor(ComputeDispatchSize dispatch);
+  void computeVert(ComputeDispatchSize dispatch);
+
+private:
+  std::shared_ptr<Shader> shaderVert;
 };
 
 #endif // !MOMENT_SHADOW_MAP_PASS_H

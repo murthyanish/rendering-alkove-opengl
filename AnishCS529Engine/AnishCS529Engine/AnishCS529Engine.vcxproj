@@ -208,6 +208,7 @@
     <None Include="media\Map\Turret.fbx">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
+    <None Include="shaders\gaussean_blur_vert.comp" />
     <None Include="shaders\gbuffer.frag" />
     <None Include="shaders\gbuffer.vert" />
     <None Include="shaders\lighting.frag">
@@ -227,7 +228,7 @@
     <ClInclude Include="src\RenderGraph.inl">
       <FileType>Document</FileType>
     </ClInclude>
-    <None Include="shaders\moment_shadow_map.comp" />
+    <None Include="shaders\gaussean_blur_hor.comp" />
     <None Include="shaders\shadow.frag" />
     <None Include="shaders\shadow.vert" />
     <None Include="shaders\skydome.frag" />

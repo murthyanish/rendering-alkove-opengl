@@ -37,7 +37,7 @@ void ShadowManager::update(SceneGraph* scene, Lights* lights)
         const int shadowIndex = light.shadowIndex;
         if ((shadows[shadowIndex].lastLightPosition - light.position).magnitudSquared() > epsilon) {
           updateShadow(scene, shadows[shadowIndex], light.position);
-          updateMomentShadowMap(shadows[shadowIndex]);
+          //updateMomentShadowMap(shadows[shadowIndex]);
         }
       }
     }
@@ -65,6 +65,10 @@ int ShadowManager::addShadow(
     params.resolution, params.resolution);
 
   // For now we will always create a Moment Shadow Map.
+  renderGraphBuilder->createTexture(
+    "moment_shadow_temp",
+    params.resolution, params.resolution);
+
   fboInfo.momentTextureID = renderGraphBuilder->createTexture(
     "moment_shadow_" + std::to_string(light.shadowIndex),
     params.resolution, params.resolution);
@@ -112,22 +116,53 @@ void ShadowManager::useShadow(int index, Shader* shader) const
   * 0-3 are always reserved to the shadows.
   */
   const ShadowInfo shadow = shadows[index];
-  shader->bindTexture(0, "ShadowMap", shadow.fboInfo.textureID);
+  shader->bindTexture(0, "ShadowMap", shadow.fboInfo.momentTextureID);
 
   shader->setMat4("ShadowMatrix", shadow.shadowMatrix);
 }
 
 void ShadowManager::updateMomentShadowMap(ShadowInfo& shadow)
 {
+
+  auto tempTexture = renderGraphBuilder->getTexture("moment_shadow_temp");
+
   glBindImageTexture(
-    0, shadow.fboInfo.momentTextureID, 0,
+    0, shadow.fboInfo.textureID, 0,
+    GL_FALSE, 0,
+    GL_READ_ONLY,
+    TextureManager::getInstance().getTextureInfo(
+      shadow.fboInfo.textureID).format
+  );
+  
+  glBindImageTexture(
+    1, tempTexture, 0,
+    GL_FALSE, 0,
+    GL_WRITE_ONLY,
+    TextureManager::getInstance().getTextureInfo(
+      tempTexture).format
+  );
+
+  momentShadowMapPass.computeHor(RenderPass::ComputeDispatchSize(1024 / 16, 1024 / 1, 1));
+
+
+  glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+
+  glBindImageTexture(
+    0, tempTexture, 0,
+    GL_FALSE, 0,
+    GL_READ_ONLY,
+    TextureManager::getInstance().getTextureInfo(
+      tempTexture).format
+  );
+  
+  glBindImageTexture(
+    1, shadow.fboInfo.momentTextureID, 0,
     GL_FALSE, 0,
     GL_WRITE_ONLY,
     TextureManager::getInstance().getTextureInfo(
       shadow.fboInfo.momentTextureID).format
   );
 
-  momentShadowMapPass.setProperty("ShadowMap", shadow.fboInfo.textureID);
-  momentShadowMapPass.setProperty("alpha", alpha);
-  momentShadowMapPass.compute(shadow.params.resolution);
+  momentShadowMapPass.computeVert(RenderPass::ComputeDispatchSize(1024 / 1, 1024 / 16, 1));
 }

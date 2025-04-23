@@ -720,7 +720,10 @@
     </None>
     <None Include="shaders\shadow.frag" />
     <None Include="shaders\shadow.vert" />
-    <None Include="shaders\moment_shadow_map.comp">
+    <None Include="shaders\gaussean_blur_hor.comp">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\gaussean_blur_vert.comp">
       <Filter>Engine\Shaders</Filter>
     </None>
   </ItemGroup>
