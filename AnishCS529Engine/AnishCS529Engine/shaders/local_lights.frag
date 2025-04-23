@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Pixel shader for rendering Point Lights
 //
-// Copyright © 2025 DIGIPEN Institute of Technology. All rights reserved.
+// Copyright ? 2025 DIGIPEN Institute of Technology. All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////
 #version 440
@@ -59,7 +59,9 @@ vec3 choleskyDecomposition(
   float d = sqrt(m_22 - pow(b,2));
   if ( d < 0 ) d = 0.0001;
   const float e = (m_23 - b*c)/d;
-  float f = sqrt(m_33 - pow(c,2) - pow(e,2));
+  float f_nos = m_33 - pow(c,2) - pow(e,2);
+  if (f_nos <= 0) f_nos = 0.01;
+  float f = sqrt(f_nos);
   if ( f < 0 ) f = 0.0001;
 
   const float c_b_1 = z_1/a;
@@ -74,21 +76,28 @@ vec3 choleskyDecomposition(
   return vec3(c_1, c_2, c_3);
 }
 
-bool solveQuadratic(float A, float B, float C, out float z1, out float z2) {
+vec2 solveQuadratic(float A, float B, float C) {
+  float z1;
+  float z2;
     float discriminant = B * B - 4.0 * A * C;
 
     if (discriminant < 0.0) {
-        return false; // No real roots
+        return vec2(0); // No real roots
     }
 
     float sqrtDisc = sqrt(discriminant);
 
-    // Numerically stable version
-    float q = (B > 0.0) ? -0.5 * (B + sqrtDisc)
-                        : -0.5 * (B - sqrtDisc);
+    z1 = -B - sqrtDisc;
+    z1 /= 2 * A;
+    z2 = -B + sqrtDisc;
+    z2 /= 2 * A;
 
-    z1 = q / A;
-    z2 = C / q;
+//    // Numerically stable version
+//    float q = (B > 0.0) ? -0.5 * (B + sqrtDisc)
+//                        : -0.5 * (B - sqrtDisc);
+//
+//    z1 = q / A;
+//    z2 = C / q;
 
     // Ensure z1 <= z2
     if (z1 > z2) {
@@ -97,34 +106,33 @@ bool solveQuadratic(float A, float B, float C, out float z1, out float z2) {
         z2 = temp;
     }
 
-    return true;
+    return vec2(z1,z2);
 }
 
 float hamburger4MSM(vec4 b, float z_f) {
   const float alpha = 0.001;
-  vec4 b_1 = (1-alpha)*b + alpha*vec4(0.5);
+  const vec4 b_1 = (1-alpha)*b + alpha*vec4(0.5);
 
-  vec3 c = choleskyDecomposition(
+  const vec3 c = choleskyDecomposition(
     1, b_1.x, b_1.y,
     b_1.y, b_1.z, b_1.w,
     1, z_f, z_f*z_f);
 
-  float z_2, z_3;
-
-  if(solveQuadratic(c.z, c.y, c.x, z_2, z_3)) {
-    if (z_f <= z_2) return 0.0;
-    else if (z_f <= z_3) {
-      return (z_f * z_3 - b_1.x * (z_f + z_3) + b_1.y)
-        /
-        ((z_3 - z_2) * (z_f - z_2));
-    }
-    else {
-      return 1 - ((z_2 * z_3 - b_1.x * (z_2 + z_3) + b_1.y)
-        /
-        ((z_f - z_2) * (z_f - z_3)));
-    }
+  const vec2 z = solveQuadratic(c.z, c.y, c.x);
+  const float z_2 = z.x;
+  const float z_3 = z.y;
+  if (z_2 == 0 && z_3 == 0) return 0.0;
+  if (z_f <= z_2) return 0.0;
+  else if (z_f <= z_3) {
+    return (z_f * z_3 - b_1.x * (z_f + z_3) + b_1.y)
+    /
+    ((z_3 - z_2) * (z_f - z_2));
   }
-  return 0.0f;
+  else {
+    return 1 - ((z_2 * z_3 - b_1.x * (z_2 + z_3) + b_1.y)
+    /
+    ((z_f - z_2) * (z_f - z_3)));
+  }
 }
 
 
@@ -197,7 +205,7 @@ void main()
     vec3 F = Ks + (((1,1,1)-Ks)*pow((1-LH),5.0));
     float D = ((alpha+2.0)/(2*M_PI))*(pow(HN,alpha));
     vec3 BRDF = (Kd/M_PI) + ((F*D)/(4*pow(max(LH,0.0000000001),2.0)));
-    FragColor = (Ii*LN*BRDF) * (1-G);
+    FragColor = (Ii*LN*BRDF) * (1.0 - G);
 
     float constant  = 1.0;
     float linear    = 0.7;

@@ -43,7 +43,7 @@ namespace RenderMask {
   constexpr uint32_t UIPass             = 1 << 7;
 
   /** Default lit object passes */
-  constexpr uint32_t DefaultLit         = GBufferPrepass | LightingPass;
+  constexpr uint32_t DefaultLit         = GBufferPrepass | LightingPass | ShadowPass;
   constexpr uint32_t ShadowLit         = GBufferPrepass | LightingPass | ShadowPass;
 
   static std::vector<uint32_t> RenderPassOrder;

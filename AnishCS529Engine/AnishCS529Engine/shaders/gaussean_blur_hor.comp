@@ -22,10 +22,12 @@ void main() {
 
     vec4 sum = vec4(0);
     float weightSum = 0.0;
-
+     
     for (int i = 0; i < 5; ++i) {
-      sum +=  kernel[i] * imageLoad(imgInput, texelCoord+ivec2(i-2,0));
-      weightSum += kernel[i];
+      //sum +=  kernel[i] * imageLoad(imgInput, texelCoord+ivec2(i-2, 0));
+      sum +=  imageLoad(imgInput, texelCoord+ivec2(i-2, 0));
+      //weightSum += kernel[i];
+      weightSum += 1;
     }
 
     imageStore(imgOutput, texelCoord, sum/weightSum);
