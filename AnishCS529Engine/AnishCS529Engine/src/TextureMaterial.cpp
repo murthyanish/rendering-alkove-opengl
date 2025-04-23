@@ -21,6 +21,8 @@ TextureManager::TextureID TextureMaterial::addTexture(
   this->setProperty("mainTexture", texture);
   this->setProperty("mainTextureScale", 
     VectorTemplated<float, 2>({ scaleX, scaleY }));
+  this->setProperty("HDR", TextureManager::getInstance().isHDR(texture));
+
   this->setProperty("useNormalMap", false);
   return texture;
 }
@@ -32,6 +34,8 @@ TextureManager::TextureID TextureMaterial::addTexture(
   this->setProperty("mainTexture", textureID);
   this->setProperty("mainTextureScale",
     VectorTemplated<float, 2>({ scaleX, scaleY }));
+  this->setProperty("HDR", TextureManager::getInstance().isHDR(textureID));
+
   this->setProperty("useNormalMap", false);
   return textureID;
 }

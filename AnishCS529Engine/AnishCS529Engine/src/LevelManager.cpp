@@ -806,6 +806,11 @@ void LevelManager::initalizePlayerInLevel()
     pbFPCController->setRespawnCheckpoint(activeSpawnPoint, activeSpawnRotation);
     pbFPCController->respawnPlayer(true, true);
 
+    
+
+    //auto skydomePass = mainRenderer->getRenderGraph()->addPass<SkydomePass>();
+    //skydomePass->addTexture(std::string("media/textures/skys/Newport_Loft_Ref.hdr"));
+
     mainRenderer->getRenderGraph()->addPass<GBufferPrepass>();
 
     mainRenderer->getRenderGraph()->addPass<LightingPass>();

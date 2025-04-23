@@ -113,7 +113,7 @@ TextureManager::TextureID TextureManager::loadHDRFile(const std::string& filepat
 
   textureInfo.format = TEXTURE_RGBA32F;
 
-  TextureID id = createOpenGLTexture(textureInfo, data, textureParameters);
+  TextureID id = createOpenGLTexture(textureInfo, data, textureParameters, GL_FLOAT);
 
   stbi_image_free(data);
 
@@ -173,7 +173,7 @@ void TextureManager::setTextureParameters(TextureParameters textureParameters)
 
 TextureManager::TextureID TextureManager::createOpenGLTexture(
   const TextureInfo& textureInfo, const void* data,
-  TextureParameters textureParameters)
+  TextureParameters textureParameters, GLenum dataFormat)
 {
   TextureID id = TextureID();
   glGenTextures(1, &(id.id));
@@ -195,7 +195,7 @@ TextureManager::TextureID TextureManager::createOpenGLTexture(
 
   glTexImage2D(
     TEXTURE_2D, 0, textureInfo.format, textureInfo.width, textureInfo.height,
-    0, format, GL_UNSIGNED_BYTE, data);
+    0, format, dataFormat, data);
 
   setTextureParameters(textureParameters);
 

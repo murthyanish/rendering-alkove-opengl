@@ -14,6 +14,8 @@
 #include "RenderGraphBuilder.h"
 #include "Renderer.h"
 
+#include "RendererStateSaver.h"
+
 FBO* RenderGraphBuilder::createScreenSizeFBO(
   const std::string& name, std::vector<std::string> attachments) {
 
@@ -24,6 +26,8 @@ FBO* RenderGraphBuilder::createScreenSizeFBO(
 
 FBO* RenderGraphBuilder::createFBO(const std::string& name, std::vector<std::string> attachments, int width, int height)
 {
+  if (fbos.contains(name)) return fbos[name];
+
   FBO* fbo = new FBO();
 
   fbo->setViewport(0, 0, width, height);
@@ -37,11 +41,18 @@ FBO* RenderGraphBuilder::createFBO(const std::string& name, std::vector<std::str
   fbo->finalize();
   fbo->addScreenSizeBufferUpdateCallback(renderer);
 
+  Renderer::StateSaver statesaver(*renderer);
+
+  fbo->useViewport();
+  fbo->clear();
+
   return fbo;
 }
 
 TextureManager::TextureID RenderGraphBuilder::createScreenSizeTexture(
   const std::string& name) {
+
+  if (textures.contains(name)) return textures[name];
 
   Renderer::Viewport viewport = renderer->getCurrentState().viewport;
   return createTexture(name, viewport.width, viewport.height);
@@ -49,6 +60,8 @@ TextureManager::TextureID RenderGraphBuilder::createScreenSizeTexture(
 
 TextureManager::TextureID RenderGraphBuilder::createTexture(const std::string& name, int width, int height)
 {
+  if (textures.contains(name)) return textures[name];
+
   TextureManager::TextureInfo textureInfo = TextureManager::TextureInfo();
   textureInfo.width = width;
   textureInfo.height = height;
@@ -73,7 +86,19 @@ TextureManager::TextureID RenderGraphBuilder::getTexture(const std::string & nam
   return textures[name];
 }
 
-void RenderGraphBuilder::clearFBOs() {
+void RenderGraphBuilder::clearFBOs()
+{
+  Renderer::StateSaver state(*renderer);
+
+  for (const auto& [name, fbo] : fbos) {
+    if (fbo) {
+      fbo->useViewport();
+      fbo->clear();
+    }
+  }
+}
+
+void RenderGraphBuilder::deleteFBOs() {
   for ( const auto & [name, fbo] : fbos ) {
     if (fbo) delete fbo;
   }
@@ -81,13 +106,13 @@ void RenderGraphBuilder::clearFBOs() {
   fbos.clear();
 }
 
-void RenderGraphBuilder::clearTextures()
+void RenderGraphBuilder::deleteTextures()
 {
   textures.clear();
 }
 
-void RenderGraphBuilder::clear()
+void RenderGraphBuilder::deleteResources()
 {
-  clearFBOs();
-  clearTextures();
+  deleteFBOs();
+  deleteTextures();
 }

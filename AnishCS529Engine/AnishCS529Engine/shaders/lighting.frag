@@ -47,18 +47,8 @@ uniform sampler2D GBuffer_specular;
 
 out vec3 FragColor;
 
-vec3 toLinear(vec3 color) {
-  return pow(
-      (
-        (exposure * color) / 
-        (
-          (exposure * color) + 
-          vec3(1.0)
-        )
-      ), vec3(2.2));
-}
-
 vec3 toSRGB(vec3 color) {
+  const float exposure = 1.0f;
   return pow(
       (
         (exposure * color) / 
@@ -87,11 +77,13 @@ void main()
     
     vec3 Ii = sunLight.color * sunLight.intensity;
     vec3 L = -normalize(sunLight.direction);
-
-    if (HDR) {
-      Kd = toLinear(Kd);
-    }
     
+
+    if (texture(GBuffer_diffuse, gBufferPosition).w == 0.0f) {
+      FragColor = toSRGB(Kd);
+      return;
+    }
+
     // The lighting calculation ...
     vec3 H = normalize(L+V);
     float LN = max(dot(L,N),0.0);
@@ -107,7 +99,5 @@ void main()
     vec3 BRDF = (Kd/M_PI) + ((F*D)/(4*pow(max(LH,0.0000000001),2.0)));
     FragColor = ambientDiffuse + (Ii*LN*BRDF);
 
-    if (HDR) {
-      FragColor = toSRGB(FragColor);
-    }
+    FragColor = toSRGB(FragColor);
 }

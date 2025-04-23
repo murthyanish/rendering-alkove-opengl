@@ -47,7 +47,5 @@ void GBufferPrepass::draw(std::shared_ptr<Camera> camera, SceneGraph* sceneGraph
 
   RenderPass::draw(camera, sceneGraph);
 
-  renderGraphBuilder->getRenderer()->setViewport(viewport);
-
   gbuffer->unbind();
 }

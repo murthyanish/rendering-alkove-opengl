@@ -22,6 +22,18 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
 
   Vector3 center(offsetX, offsetY, offsetZ);
 
+  auto skydomeMaterial = std::make_shared<TextureMaterial>("media/textures/skys/Newport_Loft_Ref.hdr");
+  skydomeMaterial->setProperty("skydome", 1);
+
+  auto skydome = std::make_shared<GameObject>("skydome");
+
+  sceneGraph.addNode(skydome);
+  skydome->setLocalScaling(Vector3(1000.0f));
+
+  auto skydomeRender = skydome->addComponent<Render3D>();
+  skydomeRender->setMaterial(skydomeMaterial);
+  skydomeRender->setMesh(Mesh::createMesh("skydome", Mesh::Sphere));
+
   auto createWall = [&](const std::string& name, const Vector3& localPos, const Vector3& localScale) {
     auto wall = std::make_shared<GameObject>(name, GameObject::RUNNABLE_WALL);
     sceneGraph.addNode(wall);
@@ -52,11 +64,12 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
 
 
   // Walls
-  createWall("LeftWall", Vector3(-width / 2.0f, height / 2.0f, 0.0f), Vector3(wallThickness, height, depth));
-  createWall("RightWall", Vector3(width / 2.0f, height / 2.0f, 0.0f), Vector3(wallThickness, height, depth));
-  createWall("BackWall", Vector3(0.0f, height / 2.0f, depth / 2.0f), Vector3(width, height, wallThickness));
-  createWall("FrontWall", Vector3(0.0f, height / 2.0f, -depth / 2.0f), Vector3(width, height, wallThickness));
-  createWall("TopWall", Vector3(0.0f, height, 0.0f), Vector3(width, wallThickness, depth));
+  //createWall("LeftWall", Vector3(-width / 2.0f, height / 2.0f, 0.0f), Vector3(wallThickness, height, depth));
+  //createWall("RightWall", Vector3(width / 2.0f, height / 2.0f, 0.0f), Vector3(wallThickness, height, depth));
+  //createWall("BackWall", Vector3(0.0f, height / 2.0f, depth / 2.0f), Vector3(width, height, wallThickness));
+  //createWall("FrontWall", Vector3(0.0f, height / 2.0f, -depth / 2.0f), Vector3(width, height, wallThickness));
+  //createWall("TopWall", Vector3(0.0f, height, 0.0f), Vector3(width, wallThickness, depth));
+  
   createWall("BottomWall", Vector3(0.0f, 0.0f, 0.0f), Vector3(width, wallThickness, depth));
 
   {

@@ -85,6 +85,7 @@
     <ClCompile Include="src\ShaderManager.cpp" />
     <ClCompile Include="src\ShadowManager.cpp" />
     <ClCompile Include="src\ShadowPass.cpp" />
+    <ClCompile Include="src\SkydomePass.cpp" />
     <ClCompile Include="src\Sphere.cpp" />
     <ClCompile Include="src\CollisionGenerator.cpp" />
     <ClCompile Include="src\CollisionListener.cpp" />

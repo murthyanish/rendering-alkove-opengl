@@ -64,7 +64,7 @@ public:
   void updateMomentShadowMap(ShadowInfo& shadow);
 
 private:
-  const float alpha = 0.001;
+  const float alpha = 0.001f;
   std::vector<ShadowInfo> shadows;
   RenderGraphBuilder* renderGraphBuilder;
 
