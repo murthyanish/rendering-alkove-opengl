@@ -166,7 +166,7 @@ vec3 irradianceSpecular(
       textureLod(skydome, uvFromDirectionVectorFlipped(-omega_k), level).xyz;
     
     //const vec3 BRDF = IiIBL * clamp(N*omega_k, 0.001) * ((F*specD)/(4*pow(max(LH,0.0000000001),2.0)));
-    const vec3 BRDF = (Kd/M_PI) + ((F*specD)/(4*pow(max(LH,0.0000000001),2.0)));
+    const vec3 BRDF = (Kd/M_PI) + ((F)/(4*pow(max(LH,0.0000000001),2.0)));
     
     finalSpecular += IiIBL*LN*BRDF;
   }

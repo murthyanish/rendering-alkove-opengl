@@ -84,12 +84,12 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
 
   // Lights
 
-  /*sceneGraph.addPointLight(
-      PointLight(
-        Vector3(-110.5f + offsetX, 50.0f + offsetY, -120.0f + offsetZ),
-        2.0f,
-        Vector3(1.0f),
-        50.0f));*/
+  sceneGraph.addPointLight(
+    PointLight(
+      Vector3(-110.5f + offsetX, 50.0f + offsetY, -120.0f + offsetZ),
+      2.0f,
+      Vector3(1.0f),
+      50.0f));
 
 
         /*for (int i = 0; i < 980; ++i) {
