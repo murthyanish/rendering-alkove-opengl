@@ -12,8 +12,10 @@ layout (local_size_x = 16, local_size_y = 1) in;
 layout(rgba32f, binding = 0) readonly uniform image2D imgInput;
 layout(rgba32f, binding = 1) writeonly uniform image2D imgOutput;
 
-// Gaussian kernel coefficients (example for 5x5 kernel)
-const float kernel[5] = {0.0517, 0.1355, 0.2215, 0.1355, 0.0517};
+layout(std140, binding = 3) uniform moments {
+  float width;
+  float weights[101];
+};
 
 uniform float alpha;
 
@@ -23,11 +25,11 @@ void main() {
     vec4 sum = vec4(0);
     float weightSum = 0.0;
      
-    for (int i = 0; i < 5; ++i) {
-      //sum +=  kernel[i] * imageLoad(imgInput, texelCoord+ivec2(i-2, 0));
-      sum +=  imageLoad(imgInput, texelCoord+ivec2(i-2, 0));
-      //weightSum += kernel[i];
-      weightSum += 1;
+    for (int i = 0; i < 2*width+1; ++i) {
+      sum +=  weights[i] * imageLoad(imgInput, texelCoord+ivec2(i-2, 0));
+      //sum +=  imageLoad(imgInput, texelCoord+ivec2(i-2, 0));
+      weightSum += weights[i];
+      //weightSum += 1;
     }
 
     imageStore(imgOutput, texelCoord, sum/weightSum);

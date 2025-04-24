@@ -61,15 +61,21 @@ public:
 
   void useShadow(int index, Shader* shader) const;
 
+  void setMomentWidth(int width);
   void updateMomentShadowMap(ShadowInfo& shadow);
 
 private:
+  int momentWidth = -1;
+  GLuint momentUBO;
+
   const float alpha = 0.001;
   std::vector<ShadowInfo> shadows;
   RenderGraphBuilder* renderGraphBuilder;
 
   ShadowPass shadowPass;
   MomentShadowMapPass momentShadowMapPass;
+
+  void calculateMomentWeights(int width);
 };
 
 #endif // !SHADOW_MANAGER_H
