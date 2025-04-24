@@ -22,11 +22,17 @@ public:
     // 0b0001 is the renderMask for the default lighting pass
     defaultRenderMask = RenderMask::DefaultLit;
     setProperty("useTexture", 1);
+    setProperty("HDR", 0);
+
+    // Temporary because I didn't have time to fix skydome pass
+    setProperty("skydome", 0);
   };
 
   TextureMaterial(
     const std::string& textureFile,
     float scaleX = 1.0f, float scaleY = 1.0f) : Material() {
+    // 0b0001 is the renderMask for the default lighting pass
+    defaultRenderMask = RenderMask::DefaultLit;
 
     addTexture(textureFile, scaleX, scaleY);
   }
@@ -34,6 +40,8 @@ public:
   TextureMaterial(
     TextureManager::TextureID textureID,
     float scaleX = 1.0f, float scaleY = 1.0f) : Material() {
+    // 0b0001 is the renderMask for the default lighting pass
+    defaultRenderMask = RenderMask::DefaultLit;
 
     addTexture(textureID, scaleX, scaleY);
   }

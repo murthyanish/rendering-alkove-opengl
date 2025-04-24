@@ -25,7 +25,7 @@ class ShadowManager;
 class RenderGraphBuilder {
 public:
   RenderGraphBuilder(Renderer* _renderer) : renderer(_renderer) {}
-  ~RenderGraphBuilder() { clear(); };
+  ~RenderGraphBuilder() { deleteResources(); };
   
   FBO* createScreenSizeFBO
   (const std::string& name, std::vector<std::string> attachments);
@@ -40,8 +40,10 @@ public:
   TextureManager::TextureID getTexture(const std::string& name);
 
   void clearFBOs();
-  void clearTextures();
-  void clear();
+
+  void deleteFBOs();
+  void deleteTextures();
+  void deleteResources();
 
   Renderer* getRenderer() { return renderer; };
   void setShadowManager(ShadowManager* _shadowManager) { shadowManager = _shadowManager; };

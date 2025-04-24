@@ -23,13 +23,15 @@ private:
   bool HDR;
   std::shared_ptr<Mesh> sphereMesh;
   Matrix4 scale;
+  FBO* gbuffer;
 
 public:
-  SkydomePass(TextureManager::TextureID textureID);
+  SkydomePass();
 
-  SkydomePass(const std::string& textureName);
+  void addTexture(TextureManager::TextureID textureID);
+  void addTexture(const std::string& textureName);
 
-  SkydomePass() = delete;
+  void initialize() override;
 
   void draw(
     std::shared_ptr<Camera> camera,

@@ -85,6 +85,7 @@
     <ClCompile Include="src\ShaderManager.cpp" />
     <ClCompile Include="src\ShadowManager.cpp" />
     <ClCompile Include="src\ShadowPass.cpp" />
+    <ClCompile Include="src\SkydomePass.cpp" />
     <ClCompile Include="src\Sphere.cpp" />
     <ClCompile Include="src\CollisionGenerator.cpp" />
     <ClCompile Include="src\CollisionListener.cpp" />
@@ -100,6 +101,7 @@
       <FileType>Document</FileType>
     </ClInclude>
     <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\TeapotMesh.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\TextureMaterial.cpp" />
     <ClCompile Include="src\TimeControlledRB.cpp" />

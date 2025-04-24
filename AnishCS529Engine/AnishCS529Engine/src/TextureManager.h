@@ -118,7 +118,8 @@ private:
 
   TextureID createOpenGLTexture(
     const TextureInfo& textureInfo, const void* data,
-    TextureParameters textureParameters = TextureParameters());
+    TextureParameters textureParameters = TextureParameters(),
+    GLenum dataFormat = GL_UNSIGNED_BYTE);
 };
 
 #endif // !TEXTURE_MANAGER_H

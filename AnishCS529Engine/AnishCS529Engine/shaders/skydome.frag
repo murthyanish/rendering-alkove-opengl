@@ -21,7 +21,7 @@ layout (binding = 0) uniform camera
     float exposure;
 };
 
-out vec3 FragColor;
+layout (location = 0) out vec4 FragData[4];
 
 vec3 toSRGB(vec3 color) {
   return pow(
@@ -41,8 +41,8 @@ void main()
     // Sky skips light processing so using a shortcut.
     vec2 uv = vec2(atan(V.x,V.z)/(2.0 * pi), acos(V.y)/pi);
     vec4 color = texture(skydomeTexture, uv);
-    FragColor = color.rgb;
     if (HDR) {
-      FragColor = toSRGB(FragColor);
+      color.xyz = toSRGB(color.xyz);
     }
+    FragData[3] = color;
 }

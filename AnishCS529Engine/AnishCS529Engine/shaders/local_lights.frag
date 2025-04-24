@@ -164,21 +164,6 @@ void main()
       float z_f = shadowCoord.w - 1.6;
 
       G = hamburger4MSM(b, z_f);
-
-      // FragColor = vec3(G);
-      
-//      if (shadowCoord.w > 0 && 
-//        shadowIndex.x >= 0.0 && shadowIndex.x < 1.0 &&
-//        shadowIndex.y >= 0.0 && shadowIndex.y < 1.0) {
-//          float lightDepth = texture(ShadowMap, shadowIndex).x;
-//          if (lightDepth != 0.0) {
-//            float pixelDepth = shadowCoord.w;
-//            if ( pixelDepth > (lightDepth + 1.6) ) {
-//              discard;
-//              return;
-//            }
-//          }
-//      }
     }
 
     vec3 eyeVec = (inverseView*vec4(0,0,0,1)).xyz-worldPos;

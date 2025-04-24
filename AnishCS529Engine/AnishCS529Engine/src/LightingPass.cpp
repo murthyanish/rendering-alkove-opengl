@@ -18,6 +18,8 @@ LightingPass::LightingPass() :
   RenderPass(), screenQuad(Mesh::createSquareMesh("screenQuad", 1.0f)) {
   this->addShader("shaders/lighting.vert\nshaders/lighting.frag");
 
+  setProperty("enableIrradiance", 0);
+  setProperty("enableIBLSpecular", 0);
   renderMask = RenderMask::LightingPass;
 }
 
@@ -31,6 +33,82 @@ void LightingPass::initialize()
     "GBuffer_diffuse", renderGraphBuilder->getTexture("GBuffer_diffuse"));
   setProperty(
     "GBuffer_specular", renderGraphBuilder->getTexture("GBuffer_specular"));
+  // For testing
+  irradianceSpecularPointCount = 40;
+  
+  createIrradiancePointsUBO(
+    irradianceSpecularPointCount,
+    generateLowDiscrepancyPoints(irradianceSpecularPointCount));
+}
+
+void LightingPass::setIrradiancePointsCount(int N) {
+  irradianceSpecularPointCount = N;
+}
+
+std::vector<float> LightingPass::generateLowDiscrepancyPoints(int N)
+{
+  std::vector<float> points;
+  points.reserve(N * 2 + 2);
+  points.push_back(static_cast<float>(N));
+  points.push_back(0.0f);
+
+  int kk;
+  int pos = 0;
+  float p;
+  float u;
+
+  for (int k = 0; k < N; k++) {
+    for (p = 0.5f, kk = k, u = 0.0f; kk; p *= 0.5f, kk >>= 1)
+      if (kk & 1)
+        u += p;
+    float v = (k + 0.5) / N;
+    points.push_back(u);
+    points.push_back(v);
+  }
+
+  std::cout << "Irradiance points: ";
+  for (int i = 2; i < N * 2 + 2; i += 2)
+    std::cout << "[" << points[i] << ", " << points[i + 1] << "], ";
+  std::cout << std::endl;
+
+  return points;
+}
+
+void LightingPass::createIrradiancePointsUBO(
+  int N, std::vector<float> points)
+{
+  glGenBuffers(1, &irradianceSpecularPointCountsUBO);
+  glBindBuffer(GL_UNIFORM_BUFFER, irradianceSpecularPointCountsUBO);
+  // Binding 4 is dedicated to this now
+  glBindBufferBase(GL_UNIFORM_BUFFER, 4, irradianceSpecularPointCountsUBO);
+  glBufferData(
+    GL_UNIFORM_BUFFER, sizeof(float) * points.size(),
+    points.data(), GL_STATIC_DRAW);
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void LightingPass::addIrradianceMap(TextureManager::TextureID textureID)
+{
+  setProperty("enableIrradiance", 1);
+  setProperty("IrradianceMap", textureID);
+}
+
+void LightingPass::addIrradianceMap(const std::string& texturePath)
+{
+  setProperty("enableIrradiance", 1);
+  setProperty("IrradianceMap", TextureManager::getInstance().loadFile(texturePath));
+}
+
+void LightingPass::addSkydome(TextureManager::TextureID textureID)
+{
+  setProperty("enableIBLSpecular", 1);
+  setProperty("skydome", textureID);
+}
+
+void LightingPass::addSkydome(const std::string& texturePath)
+{
+  setProperty("enableIBLSpecular", 1);
+  setProperty("skydome", TextureManager::getInstance().loadFile(texturePath));
 }
 
 void LightingPass::draw(

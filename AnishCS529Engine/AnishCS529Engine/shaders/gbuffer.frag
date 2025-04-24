@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Pixel shader for GBuffer
 //
-// Copyright © 2025 DIGIPEN Institute of Technology. All rights reserved.
+// Copyright ? 2025 DIGIPEN Institute of Technology. All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////
 #version 440
@@ -34,7 +34,14 @@ uniform bool useNormalMap;
 uniform sampler2D normalMap;
 uniform vec2 normalMapScale;
 
+uniform int skydome;
+uniform int HDR;
+
 layout (location = 0) out vec4 FragData[4];
+
+vec3 toLinear(vec3 color) {
+  return pow(color, vec3(2.2));
+}
 
 void main()
 {
@@ -47,7 +54,7 @@ void main()
 
     vec3 N = normalize(normalVec);
 
-    vec3 Kd = diffuse;
+    vec4 Kd = vec4(diffuse, 1.0f);
     vec3 Ks = specular;
     float alpha = shininess;
 
@@ -62,7 +69,7 @@ void main()
       
     if (useTexture) {
       vec4 color = texture(mainTexture, scaledTexCoord);
-      Kd = color.rgb;
+      Kd = vec4(color.xyz, 1.0);
     }
 
     // The normal map calc ...
@@ -75,8 +82,21 @@ void main()
       N = delta.x*T + delta.y*B + delta.z*N;
     }
     
+    if (skydome > 0) {
+      vec3 eyeVec = (inverseView*vec4(0.0,0.0,0.0,1.0)).xyz-worldPos;
+      vec3 V = normalize(eyeVec);
+      vec2 uv = vec2(0.5 -atan(-V.z,V.x)/(2.0f*pi), acos(V.y)/pi);
+      Kd = vec4(texture(mainTexture, uv).xyz, 0.0);
+    }
+    
+    if (HDR < 1) {
+      Kd.xyz = toLinear(Kd.xyz);
+    }
+    
     FragData[0] = vec4(worldPos, 1.0f);
     FragData[1] = vec4(N, 1.0f);
-    FragData[2] = vec4(Kd, 1.0f);
+    FragData[2] = Kd;
     FragData[3] = vec4(Ks, alpha);
+
+    
 }

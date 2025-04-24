@@ -13,41 +13,57 @@
 #include "precompiled.h"
 #include "SkydomePass.h"
 
-SkydomePass::SkydomePass(TextureManager::TextureID textureID) :
+SkydomePass::SkydomePass() :
   RenderPass(), sphereMesh(Mesh::createSphereMesh("sphere", 32)),
   scale(Matrix4::scale(Vector3(2000.0f))) {
 
   this->addShader("shaders/skydome.vert\nshaders/skydome.frag");
   shader->initializeUBO("camera", 0);
-
-  skydomeTexture = textureID;
-  HDR = TextureManager::getInstance().isHDR(skydomeTexture);
 
   renderMask = RenderMask::SkydomePass;
 }
 
-SkydomePass::SkydomePass(const std::string& textureName) :
-  RenderPass(), sphereMesh(Mesh::createSphereMesh("sphere", 32)),
-  scale(Matrix4::scale(Vector3(2000.0f))) {
+void SkydomePass::addTexture(TextureManager::TextureID textureID)
+{
+  skydomeTexture = textureID;
+  HDR = TextureManager::getInstance().isHDR(skydomeTexture);
+  setProperty("skydomeTexture", skydomeTexture);
+  setProperty("HDR", HDR);
+}
 
-  this->addShader("shaders/skydome.vert\nshaders/skydome.frag");
-  shader->initializeUBO("camera", 0);
-
+void SkydomePass::addTexture(const std::string& textureName)
+{
   skydomeTexture = TextureManager::getInstance().loadFile(textureName);
   HDR = TextureManager::getInstance().isHDR(skydomeTexture);
+  setProperty("skydomeTexture", skydomeTexture);
+  setProperty("HDR", HDR);
+}
 
-  setProperty(
-    "skydomeTexture", skydomeTexture);
-  setProperty(
-    "HDR", HDR);
-
-  renderMask = RenderMask::SkydomePass;
+void SkydomePass::initialize() {
+  renderGraphBuilder->createScreenSizeTexture("GBuffer_position");
+  renderGraphBuilder->createScreenSizeTexture("GBuffer_normal");
+  renderGraphBuilder->createScreenSizeTexture("GBuffer_diffuse");
+  renderGraphBuilder->createScreenSizeTexture("GBuffer_specular");
+  gbuffer = renderGraphBuilder->createScreenSizeFBO(
+    "GBuffer",
+    {
+      "GBuffer_position",
+      "GBuffer_normal",
+      "GBuffer_diffuse",
+      "GBuffer_specular"
+    });
 }
 
 void SkydomePass::draw(
   std::shared_ptr<Camera> camera,
   SceneGraph* sceneGraph) const {
   glDepthMask(GL_FALSE);
+
+  gbuffer->bind();
+
+  gbuffer->useViewport();
+
+  gbuffer->clear();
 
   shader->use();
 
@@ -59,6 +75,7 @@ void SkydomePass::draw(
 
   shader->unuse();
 
+  gbuffer->unbind();
+
   glDepthMask(GL_TRUE);
-  glClear(GL_DEPTH_BUFFER_BIT);
 }

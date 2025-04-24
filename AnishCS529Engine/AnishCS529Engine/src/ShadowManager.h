@@ -68,7 +68,7 @@ private:
   int momentWidth = -1;
   GLuint momentUBO;
 
-  const float alpha = 0.001;
+  const float alpha = 0.001f;
   std::vector<ShadowInfo> shadows;
   RenderGraphBuilder* renderGraphBuilder;
 

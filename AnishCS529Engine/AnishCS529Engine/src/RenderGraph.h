@@ -49,6 +49,8 @@ public:
 
   Renderer* getRenderer() { return renderer; }
 
+  std::shared_ptr<RenderGraphBuilder> getRenderGraphBuilder() { return renderGraphBuilder; }
+
   void draw(SceneGraph* scene);
 
   bool lightsSet = false;

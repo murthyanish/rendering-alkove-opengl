@@ -84,6 +84,7 @@ void RenderGraph::initializeLightBuffers()
 {
   glGenBuffers(1, &uboLights);
   glBindBuffer(GL_UNIFORM_BUFFER, uboLights);
+  glBindBufferBase(GL_UNIFORM_BUFFER, 1, uboLights);
   glBufferData(
     GL_UNIFORM_BUFFER,
     sizeof(LightingPassLights),
@@ -114,6 +115,7 @@ void RenderGraph::initializeCameraUBO()
 {
   glGenBuffers(1, &uboCamera);
   glBindBuffer(GL_UNIFORM_BUFFER, uboCamera);
+  glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboCamera); // Binding point 0 matches GLSL
   glBufferData(GL_UNIFORM_BUFFER, (sizeof(Matrix4) * 3) + sizeof(float), NULL, GL_STATIC_DRAW);
   glBindBuffer(GL_UNIFORM_BUFFER, 0);
   glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboCamera, 0, sizeof(Matrix4) * 2);

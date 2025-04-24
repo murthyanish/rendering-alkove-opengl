@@ -370,7 +370,7 @@ void Mesh::processMesh(aiMesh* mesh, Attributes& newMeshData, std::vector<unsign
 //  return attributes;
 //}
 
-void pushquad(std::vector<unsigned int>& Tri, int i, int j, int k, int l)
+void Mesh::pushquad(std::vector<unsigned int>& Tri, int i, int j, int k, int l)
 {
   Tri.push_back(i);
   Tri.push_back(j);
