@@ -74,7 +74,8 @@ void LightingPass::createIrradiancePointsUBO(
 {
   glGenBuffers(1, &irradianceSpecularPointCountsUBO);
   glBindBuffer(GL_UNIFORM_BUFFER, irradianceSpecularPointCountsUBO);
-  glBindBufferBase(GL_UNIFORM_BUFFER, 3, irradianceSpecularPointCountsUBO); // Binding 3 is dedicated to this now
+  // Binding 4 is dedicated to this now
+  glBindBufferBase(GL_UNIFORM_BUFFER, 4, irradianceSpecularPointCountsUBO);
   glBufferData(
     GL_UNIFORM_BUFFER, sizeof(float) * points.size(),
     points.data(), GL_STATIC_DRAW);

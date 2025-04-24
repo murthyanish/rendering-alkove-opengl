@@ -36,7 +36,7 @@ layout (binding = 1) uniform lights
   AmbientLight ambientLight;
 };
 
-layout (binding = 3) uniform irradianceSpecularPointsBlock
+layout (binding = 4) uniform irradianceSpecularPointsBlock
 {
   float irradianceSpecularPointCount;
   float irradianceSpecularPointPadding;
