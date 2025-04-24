@@ -204,7 +204,7 @@ void main()
     FragColor = specularBRDF(L, N, V, Ii, Kd, Ks, alpha);
 
     if (enableIrradiance > 0) {
-      vec2 uv = uvFromDirectionVectorFlipped(N);
+      vec2 uv = uvFromDirectionVectorFlipped(-N);
       ambientDiffuse = Kd * (texture(IrradianceMap, uv).xyz) / M_PI;
       
       if (enableIBLSpecular > 0) {
