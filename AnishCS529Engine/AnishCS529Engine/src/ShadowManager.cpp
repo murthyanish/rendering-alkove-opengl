@@ -20,6 +20,10 @@ void ShadowManager::update(SceneGraph* scene, Lights* lights)
   // Later add logic here for directional light, and for
   // updating changed lights
 
+  if (momentWidth == -1) {
+    setMomentWidth(10);
+  }
+
   const float epsilon = 0.01f;
 
   for (int i = 0; i < lights->pointLights.size(); ++i) {
@@ -121,9 +125,32 @@ void ShadowManager::useShadow(int index, Shader* shader) const
   shader->setMat4("ShadowMatrix", shadow.shadowMatrix);
 }
 
+void ShadowManager::calculateMomentWeights(int width)
+{
+  std::vector<float> weights;
+  weights.push_back(width);
+
+  weights.reserve(width * 2 + 2);
+  for (int i = -width; i < width + 1; ++i) {
+    weights.push_back(expf(-(1 / 2) * powf(i / (width / 2), 2)));
+  }
+
+  glGenBuffers(1, &momentUBO);
+  glBindBuffer(GL_UNIFORM_BUFFER, momentUBO);
+  glBindBufferBase(GL_UNIFORM_BUFFER, 3, momentUBO);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(float) * weights.size(), weights.data(), GL_STATIC_DRAW);
+  glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+}
+
+void ShadowManager::setMomentWidth(int width)
+{
+  momentWidth = width;
+  calculateMomentWeights(momentWidth);
+}
+
 void ShadowManager::updateMomentShadowMap(ShadowInfo& shadow)
 {
-
   auto tempTexture = renderGraphBuilder->getTexture("moment_shadow_temp");
 
   glBindImageTexture(
