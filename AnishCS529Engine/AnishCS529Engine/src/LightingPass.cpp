@@ -34,7 +34,7 @@ void LightingPass::initialize()
   setProperty(
     "GBuffer_specular", renderGraphBuilder->getTexture("GBuffer_specular"));
   // For testing
-  irradianceSpecularPointCount = 1;
+  irradianceSpecularPointCount = 40;
   
   createIrradiancePointsUBO(
     irradianceSpecularPointCount,
@@ -65,6 +65,11 @@ std::vector<float> LightingPass::generateLowDiscrepancyPoints(int N)
     points.push_back(u);
     points.push_back(v);
   }
+
+  std::cout << "Irradiance points: ";
+  for (int i = 2; i < N * 2 + 2; i += 2)
+    std::cout << "[" << points[i] << ", " << points[i + 1] << "], ";
+  std::cout << std::endl;
 
   return points;
 }

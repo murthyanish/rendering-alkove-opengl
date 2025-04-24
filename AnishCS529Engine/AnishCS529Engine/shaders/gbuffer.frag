@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Pixel shader for GBuffer
 //
-// Copyright © 2025 DIGIPEN Institute of Technology. All rights reserved.
+// Copyright ? 2025 DIGIPEN Institute of Technology. All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////
 #version 440
@@ -83,9 +83,9 @@ void main()
     }
     
     if (skydome > 0) {
-      vec3 eyeVec = (inverseView*vec4(0,0,0,1)).xyz-worldPos;
+      vec3 eyeVec = (inverseView*vec4(0.0,0.0,0.0,1.0)).xyz-worldPos;
       vec3 V = normalize(eyeVec);
-      vec2 uv = vec2(1/2-atan(-V.z,V.x)/(2.0f*pi), acos(V.y)/pi);
+      vec2 uv = vec2(0.5 -atan(-V.z,V.x)/(2.0f*pi), acos(V.y)/pi);
       Kd = vec4(texture(mainTexture, uv).xyz, 0.0);
     }
     
