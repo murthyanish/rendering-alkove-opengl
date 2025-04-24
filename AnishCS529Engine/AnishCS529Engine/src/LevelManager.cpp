@@ -815,6 +815,7 @@ void LevelManager::initalizePlayerInLevel()
 
     auto lightingPass = mainRenderer->getRenderGraph()->addPass<LightingPass>();
     lightingPass->addIrradianceMap("media/textures/skys/Newport_Loft_Ref.irr.hdr");
+    lightingPass->addSkydome("media/textures/skys/Newport_Loft_Ref.hdr");
 
     mainRenderer->getRenderGraph()->addPass<LocalLightsPass>();
 

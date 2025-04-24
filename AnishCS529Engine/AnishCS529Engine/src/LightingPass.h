@@ -19,13 +19,23 @@
 class LightingPass : public RenderPass {
 protected:
   std::shared_ptr<Mesh> screenQuad;
+  GLuint irradianceSpecularPointCountsUBO;
+  int irradianceSpecularPointCount = 10;
+  
+  std::vector<float> generateLowDiscrepancyPoints(int N = 10);
+  void createIrradiancePointsUBO(int N, std::vector<float> points);
+
 public:
   LightingPass();
 
   void initialize();
 
+  void setIrradiancePointsCount(int N);
+  
   void addIrradianceMap(TextureManager::TextureID textureID);
   void addIrradianceMap(const std::string& texturePath);
+  void addSkydome(TextureManager::TextureID textureID);
+  void addSkydome(const std::string& texturePath);
 
   void draw(
     std::shared_ptr<Camera> camera,

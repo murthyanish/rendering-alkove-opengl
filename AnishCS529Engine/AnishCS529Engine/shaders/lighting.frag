@@ -36,6 +36,13 @@ layout (binding = 1) uniform lights
   AmbientLight ambientLight;
 };
 
+layout (binding = 3) uniform irradianceSpecularPointsBlock
+{
+  float irradianceSpecularPointCount;
+  float irradianceSpecularPointPadding;
+  vec2 irradianceSpecularPoints[100];
+};
+
 uniform bool HDR;
 
 uniform uint height, width;
@@ -49,6 +56,10 @@ uniform sampler2D GBuffer_specular;
 uniform int enableIrradiance;
 uniform sampler2D IrradianceMap;
 
+// Skybox
+uniform int enableIBLSpecular;
+uniform sampler2D skydome;
+
 out vec3 FragColor;
 
 vec3 toSRGB(vec3 color) {
@@ -61,6 +72,97 @@ vec3 toSRGB(vec3 color) {
           vec3(1.0)
         )
       ), vec3(1/2.2));
+}
+
+vec2 uvFromDirectionVector(vec3 D) {
+  return vec2(atan(-D.z,D.x)/(2.0f*pi), acos(D.y)/pi);
+}
+
+vec2 uvFromDirectionVectorFlipped(vec3 D) {
+  return vec2(0.5 - atan(-D.z,D.x)/(2.0f*pi), acos(D.y)/pi);
+}
+
+vec3 directionVectorFromUV(vec2 uv) {
+  return vec3( 
+    cos(2 * pi * ( 0.5 - uv.x )) * sin(pi * uv.y),
+    cos(pi * uv.y),
+    -sin(2 * pi * ( 1/2 - uv.x )) * sin(pi * uv.y)
+    );
+}
+
+// L = Light vector
+// N = Normal vector
+// V = Eye vector
+// Ii = Light color at Light vector
+// Kd = Diffuse color of surface
+// Ks = Specular color of surface
+// alpha = Shininess
+vec3 specularBRDF(
+  const vec3 L, const vec3 N, const vec3 V,
+  const vec3 Ii,
+  const vec3 Kd, const vec3 Ks, const float alpha) {
+
+  const vec3 H = normalize(L+V);
+  const float LN = max(dot(L,N),0.0);
+  const float HN = max(dot(H,N),0.0);
+  const float VN = max(dot(V,N),0.0);
+  const float LH = max(dot(L,H),0.0);
+
+  // BRDF
+  const vec3 F = Ks + (((1,1,1)-Ks)*pow((1-LH),5.0));
+  const float D = ((alpha+2.0)/(2*M_PI))*(pow(HN,alpha));
+  const vec3 BRDF = (Kd/M_PI) + ((F*D)/(4*pow(max(LH,0.0000000001),2.0)));
+  return Ii*LN*BRDF;
+}
+
+vec3 irradianceSpecular(
+  vec3 N, vec3 V,
+  const vec3 Kd, const vec3 Ks, const float alpha) {
+
+  // Todo: select n=20-40 random directions using prob.
+  // This gives omega_k. (k is index < n)
+  vec3 finalSpecular = vec3(0);
+
+  int n = int(irradianceSpecularPointCount);
+  float VN = max(dot(V,N),0.0);
+
+  // Reflection vector
+  vec3 R = -reflect(-V, N);
+
+  vec3 A = normalize(cross(vec3(0.0f,1.0f,0.0f), R));
+  vec3 B = normalize(cross(R, A));
+
+  for (int i = 0; i < n; ++i) {
+    // This is selection code:
+    // We will do Beckman distribution.
+    const float theta = atan(
+      sqrt(
+        -pow(alpha, 2) * log(1 - irradianceSpecularPoints[i].y)
+      )
+    );
+
+    const vec3 D = directionVectorFromUV(
+      vec2(irradianceSpecularPoints[i].x, theta/pi));
+
+    const vec3 omega_k = normalize(D.x * A + -D.z * B + D.y * R);
+
+    const vec3 IiIBL =
+      textureLod(skydome, uvFromDirectionVectorFlipped(omega_k), 0).xyz;
+
+    const vec3 iblSpec = specularBRDF(omega_k, N, V, IiIBL, Kd, Ks, alpha);
+
+    finalSpecular += iblSpec;
+  }
+
+  // Todo: Read pixel with textureLod at uv calculated from the
+  // above points. Store as L(omega_k) for each.
+  //float level = 1/2 * log2(width * height / n) - 1/2 * log2(D/4);
+
+  // For each pair of omega_k and L(omega_k) use MonteCarlo estimator.
+
+
+  // Sum and average the final(?) This is added to ambientDiffuse.
+  return finalSpecular;
 }
 
 void main()
@@ -88,28 +190,40 @@ void main()
       return;
     }
 
-    // The lighting calculation ...
-    vec3 H = normalize(L+V);
-    float LN = max(dot(L,N),0.0);
-    float HN = max(dot(H,N),0.0);
-    float VN = max(dot(V,N),0.0);
-    float LH = max(dot(L,H),0.0);
-
     vec3 ambientDiffuse;
 
+    FragColor = specularBRDF(L, N, V, Ii, Kd, Ks, alpha);
+
     if (enableIrradiance > 0) {
-      vec2 uv = vec2(-atan(-N.z,-N.x)/(2.0f*pi), acos(N.y)/pi);
+      vec2 uv = uvFromDirectionVectorFlipped(N);
       ambientDiffuse = 5.0 * Kd * (texture(IrradianceMap, uv).xyz) / M_PI;
+      
+      if (enableIBLSpecular > 0) {
+
+        FragColor += irradianceSpecular(
+          N, V,
+          Kd, Ks, alpha);
+
+//        const vec3 D = N; //directionVectorFromUV(uv);
+//        float VN = max(dot(V,N),0.0);
+//
+//        // Reflection vector
+//        vec3 R = 2 * VN * N - V;
+//
+//        vec3 A = normalize(cross(vec3(0.0f,1.0f,0.0f), R));
+//        vec3 B = normalize(cross(R, A));
+//
+//        vec3 omega_k = normalize(R.x * A + -R.z * B + R.y * R);
+//
+//        const vec3 IiIBL = textureLod(skydome, uvFromDirectionVectorFlipped(R), 0).xyz;
+//        const vec3 iblSpec = specularBRDF(R, N, V, IiIBL, Kd, Ks, alpha);
+//        FragColor += iblSpec;
+      }
     }
     else {
       ambientDiffuse = Ia*Kd;
     }
-
-    // BRDF
-    vec3 F = Ks + (((1,1,1)-Ks)*pow((1-LH),5.0));
-    float D = ((alpha+2.0)/(2*M_PI))*(pow(HN,alpha));
-    vec3 BRDF = (Kd/M_PI) + ((F*D)/(4*pow(max(LH,0.0000000001),2.0)));
-    FragColor = ambientDiffuse + (Ii*LN*BRDF);
+    FragColor += ambientDiffuse;
 
     FragColor = toSRGB(FragColor);
 }
