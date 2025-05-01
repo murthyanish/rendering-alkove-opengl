@@ -37,7 +37,7 @@ uniform vec2 normalMapScale;
 uniform int skydome;
 uniform int HDR;
 
-layout (location = 0) out vec4 FragData[4];
+layout (location = 0) out vec4 FragData[5];
 
 vec3 toLinear(vec3 color) {
   return pow(color, vec3(2.2));
@@ -58,6 +58,7 @@ void main()
     vec3 Ks = specular;
     float alpha = shininess;
 
+    vec3 eyeVec = (inverseView*vec4(0.0,0.0,0.0,1.0)).xyz-worldPos;
 
     // Texture mapping ...
     // This section only calculates the Kd and modified uv for some objects.
@@ -83,7 +84,6 @@ void main()
     }
     
     if (skydome > 0) {
-      vec3 eyeVec = (inverseView*vec4(0.0,0.0,0.0,1.0)).xyz-worldPos;
       vec3 V = normalize(eyeVec);
       vec2 uv = vec2(0.5 -atan(-V.z,V.x)/(2.0f*pi), acos(V.y)/pi);
       Kd = vec4(texture(mainTexture, uv).xyz, 0.0);
@@ -97,6 +97,5 @@ void main()
     FragData[1] = vec4(N, 1.0f);
     FragData[2] = Kd;
     FragData[3] = vec4(Ks, alpha);
-
-    
+    FragData[4] = vec4(eyeVec, 0);
 }

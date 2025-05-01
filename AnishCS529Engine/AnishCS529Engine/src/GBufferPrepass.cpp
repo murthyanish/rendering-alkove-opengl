@@ -25,13 +25,15 @@ void GBufferPrepass::initialize() {
   renderGraphBuilder->createScreenSizeTexture("GBuffer_normal");
   renderGraphBuilder->createScreenSizeTexture("GBuffer_diffuse");
   renderGraphBuilder->createScreenSizeTexture("GBuffer_specular");
+  renderGraphBuilder->createScreenSizeTexture("GBuffer_eye_vector");
   gbuffer = renderGraphBuilder->createScreenSizeFBO(
     "GBuffer",
     {
       "GBuffer_position",
       "GBuffer_normal",
       "GBuffer_diffuse",
-      "GBuffer_specular"
+      "GBuffer_specular",
+      "GBuffer_eye_vector"
     });
 }
 

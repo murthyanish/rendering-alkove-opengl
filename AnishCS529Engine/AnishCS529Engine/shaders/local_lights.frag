@@ -42,6 +42,7 @@ uniform sampler2D GBuffer_position;
 uniform sampler2D GBuffer_normal;
 uniform sampler2D GBuffer_diffuse;
 uniform sampler2D GBuffer_specular;
+uniform sampler2D GBuffer_eye_vector;
 
 uniform mat4 ShadowMatrix;
 uniform sampler2D ShadowMap;
@@ -166,7 +167,7 @@ void main()
       G = hamburger4MSM(b, z_f);
     }
 
-    vec3 eyeVec = (inverseView*vec4(0,0,0,1)).xyz-worldPos;
+    vec3 eyeVec = texture(GBuffer_eye_vector, gBufferPosition).xyz;
 
     vec3 N = texture(GBuffer_normal, gBufferPosition).xyz;
     vec3 V = normalize(eyeVec);
