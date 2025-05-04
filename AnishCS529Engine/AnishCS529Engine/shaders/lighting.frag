@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Pixel shader for lighting
 //
-// Copyright ? 2025 DIGIPEN Institute of Technology. All rights reserved.
+// Copyright © 2025 DIGIPEN Institute of Technology. All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////
 #version 440
@@ -52,6 +52,8 @@ uniform sampler2D GBuffer_normal;
 uniform sampler2D GBuffer_diffuse;
 uniform sampler2D GBuffer_specular;
 uniform sampler2D GBuffer_eye_vector;
+
+uniform sampler2D ambient_factor;
 
 // Irradiance Map
 uniform int enableIrradiance;
@@ -207,11 +209,12 @@ void main()
     if (enableIrradiance > 0) {
       vec2 uv = uvFromDirectionVectorFlipped(-N);
       ambientDiffuse = Kd * (texture(IrradianceMap, uv).xyz) / M_PI;
+      ambientDiffuse *= texture(ambient_factor, gBufferPosition).r;
       
       if (enableIBLSpecular > 0) {
         FragColor += irradianceSpecular(
           N, V,
-          Kd, Ks, alpha);
+          Kd, Ks, alpha) * texture(ambient_factor, gBufferPosition).r;
       }
     }
     else {

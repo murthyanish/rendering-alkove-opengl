@@ -50,22 +50,39 @@ FBO* RenderGraphBuilder::createFBO(const std::string& name, std::vector<std::str
 }
 
 TextureManager::TextureID RenderGraphBuilder::createScreenSizeTexture(
-  const std::string& name) {
+  const std::string& name, int channels) {
 
   if (textures.contains(name)) return textures[name];
 
   Renderer::Viewport viewport = renderer->getCurrentState().viewport;
-  return createTexture(name, viewport.width, viewport.height);
+  return createTexture(name, viewport.width, viewport.height, channels);
 }
 
-TextureManager::TextureID RenderGraphBuilder::createTexture(const std::string& name, int width, int height)
+TextureManager::TextureID RenderGraphBuilder::createTexture(
+  const std::string& name, int width, int height, int channels)
 {
   if (textures.contains(name)) return textures[name];
 
   TextureManager::TextureInfo textureInfo = TextureManager::TextureInfo();
   textureInfo.width = width;
   textureInfo.height = height;
-  textureInfo.format = TEXTURE_RGBA32F;
+
+  switch (channels)
+  {
+  case 1:
+    textureInfo.format = TEXTURE_R32F;
+    break;
+  case 3:
+    textureInfo.format = TEXTURE_RGB32F;
+    break;
+  case 4:
+    textureInfo.format = TEXTURE_RGBA32F;
+    break;
+  default:
+    textureInfo.format = TEXTURE_RGBA32F;
+    break;
+  }
+
   TextureManager::TextureParameters textureParameters = TextureManager::TextureParameters();
   textureParameters.max_level = 0;
   textureParameters.wrap_s = TEXTURE_CLAMP_TO_EDGE;

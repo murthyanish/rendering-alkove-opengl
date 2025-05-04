@@ -19,7 +19,7 @@ void MomentShadowMapPass::computeVert(ComputeDispatchSize dispatch)
 {
   shaderVert->use();
 
-  applyProperties();
+  applyProperties(shaderVert);
 
   glDispatchCompute(dispatch.x, dispatch.y, dispatch.z);
 

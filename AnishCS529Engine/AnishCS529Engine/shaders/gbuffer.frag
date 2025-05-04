@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Pixel shader for GBuffer
 //
-// Copyright ? 2025 DIGIPEN Institute of Technology. All rights reserved.
+// Copyright © 2025 DIGIPEN Institute of Technology. All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////
 #version 440
@@ -97,5 +97,5 @@ void main()
     FragData[1] = vec4(N, 1.0f);
     FragData[2] = Kd;
     FragData[3] = vec4(Ks, alpha);
-    FragData[4] = vec4(eyeVec, 0);
+    FragData[4] = vec4(eyeVec, length(eyeVec));
 }

@@ -19,6 +19,7 @@ static std::vector<uint32_t> RenderPassOrder = {
     RenderMask::MomentShadowMapPass,
     RenderMask::GBufferPrepass,
     RenderMask::DebugPass,
+    RenderMask::AmbientOcclusionPass,
     RenderMask::LightingPass,
     RenderMask::LocalLightsPass,
     RenderMask::UIPass

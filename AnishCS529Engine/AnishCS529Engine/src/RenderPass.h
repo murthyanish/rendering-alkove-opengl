@@ -127,6 +127,8 @@ public:
   /* Compute specific */
   virtual void compute(
       ComputeDispatchSize dispatchSize);
+  virtual void compute(
+      ComputeDispatchSize dispatchSize, std::shared_ptr<Shader> shader);
 
 protected:
   bool enabled;
@@ -143,7 +145,9 @@ protected:
   std::optional<std::unordered_map<std::string, TextureManager::TextureID>> textureData;
 
   void applyProperties() const;
+  void applyProperties(std::shared_ptr<Shader> shader) const;
   void unbindTextures() const;
+  void unbindTextures(std::shared_ptr<Shader> shader) const;
 
   // Todo: turn this into per point light.
   //void applyLights(Lights lights) const;

@@ -108,7 +108,67 @@ void RenderPass::applyProperties() const
   }
 }
 
+void RenderPass::applyProperties(std::shared_ptr<Shader> shader) const
+{
+  /* Todo: this is VERY inefficient. We don't need to be using variant
+  * and doing TWO loops over the same variant data is really bad for
+  * performance. Please fix this when you get time.
+  *
+  * Also a nightmare to manage. I forgot to add Vector2 to one and
+  * took half an hour to realise.
+  */
+
+  /*
+  * Texture Units 0-9 are reserved.
+  * Here's a list of the reserved textures:
+  * 0 - shadow
+  */
+
+  unsigned int textureUnit = 10;
+
+  for (const auto& [name, value] : properties) {
+    if (auto item = std::get_if<unsigned int>(&value)) {
+      shader->setUInt(name, *item);
+    }
+    else if (auto item = std::get_if<int>(&value)) {
+      shader->setInt(name, *item);
+    }
+    else if (auto item = std::get_if<float>(&value)) {
+      shader->setFloat(name, *item);
+    }
+    else if (auto item = std::get_if<VectorTemplated<float, 2>>(&value)) {
+      shader->setVec2(name, (*item)[0], (*item)[1]);
+    }
+    else if (auto item = std::get_if<Vector3>(&value)) {
+      shader->setVec3(name, *item);
+    }
+    else if (auto item = std::get_if<Matrix4>(&value)) {
+      shader->setMat4(name, *item);
+    }
+    else if (auto item = std::get_if<TextureManager::TextureID>(&value)) {
+      shader->bindTexture(textureUnit, name, *item);
+      ++textureUnit;
+    }
+  }
+}
+
 void RenderPass::unbindTextures() const
+{
+  /* Todo: this is also very unefficient, we shouldn't
+  * iterate every property just to unbind textures.
+  */
+
+  unsigned int textureUnit = 10;
+
+  for (const auto& [name, value] : properties) {
+    if (auto item = std::get_if<TextureManager::TextureID>(&value)) {
+      shader->unbindTexture(textureUnit);
+      ++textureUnit;
+    }
+  }
+}
+
+void RenderPass::unbindTextures(std::shared_ptr<Shader> shader) const
 {
   /* Todo: this is also very unefficient, we shouldn't
   * iterate every property just to unbind textures.
@@ -158,5 +218,17 @@ void RenderPass::compute(ComputeDispatchSize dispatchSize)
   glDispatchCompute(dispatchSize.x, dispatchSize.y, dispatchSize.z);
 
   unbindTextures();
+  shader->unuse();
+}
+
+void RenderPass::compute(ComputeDispatchSize dispatchSize, std::shared_ptr<Shader> shader)
+{
+  shader->use();
+
+  applyProperties(shader);
+
+  glDispatchCompute(dispatchSize.x, dispatchSize.y, dispatchSize.z);
+
+  unbindTextures(shader);
   shader->unuse();
 }

@@ -38,6 +38,9 @@ namespace RenderMask {
   /** Lights pass to render all the lights in the scene */
   constexpr uint32_t LocalLightsPass = 1 << 6;
 
+  /** Ambient Occlusion Pass */
+  constexpr uint32_t AmbientOcclusionPass = 1 << 8;
+
   /** Pass specifically for 2D UI elements with no lighting or 3D
   * considerations, should always be last. */
   constexpr uint32_t UIPass             = 1 << 7;

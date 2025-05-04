@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Pixel shader for rendering Point Lights
 //
-// Copyright ? 2025 DIGIPEN Institute of Technology. All rights reserved.
+// Copyright © 2025 DIGIPEN Institute of Technology. All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////
 #version 440
@@ -162,7 +162,7 @@ void main()
       vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
 
       vec4 b = texture(ShadowMap, shadowIndex);
-      float z_f = shadowCoord.w - 1.6;
+      float z_f = shadowCoord.w;
 
       G = hamburger4MSM(b, z_f);
     }

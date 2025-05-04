@@ -1,0 +1,55 @@
+///////////////////////////////////////////////////////////////////////////////
+// Compute shader for Moment Shadow Maps
+//
+// Copyright © 2025 DIGIPEN Institute of Technology. All rights reserved.
+//
+///////////////////////////////////////////////////////////////////////////////
+#version 430 core
+
+const float pi = 3.14159265358979323846;
+
+layout (local_size_x = 1, local_size_y = 16) in;
+
+// images
+layout(r32f, binding = 0) readonly uniform image2D imgInput;
+layout(r32f, binding = 1) writeonly uniform image2D imgOutput;
+
+layout(std140, binding = 4) uniform filters {
+  float width;
+  float weights[101];
+};
+
+uniform sampler2D GBuffer_normal;
+uniform sampler2D GBuffer_eye_vector;
+
+float getRange(vec2 x_i, vec3 N, float d) {
+  // Temporarily hardcoding
+  float s = 0.01;
+
+  vec3 N_i = texture(GBuffer_normal, x_i).xyz;
+  float d_i = texture(GBuffer_eye_vector, x_i).w;
+
+  float linear = max(0.0, dot(N_i, N)) / sqrt(2 * pi * s);
+  float exponent = exp(-pow(d_i - d, 2) / (2 * s));
+
+  return linear * exponent;
+}
+
+void main() {
+    ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);
+
+    vec3 N = texture(GBuffer_normal, texelCoord).xyz;
+    float d = texture(GBuffer_eye_vector, texelCoord).w;
+
+    vec4 sum = vec4(0);
+    float weightSum = 0.0;
+
+    for (int i = 0; i < 2*width+1; ++i) {
+      const float weight = getRange(texelCoord+ivec2(0, i-2), N, d) * weights[i];
+      sum +=  weight * imageLoad(imgInput, texelCoord+ivec2(0, i-2));
+
+      weightSum += weight;
+    }
+
+    imageStore(imgOutput, texelCoord, sum/weightSum);
+}

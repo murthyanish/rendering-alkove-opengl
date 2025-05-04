@@ -128,11 +128,14 @@ void ShadowManager::useShadow(int index, Shader* shader) const
 void ShadowManager::calculateMomentWeights(int width)
 {
   std::vector<float> weights;
+  weights.reserve(width * 2 + 2);
   weights.push_back(width);
 
-  weights.reserve(width * 2 + 2);
   for (int i = -width; i < width + 1; ++i) {
-    weights.push_back(expf(-(1 / 2) * powf(i / (width / 2), 2)));
+    weights.push_back(
+      expf(
+        -(1.0 / 2.0) *
+        powf(static_cast<float>(i) / (static_cast<float>(width) / 2.0), 2.0)));
   }
 
   glGenBuffers(1, &momentUBO);

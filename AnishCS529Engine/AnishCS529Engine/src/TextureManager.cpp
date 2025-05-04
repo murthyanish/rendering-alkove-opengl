@@ -64,6 +64,8 @@ void TextureManager::resizeTexture(TextureID id, int width, int height)
   Texture::Format format;
   if (textures[id].format == TEXTURE_RGB || textures[id].format == TEXTURE_RGB32F)
     format = TEXTURE_RGB;
+  else if (textures[id].format == TEXTURE_RED || textures[id].format == TEXTURE_R32F)
+    format = TEXTURE_RED;
   else if (textures[id].format == TEXTURE_RGBA || textures[id].format == TEXTURE_RGBA32F)
     format = TEXTURE_RGBA;
   else {
@@ -185,6 +187,8 @@ TextureManager::TextureID TextureManager::createOpenGLTexture(
   Texture::Format format;
   if (textureInfo.format == TEXTURE_RGB || textureInfo.format == TEXTURE_RGB32F)
     format = TEXTURE_RGB;
+  else if (textures[id].format == TEXTURE_RED || textures[id].format == TEXTURE_R32F)
+    format = TEXTURE_RED;
   else if (textureInfo.format == TEXTURE_RGBA || textureInfo.format == TEXTURE_RGBA32F)
      format = TEXTURE_RGBA;
   else {
