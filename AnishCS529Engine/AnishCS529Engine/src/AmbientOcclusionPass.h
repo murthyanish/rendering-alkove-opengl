@@ -44,7 +44,7 @@ public:
 
   void drawAmbientOcclusionTexture() const;
 
-  void computeBilateralBlurFilter(ComputeDispatchSize dispatch) const;
+  void computeBilateralBlurFilter(int width, int height) const;
 
   void draw(
     std::shared_ptr<Camera> camera,

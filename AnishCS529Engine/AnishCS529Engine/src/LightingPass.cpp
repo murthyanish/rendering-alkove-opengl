@@ -43,7 +43,7 @@ void LightingPass::initialize()
     generateLowDiscrepancyPoints(irradianceSpecularPointCount));
 
   setProperty(
-    "ambient_factor", renderGraphBuilder->getTexture("ambient_factor"));
+    "ambient_factor", renderGraphBuilder->getTexture("filtered_ambient_factor"));
 }
 
 void LightingPass::setIrradiancePointsCount(int N) {

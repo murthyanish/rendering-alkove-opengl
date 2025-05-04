@@ -105,7 +105,7 @@ void AmbientOcclusionPass::setFilterWidth(int width)
   calculateFilterWeights(filterWidth);
 }
 
-void AmbientOcclusionPass::computeBilateralBlurFilter(ComputeDispatchSize dispatch) const
+void AmbientOcclusionPass::computeBilateralBlurFilter(int width, int height) const
 {
   {
     // Horizontal blur
@@ -129,13 +129,12 @@ void AmbientOcclusionPass::computeBilateralBlurFilter(ComputeDispatchSize dispat
 
     applyProperties(compShaderBilateralHor);
 
-    glDispatchCompute(dispatch.x, 1, 1);
+    glDispatchCompute(width / 16, height / 1, 1);
+
+    unbindTextures(compShaderBilateralHor);
 
     compShaderBilateralHor->unuse();
   }
-
-  // Skipped texture unbind and property reset because both use same properties
-  // and textures
 
   glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
@@ -159,7 +158,9 @@ void AmbientOcclusionPass::computeBilateralBlurFilter(ComputeDispatchSize dispat
 
     compShaderBilateralVert->use();
 
-    glDispatchCompute(1, dispatch.y, 1);
+    applyProperties(compShaderBilateralVert);
+
+    glDispatchCompute(width / 1, height / 16, 1);
 
     unbindTextures(compShaderBilateralVert);
     compShaderBilateralVert->unuse();
@@ -171,5 +172,6 @@ void AmbientOcclusionPass::draw(
     SceneGraph* scene) const {
 
   drawAmbientOcclusionTexture();
-  computeBilateralBlurFilter(ComputeDispatchSize(1024 / 16, 1024 / 16,1));
+  auto viewport = renderGraphBuilder->getRenderer()->getCurrentState().viewport;
+  computeBilateralBlurFilter(viewport.width, viewport.height);
 }
