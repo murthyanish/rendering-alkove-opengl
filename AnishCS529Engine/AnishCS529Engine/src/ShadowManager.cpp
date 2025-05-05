@@ -172,7 +172,7 @@ void ShadowManager::updateMomentShadowMap(ShadowInfo& shadow)
       tempTexture).format
   );
 
-  momentShadowMapPass.computeHor(RenderPass::ComputeDispatchSize(1024 / 16, 1024 / 1, 1));
+  momentShadowMapPass.computeHor(RenderPass::ComputeDispatchSize(1024 / 128, 1024 / 1, 1));
 
 
   glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
@@ -194,5 +194,5 @@ void ShadowManager::updateMomentShadowMap(ShadowInfo& shadow)
       shadow.fboInfo.momentTextureID).format
   );
 
-  momentShadowMapPass.computeVert(RenderPass::ComputeDispatchSize(1024 / 1, 1024 / 16, 1));
+  momentShadowMapPass.computeVert(RenderPass::ComputeDispatchSize(1024 / 1, 1024 / 128, 1));
 }

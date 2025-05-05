@@ -81,7 +81,7 @@ void AmbientOcclusionPass::drawAmbientOcclusionTexture() const
 void AmbientOcclusionPass::calculateFilterWeights(int width)
 {
   std::vector<float> weights;
-  weights.reserve(width * 2 + 2);
+  weights.reserve(1 + width * 2 + 1);
   weights.push_back(width);
 
   for (int i = -width; i < width + 1; ++i) {
@@ -128,8 +128,10 @@ void AmbientOcclusionPass::computeBilateralBlurFilter(int width, int height) con
     compShaderBilateralHor->use();
 
     applyProperties(compShaderBilateralHor);
+    compShaderBilateralHor->setInt("screenWidth", width);
+    compShaderBilateralHor->setInt("screenHeight", height);
 
-    glDispatchCompute(width / 16, height / 1, 1);
+    glDispatchCompute(width / 128, height / 1, 1);
 
     unbindTextures(compShaderBilateralHor);
 
@@ -159,6 +161,8 @@ void AmbientOcclusionPass::computeBilateralBlurFilter(int width, int height) con
     compShaderBilateralVert->use();
 
     applyProperties(compShaderBilateralVert);
+    compShaderBilateralVert->setInt("screenWidth", width);
+    compShaderBilateralVert->setInt("screenHeight", height);
 
     glDispatchCompute(width / 1, height / 16, 1);
 

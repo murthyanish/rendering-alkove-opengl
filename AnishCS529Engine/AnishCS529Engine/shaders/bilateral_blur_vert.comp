@@ -14,20 +14,27 @@ layout (local_size_x = 1, local_size_y = 16) in;
 layout(r32f, binding = 0) readonly uniform image2D imgInput;
 layout(r32f, binding = 1) writeonly uniform image2D imgOutput;
 
-layout(std140, binding = 4) uniform filters {
+layout(binding = 5) uniform filters {
   float width;
   float weights[101];
 };
 
+shared vec4 v[16+101]; // Shared memory for the work group
+shared vec3 N_v[16+101];
+shared float d_v[16+101];
+
+uniform int screenWidth;
+uniform int screenHeight;
+
 uniform sampler2D GBuffer_normal;
 uniform sampler2D GBuffer_eye_vector;
 
-float getRange(vec2 x_i, vec3 N, float d) {
+float getRange(uint lpos, vec3 N, float d) {
   // Temporarily hardcoding
   float s = 0.01;
 
-  vec3 N_i = texture(GBuffer_normal, x_i).xyz;
-  float d_i = texture(GBuffer_eye_vector, x_i).w;
+  vec3 N_i = N_v[lpos];
+  float d_i = d_v[lpos];
 
   float linear = max(0.0, dot(N_i, N)) / sqrt(2 * pi * s);
   float exponent = exp(-pow(d_i - d, 2) / (2 * s));
@@ -36,20 +43,33 @@ float getRange(vec2 x_i, vec3 N, float d) {
 }
 
 void main() {
-    ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);
-
-    vec3 N = texture(GBuffer_normal, texelCoord).xyz;
-    float d = texture(GBuffer_eye_vector, texelCoord).w;
-
     vec4 sum = vec4(0);
     float weightSum = 0.0;
 
+    ivec2 gpos = ivec2(gl_GlobalInvocationID.xy); // Global pixel id.
+                      // Calculated from thread id and work group id.
+    uint lpos = gl_LocalInvocationID.y; // Thread ID in the group
+
+    vec3 N = texture(GBuffer_normal, gpos/vec2(screenWidth,screenHeight)).xyz;
+    float d = texture(GBuffer_eye_vector, gpos/vec2(screenWidth,screenHeight)).w;
+
+    v[lpos] = imageLoad(imgInput, gpos + ivec2(0, -width));
+    N_v[lpos] = texture(GBuffer_normal, (gpos + ivec2(0, -width))/vec2(screenWidth,screenHeight)).xyz;
+    d_v[lpos] = texture(GBuffer_eye_vector, (gpos + ivec2(0, -width))/vec2(screenWidth,screenHeight)).w;
+    if (lpos < 2*width+1) {
+      v[lpos + 16] = imageLoad(imgInput, gpos + ivec2(0, 16 - width));
+      N_v[lpos + 16] = texture(GBuffer_normal, (gpos + ivec2(0, 16 - width))/vec2(screenWidth,screenHeight)).xyz;
+      d_v[lpos + 16] = texture(GBuffer_eye_vector, (gpos + ivec2(0, 16 - width))/vec2(screenWidth,screenHeight)).w;
+    }
+
+    barrier();
+
     for (int i = 0; i < 2*width+1; ++i) {
-      const float weight = getRange(texelCoord+ivec2(0, i-2), N, d) * weights[i];
-      sum +=  weight * imageLoad(imgInput, texelCoord+ivec2(0, i-2));
+      const float weight = getRange(lpos+i, N, d) * weights[i];
+      sum += weight * v[lpos+i];
 
       weightSum += weight;
     }
 
-    imageStore(imgOutput, texelCoord, sum/weightSum);
+    imageStore(imgOutput, gpos, sum/weightSum);
 }

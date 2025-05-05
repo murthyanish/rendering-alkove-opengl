@@ -6,31 +6,38 @@
 ///////////////////////////////////////////////////////////////////////////////
 #version 430 core
 
-layout (local_size_x = 16, local_size_y = 1) in;
+layout (local_size_x = 128, local_size_y = 1) in;
 
 // images
 layout(rgba32f, binding = 0) readonly uniform image2D imgInput;
 layout(rgba32f, binding = 1) writeonly uniform image2D imgOutput;
 
-layout(std140, binding = 3) uniform moments {
+layout(binding = 3) uniform moments {
   float width;
   float weights[101];
 };
 
-uniform float alpha;
+shared vec4 v[128+101]; // Shared memory for the work group
 
 void main() {
-    ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);
-
     vec4 sum = vec4(0);
     float weightSum = 0.0;
 
+    ivec2 gpos = ivec2(gl_GlobalInvocationID.xy); // Global pixel id.
+                      // Calculated from thread id and work group id.
+    uint lpos = gl_LocalInvocationID.x; // Thread ID in the group
+
+    v[lpos] = imageLoad(imgInput, gpos + ivec2(-width,0));
+    if (lpos < 2*width+1)
+      v[lpos + 128] = imageLoad(imgInput, gpos + ivec2(128 - width,0));
+
+    barrier();
+
     for (int i = 0; i < 2*width+1; ++i) {
-      sum +=  weights[i] * imageLoad(imgInput, texelCoord+ivec2(i-2, 0));
-      //sum +=  imageLoad(imgInput, texelCoord+ivec2(i-2, 0));
+      sum += weights[i] * v[lpos+i];
       weightSum += weights[i];
       //weightSum += 1;
     }
 
-    imageStore(imgOutput, texelCoord, sum/weightSum);
+    imageStore(imgOutput, gpos, sum/weightSum);
 }
