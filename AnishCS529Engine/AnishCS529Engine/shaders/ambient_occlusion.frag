@@ -33,9 +33,9 @@ void main()
     // AO code
     
     // Temporarily hard coding these for debugging
-    float R = 2.0; // Range of influence
+    float R = 1.0; // Range of influence
     int n = 10; // Number of samples
-    float s = 2.0;  // scale of AO, taken from AAO
+    float s = 1.0;  // scale of AO, taken from AAO
     float k = 10.0;  // contrast of AO, taken from AAO
 
     // Values for AO calculation

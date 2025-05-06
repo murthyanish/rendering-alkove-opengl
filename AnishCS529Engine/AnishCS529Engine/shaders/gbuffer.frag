@@ -85,7 +85,7 @@ void main()
     
     if (skydome > 0) {
       vec3 V = normalize(eyeVec);
-      vec2 uv = vec2(0.5 -atan(-V.z,V.x)/(2.0f*pi), acos(V.y)/pi);
+      vec2 uv = vec2(fract(0.5+atan(V.z,V.x)/(2.0f*pi)), acos(V.y)/pi);
       Kd = vec4(texture(mainTexture, uv).xyz, 0.0);
     }
     

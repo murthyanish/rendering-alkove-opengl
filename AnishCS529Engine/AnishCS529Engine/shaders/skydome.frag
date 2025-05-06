@@ -39,7 +39,7 @@ void main()
     vec3 V = normalize(eyePos);
     
     // Sky skips light processing so using a shortcut.
-    vec2 uv = vec2(atan(V.x,V.z)/(2.0 * pi), acos(V.y)/pi);
+    vec2 uv = vec2(fract(0.5+atan(V.z,V.x)/(2.0f*pi)), acos(V.y)/pi);
     vec4 color = texture(skydomeTexture, uv);
     if (HDR) {
       color.xyz = toSRGB(color.xyz);

@@ -112,7 +112,7 @@ vec2 solveQuadratic(float A, float B, float C) {
 
 float hamburger4MSM(vec4 b, float z_f) {
   const float alpha = 0.001;
-  const vec4 b_1 = (1-alpha)*b + alpha*vec4(0.5);
+  const vec4 b_1 = (1.0 - alpha)*b + alpha*vec4(0.5);
 
   const vec3 c = choleskyDecomposition(
     1, b_1.x, b_1.y,
@@ -122,7 +122,7 @@ float hamburger4MSM(vec4 b, float z_f) {
   const vec2 z = solveQuadratic(c.z, c.y, c.x);
   const float z_2 = z.x;
   const float z_3 = z.y;
-  if (z_2 == 0 && z_3 == 0) return 0.0;
+  if (z_2 == 0.0 && z_3 == 0.0) return 0.0;
   if (z_f <= z_2) return 0.0;
   else if (z_f <= z_3) {
     return (z_f * z_3 - b_1.x * (z_f + z_3) + b_1.y)
@@ -130,7 +130,7 @@ float hamburger4MSM(vec4 b, float z_f) {
     ((z_3 - z_2) * (z_f - z_2));
   }
   else {
-    return 1 - ((z_2 * z_3 - b_1.x * (z_2 + z_3) + b_1.y)
+    return 1.0 - ((z_2 * z_3 - b_1.x * (z_2 + z_3) + b_1.y)
     /
     ((z_f - z_2) * (z_f - z_3)));
   }
