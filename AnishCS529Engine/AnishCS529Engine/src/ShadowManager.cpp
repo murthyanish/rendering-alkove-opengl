@@ -21,7 +21,7 @@ void ShadowManager::update(SceneGraph* scene, Lights* lights)
   // updating changed lights
 
   if (momentWidth == -1) {
-    setMomentWidth(10);
+    setMomentWidth(50);
   }
 
   const float epsilon = 0.01f;
@@ -82,6 +82,8 @@ int ShadowManager::addShadow(
     fboInfo,
     params,
     light.position,
+    light.rotX,
+    light.rotY,
     lightIndex
   };
   
@@ -100,7 +102,13 @@ void ShadowManager::updateShadow(
   glEnable(GL_CULL_FACE);
   glCullFace(GL_FRONT);
 
-  const Matrix4 viewMatrix = Matrix4::lookAt(position, position - Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
+  const Vector3 target = position - (Matrix4::rotationXYZ(0.0f, shadow.rotY, shadow.rotX) * Vector3(0.0f, 1.0f, 0.0f));
+
+  const Matrix4 viewMatrix = 
+    Matrix4::lookAt(
+      position, 
+      target,
+      position.cross(target));
   const Matrix4 projectionMatrix = Matrix4::perspective(
     45.0f * 3.14159f / 180.0f,
     1.0f,

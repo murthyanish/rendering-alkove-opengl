@@ -60,6 +60,7 @@
     <ClCompile Include="src\Map_Tutorial2.cpp" />
     <ClCompile Include="src\Map_Victory.cpp" />
     <ClCompile Include="src\MomentShadowMapPass.cpp" />
+    <ClCompile Include="src\OneBitLightsPass.cpp" />
     <ClCompile Include="src\PauseMenu.cpp" />
     <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\GamePad.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\MomentShadowMapPass.h" />
+    <ClInclude Include="src\OneBitLightsPass.h" />
     <ClInclude Include="src\PauseMenu.h" />
     <ClInclude Include="src\PhysicsBody.h" />
     <ClInclude Include="src\Quaternion.h" />
@@ -237,6 +239,8 @@
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="shaders\gaussean_blur_hor.comp" />
+    <None Include="shaders\one_bit_lighting.frag" />
+    <None Include="shaders\one_bit_lighting.vert" />
     <None Include="shaders\shadow.frag" />
     <None Include="shaders\shadow.vert" />
     <None Include="shaders\skydome.frag" />

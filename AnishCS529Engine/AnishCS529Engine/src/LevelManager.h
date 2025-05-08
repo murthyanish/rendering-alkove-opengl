@@ -34,7 +34,7 @@
 #include "Input.h"
 #include "KeyList.h"
 #include "LightingPass.h"
-#include "LocalLightsPass.h"
+#include "OneBitLightsPass.h"
 #include "MapLoader.h"
 #include "OBB.h"
 #include "PauseMenu.h"

@@ -45,6 +45,8 @@ public:
     ShadowFBOInfo fboInfo;
     ShadowParams params;
     Vector3 lastLightPosition;
+    float rotX;
+    float rotY;
     int lightIndex;
   };
 

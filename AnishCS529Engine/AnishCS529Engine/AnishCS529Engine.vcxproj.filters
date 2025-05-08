@@ -384,16 +384,10 @@
     <ClCompile Include="src\EngineMath.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ShadowPass.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\MapGraphics.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ShadowManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MomentShadowMapPass.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SkydomePass.cpp">
@@ -403,6 +397,15 @@
       <Filter>Engine\Source Files\ObjectResources\Materials/Meshes</Filter>
     </ClCompile>
     <ClCompile Include="src\AmbientOcclusionPass.cpp">
+      <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OneBitLightsPass.cpp">
+      <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MomentShadowMapPass.cpp">
+      <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShadowPass.cpp">
       <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClCompile>
   </ItemGroup>
@@ -668,6 +671,9 @@
     <ClInclude Include="src\AmbientOcclusionPass.h">
       <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClInclude>
+    <ClInclude Include="src\OneBitLightsPass.h">
+      <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\skydome.frag">
@@ -752,6 +758,12 @@
       <Filter>Engine\Shaders</Filter>
     </None>
     <None Include="shaders\bilateral_blur_vert.comp">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\one_bit_lighting.vert">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\one_bit_lighting.frag">
       <Filter>Engine\Shaders</Filter>
     </None>
   </ItemGroup>

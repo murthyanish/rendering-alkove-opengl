@@ -50,12 +50,12 @@ void MapLoader::advanced(float offsetX, float offsetY, float offsetZ,
         20.0f, 
         Vector3(1.0f), 
         10000.0f));*/
-    sceneGraph.addPointLight(
+    /*sceneGraph.addPointLight(
       PointLight(
         Vector3(-110.5f + offsetX, 50.0f + offsetY, -120.0f + offsetZ),
         2.0f,
         Vector3(1.0f),
-        50.0f));
+        50.0f));*/
 
     Vector3 initialPos = Vector3(
       -110.5f + offsetX, 10.0f + 0.25f + offsetY, -120.0f + offsetZ);
