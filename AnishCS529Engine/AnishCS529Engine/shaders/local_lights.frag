@@ -49,6 +49,17 @@ uniform sampler2D ShadowMap;
 
 out vec3 FragColor;
 
+vec3 toSRGB(vec3 color) {
+  return pow(
+      (
+        (exposure * color) / 
+        (
+          (exposure * color) + 
+          vec3(1.0)
+        )
+      ), vec3(1.0/2.2));
+}
+
 vec3 choleskyDecomposition(
   float m_11, float m_12, float m_13,
   float m_22, float m_23, float m_33,
@@ -206,4 +217,5 @@ void main()
 
 
     FragColor *= attenuation;
+    FragColor = toSRGB(FragColor);
 }

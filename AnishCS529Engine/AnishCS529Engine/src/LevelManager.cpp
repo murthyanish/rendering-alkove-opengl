@@ -647,6 +647,7 @@ void LevelManager::createPlayerObject()
 
   camera = std::make_shared<AttachedCamera>("mainCamera");
   camera->attachToNode(cameraGameObject);
+  camera->setExposure(0.8f);
   mainSceneGraph.addCamera(camera);
 
 #pragma endregion

@@ -265,7 +265,7 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
   sceneGraph.addNode(autoBunnyParent);
 
   /*auto autoBunnyMaterial = Material::getMaterial<SolidColorMaterial>("autoBunnyMaterial");
-  autoBunnyMaterial->setProperty("diffuse", Vector3(0.0f));
+  autoBunnyMaterial->setProperty("diffuse", Vector3(252.0f/256.0f, 144.0f/256.0f, 3.0f/256.0f));
   autoBunnyMaterial->setProperty("specular", Vector3(0.8f));
   autoBunnyMaterial->setProperty("shininess", 128.0f);
 

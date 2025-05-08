@@ -66,7 +66,6 @@ uniform sampler2D skydome;
 out vec3 FragColor;
 
 vec3 toSRGB(vec3 color) {
-  const float exposure = 1.0f;
   return pow(
       (
         (exposure * color) / 
