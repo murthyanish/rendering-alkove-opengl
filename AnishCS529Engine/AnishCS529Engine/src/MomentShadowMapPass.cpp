@@ -17,12 +17,5 @@ void MomentShadowMapPass::computeHor(ComputeDispatchSize dispatch)
 
 void MomentShadowMapPass::computeVert(ComputeDispatchSize dispatch)
 {
-  shaderVert->use();
-
-  applyProperties(shaderVert);
-
-  glDispatchCompute(dispatch.x, dispatch.y, dispatch.z);
-
-  unbindTextures();
-  shaderVert->unuse();
+  compute(dispatch, shaderVert);
 }

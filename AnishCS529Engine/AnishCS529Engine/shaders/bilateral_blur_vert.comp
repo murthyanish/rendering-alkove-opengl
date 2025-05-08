@@ -61,6 +61,11 @@ void main() {
       N_v[lpos + 16] = texture(GBuffer_normal, (gpos + ivec2(0, 16 - width))/vec2(screenWidth,screenHeight)).xyz;
       d_v[lpos + 16] = texture(GBuffer_eye_vector, (gpos + ivec2(0, 16 - width))/vec2(screenWidth,screenHeight)).w;
     }
+    if (lpos + 16 < 2*width+1) {
+      v[lpos + 32] = imageLoad(imgInput, gpos + ivec2(0, 32 - width));
+      N_v[lpos + 32] = texture(GBuffer_normal, (gpos + ivec2(0, 32 - width))/vec2(screenWidth,screenHeight)).xyz;
+      d_v[lpos + 32] = texture(GBuffer_eye_vector, (gpos + ivec2(0, 32 - width))/vec2(screenWidth,screenHeight)).w;
+    }
 
     barrier();
 
