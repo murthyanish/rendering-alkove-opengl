@@ -21,7 +21,7 @@ void ShadowManager::update(SceneGraph* scene, Lights* lights)
   // updating changed lights
 
   if (momentWidth == -1) {
-    setMomentWidth(10);
+    setMomentWidth(5);
   }
 
   const float epsilon = 0.01f;
@@ -108,6 +108,8 @@ void ShadowManager::updateShadow(
     shadow.params.far);
   shadowPass.setProperty("ViewMatrix", viewMatrix);
   shadowPass.setProperty("ProjectionMatrix", projectionMatrix);
+  //shadowPass.setProperty("NearPlane", shadow.params.near);
+  //shadowPass.setProperty("FarPlane", shadow.params.far);
   shadowPass.draw(nullptr, scene);
 
   shadow.shadowMatrix =
@@ -129,6 +131,9 @@ void ShadowManager::useShadow(int index, Shader* shader) const
   shader->bindTexture(0, "ShadowMap", shadow.fboInfo.momentTextureID);
 
   shader->setMat4("ShadowMatrix", shadow.shadowMatrix);
+
+  //shader->setFloat("ShadowNearPlane", shadow.params.near);
+  //shader->setFloat("ShadowFarPlane", shadow.params.far);
 }
 
 void ShadowManager::calculateMomentWeights(int width)
