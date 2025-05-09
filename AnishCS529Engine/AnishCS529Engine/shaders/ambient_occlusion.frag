@@ -69,7 +69,7 @@ void main()
       // R/d is used here since it scales radius to world space.
       // (just R would be screen space).
 
-      float theta = 2 * pi * alpha * ( 7 * n / 9 ) + phi;
+      float theta = 2.0 * pi * alpha * ( 7.0 * n / 9.0 ) + phi;
 
       // Calculated point
       vec2 P_i = vec2(x,y) + h * vec2(cos(theta), sin(theta));
@@ -87,7 +87,7 @@ void main()
       }
     }// End of Point calculation
 
-    float S = ((2 * pi * c) / n) * S_summ;
+    float S = ((2.0 * pi * c) / n) * S_summ;
       
-    A = pow(max(0.0, (1 - s * S)), k);
+    A = pow(max(0.0, (1.0 - s * S)), k);
 }
