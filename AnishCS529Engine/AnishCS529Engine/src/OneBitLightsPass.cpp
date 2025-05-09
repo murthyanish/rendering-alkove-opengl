@@ -14,7 +14,7 @@ OneBitLightsPass::OneBitLightsPass() :
   RenderPass(), sphereMesh(Mesh::createSphereMesh("lightSphere", 8)) {
   this->addShader("shaders/one_bit_lighting.vert\nshaders/one_bit_lighting.frag");
 
-  renderMask = RenderMask::LocalLightsPass;
+  renderMask = RenderMask::LightingPass;
 }
 
 void OneBitLightsPass::initialize()

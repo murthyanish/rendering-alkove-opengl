@@ -41,6 +41,7 @@
     <ClCompile Include="src\EdgeDetectionPass.cpp" />
     <ClCompile Include="src\EngineMath.cpp" />
     <ClCompile Include="src\FBO.cpp" />
+    <ClCompile Include="src\FinalOneBitPass.cpp" />
     <ClCompile Include="src\FreeCamera.cpp" />
     <ClCompile Include="src\GBufferPrepass.cpp" />
     <ClCompile Include="src\GeometryBuffer.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="src\EdgeDetectionPass.h" />
     <ClInclude Include="src\EngineMath.h" />
     <ClInclude Include="src\FBO.h" />
+    <ClInclude Include="src\FinalOneBitPass.h" />
     <ClInclude Include="src\FirstPersonControllerComponent.h" />
     <ClInclude Include="src\FramerateController.inl">
       <FileType>Document</FileType>
@@ -225,8 +227,10 @@
     <None Include="shaders\bilateral_blur_hor.comp" />
     <None Include="shaders\bilateral_blur_vert.comp" />
     <None Include="shaders\dithering.frag" />
+    <None Include="shaders\final_one_bit.frag" />
     <None Include="shaders\dithering.vert" />
     <None Include="shaders\edge_detection.comp" />
+    <None Include="shaders\final_one_bit.vert" />
     <None Include="shaders\gaussean_blur_vert.comp" />
     <None Include="shaders\gbuffer.frag" />
     <None Include="shaders\gbuffer.vert" />

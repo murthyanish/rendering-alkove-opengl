@@ -19,6 +19,11 @@ protected:
   std::shared_ptr<Mesh> screenQuad;
   // Dithering Texture
 
+  FBO* ditherABuffer;
+  FBO* ditherBBuffer;
+  TextureManager::TextureID ditheredAImage;
+  TextureManager::TextureID ditheredBImage;
+
 public:
   DitheringPass();
 

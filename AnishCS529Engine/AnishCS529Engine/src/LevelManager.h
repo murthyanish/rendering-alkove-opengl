@@ -55,6 +55,7 @@
 #include "SurfaceColorPass.h"
 #include "EdgeDetectionPass.h"
 #include "DitheringPass.h"
+#include "FinalOneBitPass.h"
 
 
 class LevelManager {

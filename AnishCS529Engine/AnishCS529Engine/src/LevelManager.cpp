@@ -823,8 +823,10 @@ void LevelManager::initalizePlayerInLevel()
 
     mainRenderer->getRenderGraph()->addPass<OneBitLightsPass>();
 
-    mainRenderer->getRenderGraph()->addPass<DitheringPass>();
+    auto ditherPass = mainRenderer->getRenderGraph()->addPass<DitheringPass>();
+    ditherPass->addDitheringTexture("media/textures/noise.jpg");
 
+    mainRenderer->getRenderGraph()->addPass<FinalOneBitPass>();
 }
 
 void LevelManager::SetPlayerDifficulty(FirstPersonControllerComponent::Difficulty diff) {
