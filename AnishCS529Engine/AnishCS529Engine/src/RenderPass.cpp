@@ -209,7 +209,7 @@ bool RenderPass::isEnabled() const {
   return enabled;
 }
 
-void RenderPass::compute(ComputeDispatchSize dispatchSize)
+void RenderPass::compute(ComputeDispatchSize dispatchSize) const
 {
   shader->use();
 
@@ -221,7 +221,8 @@ void RenderPass::compute(ComputeDispatchSize dispatchSize)
   shader->unuse();
 }
 
-void RenderPass::compute(ComputeDispatchSize dispatchSize, std::shared_ptr<Shader> shader)
+void RenderPass::compute(
+  ComputeDispatchSize dispatchSize, std::shared_ptr<Shader> shader) const
 {
   shader->use();
 

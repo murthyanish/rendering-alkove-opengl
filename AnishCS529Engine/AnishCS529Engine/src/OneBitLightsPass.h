@@ -21,6 +21,10 @@ class OneBitLightsPass : public RenderPass {
 protected:
   std::shared_ptr<Mesh> sphereMesh;
 
+  FBO* oneBitLightsBuffer;
+
+  TextureManager::TextureID oneBitLights;
+
 public:
   OneBitLightsPass();
 

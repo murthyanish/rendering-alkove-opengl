@@ -188,13 +188,13 @@ void MapLoader::graphics(float offsetX, float offsetY, float offsetZ,
   }*/
 
 
-  /*sceneGraph.addPointLight(
+  sceneGraph.addPointLight(
     PointLight(
       initialPosition + Vector3(0.0f, 20.0f, 0.0f),
       1000.0f, Vector3(1.0f, 1.0f, 1.0f), 1000.0f,
       1
       )
-  );*/
+  );
 
   sceneGraph.addPointLight(
     PointLight(

@@ -126,9 +126,9 @@ public:
 
   /* Compute specific */
   virtual void compute(
-      ComputeDispatchSize dispatchSize);
+      ComputeDispatchSize dispatchSize) const;
   virtual void compute(
-      ComputeDispatchSize dispatchSize, std::shared_ptr<Shader> shader);
+      ComputeDispatchSize dispatchSize, std::shared_ptr<Shader> shader) const;
 
 protected:
   bool enabled;

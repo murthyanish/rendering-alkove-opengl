@@ -408,6 +408,15 @@
     <ClCompile Include="src\ShadowPass.cpp">
       <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClCompile>
+    <ClCompile Include="src\SurfaceColorPass.cpp">
+      <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EdgeDetectionPass.cpp">
+      <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DitheringPass.cpp">
+      <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Matrix4.h">
@@ -674,6 +683,15 @@
     <ClInclude Include="src\OneBitLightsPass.h">
       <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClInclude>
+    <ClInclude Include="src\SurfaceColorPass.h">
+      <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EdgeDetectionPass.h">
+      <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DitheringPass.h">
+      <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\skydome.frag">
@@ -764,6 +782,21 @@
       <Filter>Engine\Shaders</Filter>
     </None>
     <None Include="shaders\one_bit_lighting.frag">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\surface_color.vert">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\surface_color.frag">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\edge_detection.comp">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\dithering.vert">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\dithering.frag">
       <Filter>Engine\Shaders</Filter>
     </None>
   </ItemGroup>

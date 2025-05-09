@@ -19,6 +19,13 @@ OneBitLightsPass::OneBitLightsPass() :
 
 void OneBitLightsPass::initialize()
 {
+  oneBitLights = renderGraphBuilder->createScreenSizeTexture("one_bit_lights", 1);
+  oneBitLightsBuffer = renderGraphBuilder->createScreenSizeFBO(
+    "oneBitLightsBuffer",
+    {
+      "one_bit_lights"
+    });
+
   setProperty(
     "GBuffer_position", renderGraphBuilder->getTexture("GBuffer_position"));
   setProperty(
@@ -34,6 +41,10 @@ void OneBitLightsPass::initialize()
 void OneBitLightsPass::draw(
     std::shared_ptr<Camera> camera,
     SceneGraph* sceneGraph) const {
+
+  oneBitLightsBuffer->bind();
+
+  oneBitLightsBuffer->clear();
 
   glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
@@ -94,4 +105,6 @@ void OneBitLightsPass::draw(
   shader->unuse();
 
   glDisable(GL_CULL_FACE);
+
+  oneBitLightsBuffer->unbind();
 }

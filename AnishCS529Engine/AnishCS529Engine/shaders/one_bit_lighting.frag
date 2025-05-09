@@ -162,11 +162,16 @@ void main()
     if (light.castShadow > 0) {
       const vec4 shadowCoord = ShadowMatrix * vec4(worldPos, 1.0);
       vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
+      if (shadowCoord.w > 0 && 
+        shadowIndex.x >= 0.0f && shadowIndex.x < 1.0f &&
+        shadowIndex.y >= 0.0f && shadowIndex.y < 1.0f){
+      
+        vec4 b = texture(ShadowMap, shadowIndex);
+        float z_f = shadowCoord.w;
 
-      vec4 b = texture(ShadowMap, shadowIndex);
-      float z_f = shadowCoord.w;
-
-      G = hamburger4MSM(b, z_f);
+        G = hamburger4MSM(b, z_f);
+      }
+      else G = 0.0;
     }
 
     vec3 eyeVec = texture(GBuffer_eye_vector, gBufferPosition).xyz;

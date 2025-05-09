@@ -1,0 +1,52 @@
+///////////////////////////////////////////////////////////////////////////////
+// Compute shader for Edge Detection
+//
+// Copyright ? 2025 DIGIPEN Institute of Technology. All rights reserved.
+//
+///////////////////////////////////////////////////////////////////////////////
+#version 430 core
+
+const float pi = 3.14159265358979323846;
+
+layout (local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+
+// images
+layout(r32f, binding = 1) writeonly uniform image2D imgOutput;
+
+uniform int screenWidth;
+uniform int screenHeight;
+
+uniform sampler2D GBuffer_normal;
+uniform sampler2D GBuffer_eye_vector;
+
+void main() {
+    float normalThreshold = 0.2;
+    float depthThreshold = 1.0;
+    int width = 1;
+
+    ivec2 gpos = ivec2(gl_GlobalInvocationID.xy); // Global pixel id.
+                      // Calculated from thread id and work group id.
+
+    vec3 N = texture(GBuffer_normal, gpos/vec2(screenWidth,screenHeight)).xyz;
+    float d = texture(GBuffer_eye_vector, gpos/vec2(screenWidth,screenHeight)).w;
+
+    bool isEdge = false;
+
+    for (int i = -width; i < width; ++i) {
+      for (int j = -width; j < width; ++j) {
+        ivec2 offset = gpos + ivec2(i, j);
+
+        vec3 neighborNormal = texture(GBuffer_normal, offset/vec2(screenWidth,screenHeight)).xyz;
+        float neighborDepth = texture(GBuffer_eye_vector, offset/vec2(screenWidth,screenHeight)).w;
+
+        float normalDiff = length(N - neighborNormal);
+        float depthDiff = abs(d - neighborDepth);
+
+        if (normalDiff > normalThreshold || depthDiff > depthThreshold)
+            isEdge = true;
+      }
+    }
+
+    vec4 edgeValue = isEdge ? vec4(1.0) : vec4(0.0);
+    imageStore(imgOutput, gpos, edgeValue);
+}

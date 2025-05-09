@@ -52,6 +52,10 @@
 #include "TrianglePrimitive.h"
 #include "UIPass.h"
 
+#include "SurfaceColorPass.h"
+#include "EdgeDetectionPass.h"
+#include "DitheringPass.h"
+
 
 class LevelManager {
 

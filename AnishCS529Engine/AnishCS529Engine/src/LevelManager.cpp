@@ -818,7 +818,12 @@ void LevelManager::initalizePlayerInLevel()
     //lightingPass->addIrradianceMap("media/textures/skys/Newport_Loft_Ref.irr.hdr");
     //lightingPass->addSkydome("media/textures/skys/Newport_Loft_Ref.hdr");
 
+    //mainRenderer->getRenderGraph()->addPass<SurfaceColorPass>();
+    mainRenderer->getRenderGraph()->addPass<EdgeDetectionPass>();
+
     mainRenderer->getRenderGraph()->addPass<OneBitLightsPass>();
+
+    mainRenderer->getRenderGraph()->addPass<DitheringPass>();
 
 }
 

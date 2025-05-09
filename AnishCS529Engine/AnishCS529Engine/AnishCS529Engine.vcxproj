@@ -36,7 +36,9 @@
     <ClCompile Include="src\Animate.cpp" />
     <ClCompile Include="src\DeathPlane.cpp" />
     <ClCompile Include="src\AttachedCamera.cpp" />
+    <ClCompile Include="src\DitheringPass.cpp" />
     <ClCompile Include="src\Door.cpp" />
+    <ClCompile Include="src\EdgeDetectionPass.cpp" />
     <ClCompile Include="src\EngineMath.cpp" />
     <ClCompile Include="src\FBO.cpp" />
     <ClCompile Include="src\FreeCamera.cpp" />
@@ -96,7 +98,9 @@
     <ClInclude Include="src\Animate.h" />
     <ClInclude Include="src\AttachedCamera.h" />
     <ClInclude Include="src\DeathPlane.h" />
+    <ClInclude Include="src\DitheringPass.h" />
     <ClInclude Include="src\Door.h" />
+    <ClInclude Include="src\EdgeDetectionPass.h" />
     <ClInclude Include="src\EngineMath.h" />
     <ClInclude Include="src\FBO.h" />
     <ClInclude Include="src\FirstPersonControllerComponent.h" />
@@ -104,6 +108,7 @@
       <FileType>Document</FileType>
     </ClInclude>
     <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\SurfaceColorPass.cpp" />
     <ClCompile Include="src\TeapotMesh.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\TextureMaterial.cpp" />
@@ -180,6 +185,7 @@
     <ClInclude Include="src\PhysicsManager.h" />
     <ClInclude Include="src\SceneGraph.h" />
     <ClInclude Include="src\Shape.h" />
+    <ClInclude Include="src\SurfaceColorPass.h" />
     <ClInclude Include="src\TextureManager.h" />
     <ClInclude Include="src\TextureMaterial.h" />
     <ClInclude Include="src\TextureParametersOpenGL.h" />
@@ -218,6 +224,9 @@
     <None Include="shaders\ambient_occlusion.vert" />
     <None Include="shaders\bilateral_blur_hor.comp" />
     <None Include="shaders\bilateral_blur_vert.comp" />
+    <None Include="shaders\dithering.frag" />
+    <None Include="shaders\dithering.vert" />
+    <None Include="shaders\edge_detection.comp" />
     <None Include="shaders\gaussean_blur_vert.comp" />
     <None Include="shaders\gbuffer.frag" />
     <None Include="shaders\gbuffer.vert" />
@@ -245,6 +254,8 @@
     <None Include="shaders\shadow.vert" />
     <None Include="shaders\skydome.frag" />
     <None Include="shaders\skydome.vert" />
+    <None Include="shaders\surface_color.frag" />
+    <None Include="shaders\surface_color.vert" />
     <None Include="shaders\ui.frag" />
     <None Include="shaders\ui.vert" />
   </ItemGroup>
