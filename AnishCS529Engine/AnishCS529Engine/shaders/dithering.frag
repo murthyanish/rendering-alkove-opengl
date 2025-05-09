@@ -45,12 +45,6 @@ float errNoise(float i, float j) {
   return err(i, j, noise);
 }
 
-float to3Shade(float value) {
-  if (value > 0.8) return 1.0;
-  if (value > 0.3) return 0.5;
-  return 0.0;
-}
-
 void main()
 {
     vec2 gBufferPosition = gl_FragCoord.xy/vec2(width,height);
@@ -59,7 +53,6 @@ void main()
     float sum;
 
     if (firstPass == 1) {
-      cur.x = to3Shade(cur.x);
       cur.yz = texture(noise, gBufferPosition).yz;
     }
 
