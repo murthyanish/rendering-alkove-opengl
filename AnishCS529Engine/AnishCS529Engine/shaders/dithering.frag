@@ -45,12 +45,23 @@ float errNoise(float i, float j) {
   return err(i, j, noise);
 }
 
+float to3Shade(float value) {
+  if (value > 0.8) return 1.0;
+  if (value > 0.3) return 0.5;
+  return 0.0;
+}
+
 void main()
 {
     vec2 gBufferPosition = gl_FragCoord.xy/vec2(width,height);
     vec4 cur = texture(light_texture, gBufferPosition);
 
     float sum;
+
+    if (firstPass == 1) {
+      cur.x = to3Shade(cur.x);
+      cur.yz = texture(noise, gBufferPosition).yz;
+    }
 
 //    if (firstPass == 1)
 //      sum = cur.x + (2*errNoise(-1.5,0) + 2*errNoise(1.5,0) + 2*errNoise(0,-1.5) + 2*errNoise(0,1.5) + errNoise(-1,-1) + errNoise(1,-1) + errNoise(-1,1) + errNoise(1,1))/12;
