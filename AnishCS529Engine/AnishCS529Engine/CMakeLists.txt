@@ -37,6 +37,7 @@ target_include_directories(hawthorne_engine PUBLIC
 target_sources(hawthorne_engine
   PRIVATE
     src/AABB.cpp
+    src/AmbientOcclusionPass.cpp
     src/Animate.cpp
     src/AttachedCamera.cpp
     src/Audio.cpp
@@ -115,9 +116,3 @@ target_link_libraries(hawthorne_engine
   PRIVATE
     game_libraries
 )
-
-# target_include_directories (lvulkan_hellotriangle PRIVATE ${STB_INCLUDEDIR})
-# target_compile_definitions(${CHAPTER_NAME} PRIVATE USE_CPP23_MODULES=1)
-target_compile_definitions(hawthorne_engine
-  PRIVATE
-    "VULKAN_HPP_HANDLE_ERROR_OUT_OF_DATE_AS_SUCCESS" )

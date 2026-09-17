@@ -99,6 +99,9 @@ void ShadowManager::updateShadow(
 
   glEnable(GL_CULL_FACE);
   glCullFace(GL_FRONT);
+  glEnable(GL_DEPTH_TEST);
+  glDepthMask(GL_TRUE);
+  glDisable(GL_BLEND);
 
   const Matrix4 viewMatrix = Matrix4::lookAt(position, position - Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
   const Matrix4 projectionMatrix = Matrix4::perspective(
@@ -108,8 +111,8 @@ void ShadowManager::updateShadow(
     shadow.params.far);
   shadowPass.setProperty("ViewMatrix", viewMatrix);
   shadowPass.setProperty("ProjectionMatrix", projectionMatrix);
-  //shadowPass.setProperty("NearPlane", shadow.params.near);
-  //shadowPass.setProperty("FarPlane", shadow.params.far);
+  // shadowPass.setProperty("ShadowNearPlane", shadow.params.near);
+  // shadowPass.setProperty("ShadowFarPlane", shadow.params.far);
   shadowPass.draw(nullptr, scene);
 
   shadow.shadowMatrix =
@@ -132,8 +135,8 @@ void ShadowManager::useShadow(int index, Shader* shader) const
 
   shader->setMat4("ShadowMatrix", shadow.shadowMatrix);
 
-  //shader->setFloat("ShadowNearPlane", shadow.params.near);
-  //shader->setFloat("ShadowFarPlane", shadow.params.far);
+  // shader->setFloat("ShadowNearPlane", shadow.params.near);
+  // shader->setFloat("ShadowFarPlane", shadow.params.far);
 }
 
 void ShadowManager::calculateMomentWeights(int width)

@@ -30,7 +30,7 @@ public:
     // Could add more info here like Quaternion rotation for which direction 
     // to have it be generated, or a flag to generate a 360 shadow.
     float near = 1;
-    float far = 100;
+    float far = 50;
     unsigned int resolution = 1024;
   };
   

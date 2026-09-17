@@ -304,6 +304,9 @@ float GameWindow::getAspectRatio() {
  *****************************************************************************/
 void GameWindow::initialize()
 {
+#ifdef __linux__
+  glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+#endif
   if (!glfwInit()) {
     throw std::runtime_error("Failed to initialize GLFW");
   }

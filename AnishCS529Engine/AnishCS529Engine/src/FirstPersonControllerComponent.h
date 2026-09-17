@@ -124,7 +124,7 @@ public:
         walkForce(15), maxWalkSpeed(15.0f),
         runForceMultiplier(2.0f), maxRunSpeed(2 * maxWalkSpeed),
         jumpSpeed(40), airDrag(0.1f), anchoredDrag(0.6f),
-        mouseXSensitivity(0.1f), mouseYSensitivity(0.1f), pitchLimit(80),
+        mouseXSensitivity(0.5f), mouseYSensitivity(0.5f), pitchLimit(80),
         coyoteTime(0.1f), jumpBufferTime(0.2f), jumpCooldown(0.2f),
         slideForce(50), slideCoolDown(1.4f), slideEffectTime(0.5f),
         slideBufferTime(0.2f), hasSlidSinceAnchored(false),
