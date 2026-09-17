@@ -99,9 +99,6 @@ void ShadowManager::updateShadow(
 
   glEnable(GL_CULL_FACE);
   glCullFace(GL_FRONT);
-  glEnable(GL_DEPTH_TEST);
-  glDepthMask(GL_TRUE);
-  glDisable(GL_BLEND);
 
   const Matrix4 viewMatrix = Matrix4::lookAt(position, position - Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
   const Matrix4 projectionMatrix = Matrix4::perspective(
