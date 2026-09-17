@@ -12,8 +12,8 @@ out vec4 FragColor;
 void main()
 {
   FragColor = vec4(
-    position.z,
-    pow(position.z, 2.0),
-    pow(position.z, 3.0),
-    pow(position.z, 4.0));
+    position.w,
+    pow(position.w, 2.0),
+    pow(position.w, 3.0),
+    pow(position.w, 4.0));
 }

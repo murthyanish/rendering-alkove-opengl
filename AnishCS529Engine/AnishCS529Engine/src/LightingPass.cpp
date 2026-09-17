@@ -33,12 +33,17 @@ void LightingPass::initialize()
     "GBuffer_diffuse", renderGraphBuilder->getTexture("GBuffer_diffuse"));
   setProperty(
     "GBuffer_specular", renderGraphBuilder->getTexture("GBuffer_specular"));
+  setProperty(
+    "GBuffer_eye_vector", renderGraphBuilder->getTexture("GBuffer_eye_vector"));
   // For testing
   irradianceSpecularPointCount = 40;
   
   createIrradiancePointsUBO(
     irradianceSpecularPointCount,
     generateLowDiscrepancyPoints(irradianceSpecularPointCount));
+
+  setProperty(
+    "ambient_factor", renderGraphBuilder->getTexture("filtered_ambient_factor"));
 }
 
 void LightingPass::setIrradiancePointsCount(int N) {
@@ -96,7 +101,10 @@ void LightingPass::addIrradianceMap(TextureManager::TextureID textureID)
 void LightingPass::addIrradianceMap(const std::string& texturePath)
 {
   setProperty("enableIrradiance", 1);
-  setProperty("IrradianceMap", TextureManager::getInstance().loadFile(texturePath));
+  auto texture = TextureManager::getInstance().loadFile(texturePath);
+  TextureManager::getInstance().setTextureParameters(
+    texture, TextureManager::TextureParameters());
+  setProperty("IrradianceMap", texture);
 }
 
 void LightingPass::addSkydome(TextureManager::TextureID textureID)
@@ -108,7 +116,10 @@ void LightingPass::addSkydome(TextureManager::TextureID textureID)
 void LightingPass::addSkydome(const std::string& texturePath)
 {
   setProperty("enableIBLSpecular", 1);
-  setProperty("skydome", TextureManager::getInstance().loadFile(texturePath));
+  auto texture = TextureManager::getInstance().loadFile(texturePath);
+  TextureManager::getInstance().setTextureParameters(
+    texture, TextureManager::TextureParameters());
+  setProperty("skydome", texture);
 }
 
 void LightingPass::draw(

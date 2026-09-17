@@ -34,6 +34,8 @@ void LocalLightsPass::initialize()
     "GBuffer_diffuse", renderGraphBuilder->getTexture("GBuffer_diffuse"));
   setProperty(
     "GBuffer_specular", renderGraphBuilder->getTexture("GBuffer_specular"));
+  setProperty(
+    "GBuffer_eye_vector", renderGraphBuilder->getTexture("GBuffer_eye_vector"));
 }
 
 void LocalLightsPass::draw(

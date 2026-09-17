@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Pixel shader for rendering Point Lights
 //
-// Copyright ? 2025 DIGIPEN Institute of Technology. All rights reserved.
+// Copyright © 2025 DIGIPEN Institute of Technology. All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////
 #version 440
@@ -42,25 +42,39 @@ uniform sampler2D GBuffer_position;
 uniform sampler2D GBuffer_normal;
 uniform sampler2D GBuffer_diffuse;
 uniform sampler2D GBuffer_specular;
+uniform sampler2D GBuffer_eye_vector;
 
 uniform mat4 ShadowMatrix;
 uniform sampler2D ShadowMap;
+//uniform float ShadowNearPlane;
+//uniform float ShadowFarPlane;
 
 out vec3 FragColor;
+
+vec3 toSRGB(vec3 color) {
+  return pow(
+      (
+        (exposure * color) / 
+        (
+          (exposure * color) + 
+          vec3(1.0)
+        )
+      ), vec3(1.0/2.2));
+}
 
 vec3 choleskyDecomposition(
   float m_11, float m_12, float m_13,
   float m_22, float m_23, float m_33,
   float z_1, float z_2, float z_3) {
   float a = sqrt(m_11);
-  if ( a < 0 ) a = 0.0001;
+  if ( a < 0.0001 ) a = 0.0001;
   const float b = m_12/a;
   const float c = m_13/a;
   float d = sqrt(m_22 - pow(b,2));
-  if ( d < 0 ) d = 0.0001;
+  if ( d < 0.0001 ) d = 0.0001;
   const float e = (m_23 - b*c)/d;
   float f_nos = m_33 - pow(c,2) - pow(e,2);
-  if (f_nos <= 0) f_nos = 0.01;
+  if (f_nos <= 0) f_nos = 0.0001;
   float f = sqrt(f_nos);
   if ( f < 0 ) f = 0.0001;
 
@@ -110,8 +124,8 @@ vec2 solveQuadratic(float A, float B, float C) {
 }
 
 float hamburger4MSM(vec4 b, float z_f) {
-  const float alpha = 0.001;
-  const vec4 b_1 = (1-alpha)*b + alpha*vec4(0.5);
+  const float alpha = 0.00003;
+  const vec4 b_1 = (1.0 - alpha)*b + alpha*vec4(0.5);
 
   const vec3 c = choleskyDecomposition(
     1, b_1.x, b_1.y,
@@ -121,7 +135,7 @@ float hamburger4MSM(vec4 b, float z_f) {
   const vec2 z = solveQuadratic(c.z, c.y, c.x);
   const float z_2 = z.x;
   const float z_3 = z.y;
-  if (z_2 == 0 && z_3 == 0) return 0.0;
+  if (z_2 == 0.0 && z_3 == 0.0) return 0.0;
   if (z_f <= z_2) return 0.0;
   else if (z_f <= z_3) {
     return (z_f * z_3 - b_1.x * (z_f + z_3) + b_1.y)
@@ -129,7 +143,7 @@ float hamburger4MSM(vec4 b, float z_f) {
     ((z_3 - z_2) * (z_f - z_2));
   }
   else {
-    return 1 - ((z_2 * z_3 - b_1.x * (z_2 + z_3) + b_1.y)
+    return 1.0 - ((z_2 * z_3 - b_1.x * (z_2 + z_3) + b_1.y)
     /
     ((z_f - z_2) * (z_f - z_3)));
   }
@@ -159,14 +173,22 @@ void main()
     if (light.castShadow > 0) {
       const vec4 shadowCoord = ShadowMatrix * vec4(worldPos, 1.0);
       vec2 shadowIndex = shadowCoord.xy/shadowCoord.w;
+      if (shadowCoord.w > 0 && 
+        shadowIndex.x >= 0.0f && shadowIndex.x < 1.0f &&
+        shadowIndex.y >= 0.0f && shadowIndex.y < 1.0f){
 
-      vec4 b = texture(ShadowMap, shadowIndex);
-      float z_f = shadowCoord.w - 1.6;
+//      vec4 b = (texture(ShadowMap, shadowIndex) - ShadowNearPlane) / (ShadowFarPlane - ShadowNearPlane);
+//      float z_f = (shadowCoord.w - ShadowNearPlane) / (ShadowFarPlane - ShadowNearPlane);
+      
+        vec4 b = texture(ShadowMap, shadowIndex);
+        float z_f = shadowCoord.w;
 
-      G = hamburger4MSM(b, z_f);
+        G = hamburger4MSM(b, z_f);
+      }
+      else G = 0.0;
     }
 
-    vec3 eyeVec = (inverseView*vec4(0,0,0,1)).xyz-worldPos;
+    vec3 eyeVec = texture(GBuffer_eye_vector, gBufferPosition).xyz;
 
     vec3 N = texture(GBuffer_normal, gBufferPosition).xyz;
     vec3 V = normalize(eyeVec);
@@ -205,4 +227,5 @@ void main()
 
 
     FragColor *= attenuation;
+    FragColor = toSRGB(FragColor);
 }

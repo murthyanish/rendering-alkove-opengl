@@ -32,6 +32,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugAdditionalFeatures|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\AmbientOcclusionPass.cpp" />
     <ClCompile Include="src\Animate.cpp" />
     <ClCompile Include="src\DeathPlane.cpp" />
     <ClCompile Include="src\AttachedCamera.cpp" />
@@ -90,6 +91,7 @@
     <ClCompile Include="src\CollisionGenerator.cpp" />
     <ClCompile Include="src\CollisionListener.cpp" />
     <ClCompile Include="src\EventManager.cpp" />
+    <ClInclude Include="src\AmbientOcclusionPass.h" />
     <ClInclude Include="src\Animate.h" />
     <ClInclude Include="src\AttachedCamera.h" />
     <ClInclude Include="src\DeathPlane.h" />
@@ -210,6 +212,10 @@
     <None Include="media\Map\Turret.fbx">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
+    <None Include="shaders\ambient_occlusion.frag" />
+    <None Include="shaders\ambient_occlusion.vert" />
+    <None Include="shaders\bilateral_blur_hor.comp" />
+    <None Include="shaders\bilateral_blur_vert.comp" />
     <None Include="shaders\gaussean_blur_vert.comp" />
     <None Include="shaders\gbuffer.frag" />
     <None Include="shaders\gbuffer.vert" />

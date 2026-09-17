@@ -402,6 +402,9 @@
     <ClCompile Include="src\TeapotMesh.cpp">
       <Filter>Engine\Source Files\ObjectResources\Materials/Meshes</Filter>
     </ClCompile>
+    <ClCompile Include="src\AmbientOcclusionPass.cpp">
+      <Filter>Engine\Source Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Matrix4.h">
@@ -662,6 +665,9 @@
     <ClInclude Include="src\MomentShadowMapPass.h">
       <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
     </ClInclude>
+    <ClInclude Include="src\AmbientOcclusionPass.h">
+      <Filter>Engine\Header Files\Systems\RenderingSystem\RenderPasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\skydome.frag">
@@ -724,12 +730,28 @@
     <None Include="shaders\ui.frag">
       <Filter>Engine\Shaders</Filter>
     </None>
-    <None Include="shaders\shadow.frag" />
-    <None Include="shaders\shadow.vert" />
     <None Include="shaders\gaussean_blur_hor.comp">
       <Filter>Engine\Shaders</Filter>
     </None>
     <None Include="shaders\gaussean_blur_vert.comp">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\shadow.frag">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\shadow.vert">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\ambient_occlusion.vert">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\ambient_occlusion.frag">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\bilateral_blur_hor.comp">
+      <Filter>Engine\Shaders</Filter>
+    </None>
+    <None Include="shaders\bilateral_blur_vert.comp">
       <Filter>Engine\Shaders</Filter>
     </None>
   </ItemGroup>

@@ -32,9 +32,9 @@ public:
   FBO* createFBO(
     const std::string& name, std::vector<std::string> attachments, int width, int height);
   TextureManager::TextureID createScreenSizeTexture(
-    const std::string& name);
+    const std::string& name, int channels = 4);
   TextureManager::TextureID createTexture(
-    const std::string& name, int width, int height);
+    const std::string& name, int width, int height, int channels = 4);
 
   FBO* getFBO(const std::string& name);
   TextureManager::TextureID getTexture(const std::string& name);

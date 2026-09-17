@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "AmbientOcclusionPass.h"
 #include "AttachedCamera.h"
 #include "Audio.h"
 #include "Camera.h"

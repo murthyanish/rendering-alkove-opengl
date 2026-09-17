@@ -21,7 +21,7 @@ void ShadowManager::update(SceneGraph* scene, Lights* lights)
   // updating changed lights
 
   if (momentWidth == -1) {
-    setMomentWidth(10);
+    setMomentWidth(5);
   }
 
   const float epsilon = 0.01f;
@@ -96,6 +96,10 @@ void ShadowManager::updateShadow(
   shadow.fboInfo.fbo->bind();
   shadow.fboInfo.fbo->clear();
 
+
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_FRONT);
+
   const Matrix4 viewMatrix = Matrix4::lookAt(position, position - Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
   const Matrix4 projectionMatrix = Matrix4::perspective(
     45.0f * 3.14159f / 180.0f,
@@ -104,11 +108,15 @@ void ShadowManager::updateShadow(
     shadow.params.far);
   shadowPass.setProperty("ViewMatrix", viewMatrix);
   shadowPass.setProperty("ProjectionMatrix", projectionMatrix);
+  //shadowPass.setProperty("NearPlane", shadow.params.near);
+  //shadowPass.setProperty("FarPlane", shadow.params.far);
   shadowPass.draw(nullptr, scene);
 
   shadow.shadowMatrix =
     Matrix4::translation(0.5f) * Matrix4::scale(0.5f) *
     projectionMatrix * viewMatrix;
+
+  glDisable(GL_CULL_FACE);
 
   shadow.fboInfo.fbo->unbind();
 }
@@ -123,16 +131,22 @@ void ShadowManager::useShadow(int index, Shader* shader) const
   shader->bindTexture(0, "ShadowMap", shadow.fboInfo.momentTextureID);
 
   shader->setMat4("ShadowMatrix", shadow.shadowMatrix);
+
+  //shader->setFloat("ShadowNearPlane", shadow.params.near);
+  //shader->setFloat("ShadowFarPlane", shadow.params.far);
 }
 
 void ShadowManager::calculateMomentWeights(int width)
 {
   std::vector<float> weights;
+  weights.reserve(width * 2 + 2);
   weights.push_back(width);
 
-  weights.reserve(width * 2 + 2);
   for (int i = -width; i < width + 1; ++i) {
-    weights.push_back(expf(-(1 / 2) * powf(i / (width / 2), 2)));
+    weights.push_back(
+      expf(
+        -(1.0 / 2.0) *
+        powf(static_cast<float>(i) / (static_cast<float>(width) / 2.0), 2.0)));
   }
 
   glGenBuffers(1, &momentUBO);
@@ -169,7 +183,7 @@ void ShadowManager::updateMomentShadowMap(ShadowInfo& shadow)
       tempTexture).format
   );
 
-  momentShadowMapPass.computeHor(RenderPass::ComputeDispatchSize(1024 / 16, 1024 / 1, 1));
+  momentShadowMapPass.computeHor(RenderPass::ComputeDispatchSize(1024 / 128, 1024 / 1, 1));
 
 
   glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
@@ -191,5 +205,5 @@ void ShadowManager::updateMomentShadowMap(ShadowInfo& shadow)
       shadow.fboInfo.momentTextureID).format
   );
 
-  momentShadowMapPass.computeVert(RenderPass::ComputeDispatchSize(1024 / 1, 1024 / 16, 1));
+  momentShadowMapPass.computeVert(RenderPass::ComputeDispatchSize(1024 / 1, 1024 / 128, 1));
 }

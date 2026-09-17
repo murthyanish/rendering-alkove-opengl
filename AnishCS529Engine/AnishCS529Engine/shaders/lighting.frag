@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Pixel shader for lighting
 //
-// Copyright ? 2025 DIGIPEN Institute of Technology. All rights reserved.
+// Copyright © 2025 DIGIPEN Institute of Technology. All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////
 #version 440
@@ -51,6 +51,9 @@ uniform sampler2D GBuffer_position;
 uniform sampler2D GBuffer_normal;
 uniform sampler2D GBuffer_diffuse;
 uniform sampler2D GBuffer_specular;
+uniform sampler2D GBuffer_eye_vector;
+
+uniform sampler2D ambient_factor;
 
 // Irradiance Map
 uniform int enableIrradiance;
@@ -63,7 +66,6 @@ uniform sampler2D skydome;
 out vec3 FragColor;
 
 vec3 toSRGB(vec3 color) {
-  const float exposure = 1.0f;
   return pow(
       (
         (exposure * color) / 
@@ -75,29 +77,42 @@ vec3 toSRGB(vec3 color) {
 }
 
 vec2 uvFromDirectionVector(vec3 D) {
-  return vec2(atan(-D.z,D.x)/(2.0f*pi), acos(D.y)/pi);
+  return vec2(fract(atan(D.z,D.x)/(2.0f*pi)), acos(-D.y)/pi);
 }
 
 vec2 uvFromDirectionVectorFlipped(vec3 D) {
-  return vec2(0.5 - atan(-D.z,D.x)/(2.0f*pi), acos(D.y)/pi);
+  return vec2(fract(0.5 + atan(D.z,D.x)/(2.0f*pi)), acos(-D.y)/pi);
 }
 
-vec3 directionVectorFromSkewAngle(vec2 uv) {
+vec3 directionVectorFromUV(vec2 uv) {
+  if (uv.y <= 0.0002)
+    return vec3(0.0, -1.0, 0.0);
+  if (uv.y >= 0.9998)
+    return vec3(0.0, 1.0, 0.0);
 
-  //vec3 result = vec3()
+  const float theta = uv.x * 2.0 * pi;
+  const float phi = uv.y * pi;
 
   return vec3(
-    cos(2.0 * pi * ( 0.5 - uv.x )) * sin(pi * uv.y),
-    cos(pi * uv.y),
-    -sin(2.0 * pi * ( 0.5 - uv.x )) * sin(pi * uv.y)
+    cos(theta) * sin(phi),
+    -cos(phi),
+    sin(theta) * sin(phi)
     );
 }
 
 vec3 directionVectorFromUVFlipped(vec2 uv) {
+  if (uv.y <= 0.0002)
+    return vec3(0.0, -1.0, 0.0);
+  if (uv.y >= 0.9998)
+    return vec3(0.0, 1.0, 0.0);
+
+  const float theta = (0.5 + uv.x) * 2.0 * pi;
+  const float phi = uv.y * pi;
+
   return vec3(
-    cos(2 * pi * ( 0.5 - uv.y )) * sin(pi * uv.x),
-    sin(2 * pi * ( 0.5 - uv.y )) * sin(pi * uv.x),
-    cos(pi * uv.y)
+    cos(theta) * sin(phi),
+    -cos(phi),
+    sin(theta) * sin(phi)
     );
 }
 
@@ -116,7 +131,6 @@ vec3 specularBRDF(
   const vec3 H = normalize(L+V);
   const float LN = max(dot(L,N),0.0);
   const float HN = max(dot(H,N),0.0);
-  const float VN = max(dot(V,N),0.0);
   const float LH = max(dot(L,H),0.0);
 
   // BRDF
@@ -130,25 +144,23 @@ vec3 irradianceSpecular(
   vec3 N, vec3 V,
   const vec3 Kd, const vec3 Ks, const float alpha) {
 
-  vec3 finalSpecular = vec3(0);
+  vec3 finalSpecular = vec3(0.0);
 
   int n = int(irradianceSpecularPointCount);
-  
-  const float VN = max(dot(V,N),0.0);
 
   // Reflection vector
-  vec3 R = reflect(V, N);
+  vec3 R = reflect(V,N); // -(2.0 * dot(N, V) * N - V);
 
-  vec3 A = normalize(cross(vec3(0.0f,1.0f,0.0f), R));
+  vec3 A = normalize(cross(vec3(0.0,1.0,0.0), R));
   vec3 B = normalize(cross(R, A));
 
   for (int i = 0; i < n; ++i) {
     const float theta = acos(pow(irradianceSpecularPoints[i].y, (1.0/(alpha+1.0))));
 
-    const vec3 D = directionVectorFromSkewAngle(
+    const vec3 D = directionVectorFromUV(
       vec2(irradianceSpecularPoints[i].x, theta/pi));
 
-    const vec3 omega_k = -normalize(D.x * A + -D.z * B + D.y * R);
+    const vec3 omega_k = normalize(D.x * A + -D.z * B + D.y * R);
 
 
     const vec3 H = normalize(omega_k+V);
@@ -160,13 +172,15 @@ vec3 irradianceSpecular(
     const vec3 F = Ks + (((1.0,1.0,1.0)-Ks)*pow((1.0-LH),5.0));
     const float specD = ((alpha+2.0)/(2.0*M_PI))*(pow(HN,alpha));
 
-    int level = int(0.5*log2(float(width * height) / float(n)) - 0.5*log2(specD));
+    int level = int(0.5*log2(float(width * height) / float(n)) - 0.5*log2(specD/4.0));
 
     const vec3 IiIBL =
-      textureLod(skydome, uvFromDirectionVectorFlipped(-omega_k), level).xyz;
+      textureLod(skydome, uvFromDirectionVector(omega_k), level).xyz;
     
-    //const vec3 BRDF = IiIBL * clamp(N*omega_k, 0.001) * ((F*specD)/(4*pow(max(LH,0.0000000001),2.0)));
-    const vec3 BRDF = (Kd/M_PI) + ((F)/(4*pow(max(LH,0.0000000001),2.0)));
+    const vec3 BRDF = ((F)/(4.0*pow(max(LH,0.0000000001),2.0)));
+
+    // Use this for really nice looking bunnies:
+    //const vec3 BRDF = Kd/M_PI * ((F)/(4.0*pow(max(LH,0.0000000001),2.0)));
     
     finalSpecular += IiIBL*LN*BRDF;
   }
@@ -179,7 +193,7 @@ void main()
     vec2 gBufferPosition = gl_FragCoord.xy/vec2(width,height);
     
     vec3 worldPos = texture(GBuffer_position, gBufferPosition).xyz;
-    vec3 eyeVec = (inverseView*vec4(0.0,0.0,0.0,1.0)).xyz-worldPos;
+    vec3 eyeVec = texture(GBuffer_eye_vector, gBufferPosition).xyz;
 
     vec3 N = texture(GBuffer_normal, gBufferPosition).xyz;
     vec3 V = normalize(eyeVec);
@@ -194,7 +208,7 @@ void main()
     vec3 L = -normalize(sunLight.direction);
     
 
-    if (texture(GBuffer_diffuse, gBufferPosition).w == 0.0f) {
+    if (texture(GBuffer_diffuse, gBufferPosition).w == 0.0) {
       FragColor = toSRGB(Kd);
       return;
     }
@@ -204,13 +218,14 @@ void main()
     FragColor = specularBRDF(L, N, V, Ii, Kd, Ks, alpha);
 
     if (enableIrradiance > 0) {
-      vec2 uv = uvFromDirectionVectorFlipped(-N);
-      ambientDiffuse = Kd * (texture(IrradianceMap, uv).xyz) / M_PI;
+      ambientDiffuse = 
+        Kd * (texture(IrradianceMap, uvFromDirectionVector(N)).xyz) / M_PI;
+      ambientDiffuse *= texture(ambient_factor, gBufferPosition).r;
       
       if (enableIBLSpecular > 0) {
         FragColor += irradianceSpecular(
           N, V,
-          Kd, Ks, alpha);
+          Kd, Ks, alpha) * texture(ambient_factor, gBufferPosition).r;
       }
     }
     else {

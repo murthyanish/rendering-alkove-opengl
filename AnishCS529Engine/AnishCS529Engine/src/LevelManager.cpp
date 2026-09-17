@@ -634,6 +634,7 @@ void LevelManager::createPlayerObject()
 
   camera = std::make_shared<AttachedCamera>("mainCamera");
   camera->attachToNode(cameraGameObject);
+  camera->setExposure(0.8f);
   mainSceneGraph.addCamera(camera);
 
 #pragma endregion
@@ -791,6 +792,8 @@ void LevelManager::initalizePlayerInLevel()
     //skydomePass->addTexture(std::string("media/textures/skys/Newport_Loft_Ref.hdr"));
 
     mainRenderer->getRenderGraph()->addPass<GBufferPrepass>();
+
+    mainRenderer->getRenderGraph()->addPass<AmbientOcclusionPass>();
 
     auto lightingPass = mainRenderer->getRenderGraph()->addPass<LightingPass>();
     lightingPass->addIrradianceMap("media/textures/skys/Newport_Loft_Ref.irr.hdr");

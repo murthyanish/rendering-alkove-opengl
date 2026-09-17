@@ -61,8 +61,6 @@ void SkydomePass::draw(
 
   gbuffer->bind();
 
-  gbuffer->useViewport();
-
   gbuffer->clear();
 
   shader->use();

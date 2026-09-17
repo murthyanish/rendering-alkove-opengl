@@ -30,6 +30,8 @@ constexpr Texture::Format TEXTURE_RGBA = static_cast<GLint>(GL_RGBA);
 constexpr Texture::Format TEXTURE_RGBA32F = static_cast<GLint>(GL_RGBA32F);
 constexpr Texture::Format TEXTURE_RGB = static_cast<GLint>(GL_RGB);
 constexpr Texture::Format TEXTURE_RGB32F = static_cast<GLint>(GL_RGB32F);
+constexpr Texture::Format TEXTURE_RED = static_cast<GLint>(GL_RED);
+constexpr Texture::Format TEXTURE_R32F = static_cast<GLint>(GL_R32F);
 
 constexpr Texture::FilterMode TEXTURE_NEAREST = static_cast<GLint>(GL_NEAREST);
 constexpr Texture::FilterMode TEXTURE_LINEAR = static_cast<GLint>(GL_LINEAR);
