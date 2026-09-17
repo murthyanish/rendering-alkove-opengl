@@ -57,7 +57,7 @@ void RenderPass::draw(
 
   shader->setDrawMode(drawMode);
   sceneGraph->draw(shader, renderMask);
-  shader->setDrawMode(NULL);
+  shader->setDrawMode(0);
 
   unbindTextures();
   shader->unuse();

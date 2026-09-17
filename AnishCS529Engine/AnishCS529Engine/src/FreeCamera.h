@@ -15,6 +15,7 @@
 #pragma once
 
 #include <cassert>
+#include <memory>
 
  /* Base class */
 #include "Camera.h"

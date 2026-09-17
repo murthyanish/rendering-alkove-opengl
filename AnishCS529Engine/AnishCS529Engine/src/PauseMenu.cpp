@@ -23,11 +23,6 @@ void PauseMenu::setPlayer(std::shared_ptr<GameObject> pl) {
 	return;
 }
 
-void PauseMenu::setGamePad(GamePad* _gp) {
-	gp = _gp;
-	return;
-}
-
 void PauseMenu::setState(bool state) {
 	if (!isPaused && state)
 		enteredState = true;
@@ -91,11 +86,11 @@ void PauseMenu::mainPauseMenu() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable gamepad controls
 	io.FontGlobalScale = 2.0f;
 
-	if (ImGui::IsKeyDown(KEY_ENTER)) {
+	if (ImGui::IsKeyDown(ImGuiKey_Enter)) {
 		io.KeyMap[ImGuiKey_Space] = KEY_ENTER;
 	}
 
-	if (ImGui::IsKeyDown(KEY_SPACE)) {
+	if (ImGui::IsKeyDown(ImGuiKey_Space)) {
 		io.KeyMap[ImGuiKey_Space] = KEY_SPACE;
 	}
 
@@ -134,9 +129,7 @@ void PauseMenu::mainPauseMenu() {
 	if (
 		ImGui::Button("Resume", ImVec2(buttonWidth, 40)) ||
 		(!enteredState && (
-			ImGui::IsKeyPressed(KEY_ESCAPE) ||
-			gp->isReleased(XINPUT_GAMEPAD_START) ||
-			gp->isReleased(XINPUT_GAMEPAD_B)
+			ImGui::IsKeyPressed(ImGuiKey_Escape)
 			))
 	){
 		frc->clearPhysicsTime();
@@ -174,12 +167,6 @@ void PauseMenu::mainPauseMenu() {
 	}
 
 	ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
-	if (gp->CheckConnection()) {
-		ImGui::Text("Gamepad Connected");
-	}
-	else {
-		ImGui::Text("Gamepad Not Connected");
-	}
 
 	ImGui::End();
 
@@ -199,11 +186,11 @@ void PauseMenu::credits() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable gamepad controls
 	io.FontGlobalScale = 2.0f;
 
-	if (ImGui::IsKeyDown(KEY_ENTER)) {
+	if (ImGui::IsKeyDown(ImGuiKey_Enter)) {
 		io.KeyMap[ImGuiKey_Space] = KEY_ENTER;
 	}
 
-	if (ImGui::IsKeyDown(KEY_SPACE)) {
+	if (ImGui::IsKeyDown(ImGuiKey_Space)) {
 		io.KeyMap[ImGuiKey_Space] = KEY_SPACE;
 	}
 
@@ -277,9 +264,7 @@ void PauseMenu::credits() {
 	ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 	if (ImGui::Button("Go Back", ImVec2(buttonWidth, 40)) ||
 		(!enteredState && (
-			ImGui::IsKeyPressed(KEY_ESCAPE) ||
-			gp->isReleased(XINPUT_GAMEPAD_START) ||
-			gp->isReleased(XINPUT_GAMEPAD_B)
+			ImGui::IsKeyPressed(ImGuiKey_Escape)
 			))
 		) {
 		menuType = MainPauseMenu;
@@ -308,11 +293,11 @@ void PauseMenu::howToPlay() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable gamepad controls
 	io.FontGlobalScale = 2.0f;
 
-	if (ImGui::IsKeyDown(KEY_ENTER)) {
+	if (ImGui::IsKeyDown(ImGuiKey_Enter)) {
 		io.KeyMap[ImGuiKey_Space] = KEY_ENTER;
 	}
 
-	if (ImGui::IsKeyDown(KEY_SPACE)) {
+	if (ImGui::IsKeyDown(ImGuiKey_Space)) {
 		io.KeyMap[ImGuiKey_Space] = KEY_SPACE;
 	}
 
@@ -365,9 +350,7 @@ void PauseMenu::howToPlay() {
 	ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 	if (ImGui::Button("Go Back", ImVec2(buttonWidth, 40)) ||
 		(!enteredState && (
-			ImGui::IsKeyPressed(KEY_ESCAPE) ||
-			gp->isReleased(XINPUT_GAMEPAD_START) ||
-			gp->isReleased(XINPUT_GAMEPAD_B)
+			ImGui::IsKeyPressed(ImGuiKey_Escape)
 			))
 		) {
 		menuType = MainPauseMenu;
@@ -427,8 +410,7 @@ void PauseMenu::settings() {
 	ImGui::SetCursorPosX((windowWidth - 400.f) * 0.5f);
 	ImGui::SliderFloat("Music Volume", &musicVolume, 0.0f, 1.0f);
 
-	if ((ImGui::IsKeyPressed(KEY_LEFT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_LEFT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_LeftArrow) && ImGui::IsItemFocused())) {
 		if (musicVolume > 0.01f) {
 			musicVolume -= 0.05f;
 		}
@@ -436,8 +418,7 @@ void PauseMenu::settings() {
 			musicVolume = 0.0f;
 		}
 	}
-	if ((ImGui::IsKeyPressed(KEY_RIGHT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_RIGHT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_RightArrow) && ImGui::IsItemFocused())) {
 		if (musicVolume < 0.99f) {
 			musicVolume += 0.05f;
 		}
@@ -449,8 +430,7 @@ void PauseMenu::settings() {
 	ImGui::SetCursorPosX((windowWidth - 400.f) * 0.5f);
 	ImGui::SliderFloat("SFX Volume", &SFXVolume, 0.0f, 1.0f);
 
-	if ((ImGui::IsKeyPressed(KEY_LEFT) && ImGui::IsItemFocused()) || 
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_LEFT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_LeftArrow) && ImGui::IsItemFocused())) {
 		if (SFXVolume > 0.01f) {
 			SFXVolume -= 0.05f;
 		}
@@ -458,8 +438,7 @@ void PauseMenu::settings() {
 			SFXVolume = 0.0f;
 		}
 	}
-	if ((ImGui::IsKeyPressed(KEY_RIGHT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_RIGHT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_RightArrow) && ImGui::IsItemFocused())) {
 		if (SFXVolume < 0.99f) {
 			SFXVolume += 0.05f;
 		}
@@ -477,8 +456,7 @@ void PauseMenu::settings() {
 	ImGui::SetCursorPosX((windowWidth - 400.f) * 0.5f);
 	ImGui::SliderFloat("MouseX Sensivity", &mouseXSensivity, 0.0f, 0.2f);
 
-	if ((ImGui::IsKeyPressed(KEY_LEFT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_LEFT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_LeftArrow) && ImGui::IsItemFocused())) {
 		if (mouseXSensivity > 0.005f) {
 			mouseXSensivity -= 0.01f;
 		}
@@ -486,8 +464,7 @@ void PauseMenu::settings() {
 			mouseXSensivity = 0.0f;
 		}
 	}
-	if ((ImGui::IsKeyPressed(KEY_RIGHT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_RIGHT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_RightArrow) && ImGui::IsItemFocused())) {
 		if (mouseXSensivity < 0.195f) {
 			mouseXSensivity += 0.01f;
 		}
@@ -499,8 +476,7 @@ void PauseMenu::settings() {
 	ImGui::SetCursorPosX((windowWidth - 400.f) * 0.5f);
 	ImGui::SliderFloat("MouseY Sensivity", &mouseYSensivity, 0.0f, 0.2f);
 
-	if ((ImGui::IsKeyPressed(KEY_LEFT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_LEFT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_LeftArrow) && ImGui::IsItemFocused())) {
 		if (mouseYSensivity > 0.005f) {
 			mouseYSensivity -= 0.01f;
 		}
@@ -508,8 +484,7 @@ void PauseMenu::settings() {
 			mouseYSensivity = 0.0f;
 		}
 	}
-	if ((ImGui::IsKeyPressed(KEY_RIGHT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_RIGHT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_RightArrow) && ImGui::IsItemFocused())) {
 		if (mouseYSensivity < 0.195f) {
 			mouseYSensivity += 0.01f;
 		}
@@ -527,8 +502,7 @@ void PauseMenu::settings() {
 	ImGui::SetCursorPosX((windowWidth - 400.f) * 0.5f);
 	ImGui::SliderFloat("Left Joystick X Sensivity", &gpLXSensitivity, 0.0f, 6.0f);
 
-	if ((ImGui::IsKeyPressed(KEY_LEFT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_LEFT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_LeftArrow) && ImGui::IsItemFocused())) {
 		if (gpLXSensitivity > 0.05f) {
 			gpLXSensitivity -= 0.25f;
 		}
@@ -536,8 +510,7 @@ void PauseMenu::settings() {
 			gpLXSensitivity = 0.0f;
 		}
 	}
-	if ((ImGui::IsKeyPressed(KEY_RIGHT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_RIGHT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_RightArrow) && ImGui::IsItemFocused())) {
 		if (gpLXSensitivity < 5.95f) {
 			gpLXSensitivity += 0.25f;
 		}
@@ -549,8 +522,7 @@ void PauseMenu::settings() {
 	ImGui::SetCursorPosX((windowWidth - 400.f) * 0.5f);
 	ImGui::SliderFloat("Left Joystick Y Sensivity", &gpLYSensitivity, 0.0f, 6.0f);
 
-	if ((ImGui::IsKeyPressed(KEY_LEFT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_LEFT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_LeftArrow) && ImGui::IsItemFocused())) {
 		if (gpLYSensitivity > 0.05f) {
 			gpLYSensitivity -= 0.25f;
 		}
@@ -558,8 +530,7 @@ void PauseMenu::settings() {
 			gpLYSensitivity = 0.0f;
 		}
 	}
-	if ((ImGui::IsKeyPressed(KEY_RIGHT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_RIGHT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_RightArrow) && ImGui::IsItemFocused())) {
 		if (gpLYSensitivity < 5.95f) {
 			gpLYSensitivity += 0.25f;
 		}
@@ -571,8 +542,7 @@ void PauseMenu::settings() {
 	ImGui::SetCursorPosX((windowWidth - 400.f) * 0.5f);
 	ImGui::SliderFloat("Right Joystick X Sensivity", &gpRXSensitivity, 0.0f, 6.0f);
 
-	if ((ImGui::IsKeyPressed(KEY_LEFT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_LEFT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_LeftArrow) && ImGui::IsItemFocused())) {
 		if (gpRXSensitivity > 0.05f) {
 			gpRXSensitivity -= 0.25f;
 		}
@@ -580,8 +550,7 @@ void PauseMenu::settings() {
 			gpRXSensitivity = 0.0f;
 		}
 	}
-	if ((ImGui::IsKeyPressed(KEY_RIGHT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_RIGHT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_RightArrow) && ImGui::IsItemFocused())) {
 		if (gpRXSensitivity < 5.95f) {
 			gpRXSensitivity += 0.25f;
 		}
@@ -593,8 +562,7 @@ void PauseMenu::settings() {
 	ImGui::SetCursorPosX((windowWidth - 400.f) * 0.5f);
 	ImGui::SliderFloat("Right Joystick Y Sensivity", &gpRYSensitivity, 0.0f, 6.0f);
 
-	if ((ImGui::IsKeyPressed(KEY_LEFT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_LEFT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_LeftArrow) && ImGui::IsItemFocused())) {
 		if (gpRYSensitivity > 0.05f) {
 			gpRYSensitivity -= 0.25f;
 		}
@@ -602,8 +570,7 @@ void PauseMenu::settings() {
 			gpRYSensitivity = 0.0f;
 		}
 	}
-	if ((ImGui::IsKeyPressed(KEY_RIGHT) && ImGui::IsItemFocused()) ||
-		(gp->isReleased(XINPUT_GAMEPAD_DPAD_RIGHT) && ImGui::IsItemFocused())) {
+	if ((ImGui::IsKeyPressed(ImGuiKey_RightArrow) && ImGui::IsItemFocused())) {
 		if (gpRYSensitivity < 5.95f) {
 			gpRYSensitivity += 0.25f;
 		}
@@ -827,19 +794,11 @@ void PauseMenu::settings() {
             fpc->setMouseYSensivity(mouseYSensivity);
         }
     }
-    if (gp) {
-        gp->setLXSensivity(gpLXSensitivity);
-        gp->setLYSensivity(gpLYSensitivity);
-        gp->setRXSensivity(gpRXSensitivity);
-        gp->setRYSensivity(gpRYSensitivity);
-    }
 
 	ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 	if (ImGui::Button("Go Back", ImVec2(buttonWidth, 40)) ||
 		(!enteredState && !waitingForKey && (
-			ImGui::IsKeyPressed(KEY_ESCAPE) ||
-			gp->isReleased(XINPUT_GAMEPAD_START) ||
-			gp->isReleased(XINPUT_GAMEPAD_B)
+			ImGui::IsKeyPressed(ImGuiKey_Escape)
 			))
 		) {
 		menuType = MainPauseMenu;
@@ -857,11 +816,11 @@ void PauseMenu::quitMenu() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; // Enable gamepad controls
 	io.FontGlobalScale = 2.0f;
 
-	if (ImGui::IsKeyDown(KEY_ENTER)) {
+	if (ImGui::IsKeyDown(ImGuiKey_Enter)) {
 		io.KeyMap[ImGuiKey_Space] = KEY_ENTER;
 	}
 
-	if (ImGui::IsKeyDown(KEY_SPACE)) {
+	if (ImGui::IsKeyDown(ImGuiKey_Space)) {
 		io.KeyMap[ImGuiKey_Space] = KEY_SPACE;
 	}
 
@@ -899,9 +858,7 @@ void PauseMenu::quitMenu() {
 	ImGui::SetCursorPosX((windowWidth - buttonWidth) * 0.5f);
 	if (ImGui::Button("Go Back", ImVec2(buttonWidth, 40)) ||
 		(!enteredState && (
-			ImGui::IsKeyPressed(KEY_ESCAPE) ||
-			gp->isReleased(XINPUT_GAMEPAD_START) ||
-			gp->isReleased(XINPUT_GAMEPAD_B)
+			ImGui::IsKeyPressed(ImGuiKey_Escape)
 			))
 	){
 		menuType = MainPauseMenu;
@@ -923,7 +880,7 @@ void PauseMenu::quitMenu() {
 
 void PauseMenu::run() {
 
-	if (enteredState && !gp->isPressed(XINPUT_GAMEPAD_START) && !input->isKeyDown(KEY_ESCAPE) && !gp->isPressed(XINPUT_GAMEPAD_B))
+	if (enteredState && !input->isKeyDown(KEY_ESCAPE))
 		enteredState = false;
 
 	if (menuType == MainPauseMenu) {

@@ -50,11 +50,6 @@ void LevelManager::SystemInitalization()
     mainInput->setGameWindow(mainWindow);
     mainInput->initialize();
 
-    /* XInput setup */
-    gamepad = new GamePad;
-    gamepad->initialize();
-    gamepadState = gamepad->CheckConnection();
-
     /* Framerate controller setup */
     mainFramerateController =
         FFramerateController::getController();
@@ -91,13 +86,11 @@ void LevelManager::SystemShutdown()
   mainInput->shutdown();
   mainRenderer->shutdown();
   mainWindow->shutdown();
-  gamepad->shutdown();
   AudioManager::instance().shutdown();
 
   delete mainInput;
   delete mainRenderer;
   delete mainWindow;
-  delete gamepad;
 }
 
 void LevelManager::MeshMatInitializations()
@@ -189,9 +182,6 @@ void LevelManager::DisplayLogos()
 
         //Update the Input Manager
         mainInput->update();
-
-        //Update the GamePad
-        gamepad->update();
 
         //Full Screen Toggle
         if (mainInput->isKeyPressed(KEY_F11)) {
@@ -335,9 +325,6 @@ void LevelManager::ExecuteMainLoop()
 
     //Update the Input Manager
     mainInput->update();
-
-    //Update the GamePad
-    gamepad->update();
 
     ////If Escape is Pressed Exit Loop
     //if (PauseMenu::Instance().isQuit()) {
@@ -710,7 +697,6 @@ void LevelManager::createPlayerObject()
 
     auto playerBoxInputComponent = playerBox->addComponent<FirstPersonControllerComponent>()
         ->setInputSystem(mainInput)
-        ->setGamePad(gamepad)
         ->setPhysicsBody(playerBoxPB.get())
         ->setBody(playerBox.get())
         ->setSceneRoot(mainSceneGraph.getRootNode())
@@ -727,14 +713,7 @@ void LevelManager::createPlayerObject()
         ->setActionKey(FirstPersonControllerComponent::Creative, KEY_C)
         //->setActionKey(FirstPersonControllerComponent::Music, KEY_M)
         //->setActionKey(FirstPersonControllerComponent::Freeze, KEY_F)
-        ->setActionKey(FirstPersonControllerComponent::Pause, KEY_ESCAPE)
-        ->setGPActionKey(FirstPersonControllerComponent::Jump, XINPUT_GAMEPAD_A)
-        //->setGPActionKey(FirstPersonControllerComponent::Sprint, XINPUT_GAMEPAD_LEFT_THUMB)
-        ->setGPActionKey(FirstPersonControllerComponent::Sprint, XINPUT_GAMEPAD_LEFT_SHOULDER)
-        ->setGPActionKey(FirstPersonControllerComponent::Slide, XINPUT_GAMEPAD_B)
-        ->setGPActionKey(FirstPersonControllerComponent::Respawn, XINPUT_GAMEPAD_X)
-        ->setGPActionKey(FirstPersonControllerComponent::Music, XINPUT_GAMEPAD_Y)
-        ->setGPActionKey(FirstPersonControllerComponent::Pause, XINPUT_GAMEPAD_START);
+        ->setActionKey(FirstPersonControllerComponent::Pause, KEY_ESCAPE);
 
     const Key* keys = PauseMenu::Instance().getActionKeys();
     playerBoxInputComponent->setActionKey(FirstPersonControllerComponent::MoveForward, keys[PauseMenu::MoveForward]);

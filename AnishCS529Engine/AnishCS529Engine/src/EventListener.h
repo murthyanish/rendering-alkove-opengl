@@ -15,14 +15,7 @@
  *****************************************************************************/
 #pragma once
 #include "Event.h"
- // Interface for a explicit EventListener that the compiler can recognize
- // Non-templated base interface for listeners
-class IEventListener {
-public:
-  virtual ~IEventListener() = default;
-  virtual void HandleEvent(const Event& event) = 0;
-};
-
+#include "IEventListener.h"
 
 // Forward declaration - There's a "circular reference with EventManager"
 class EventManager;

@@ -87,7 +87,7 @@ private:
   std::unordered_map<GLenum, std::vector<GLuint>> shaderIDs;
   mutable std::unordered_map<std::string, GLint> uniformLocationCache; // Todo: Why is this mutable?
   GLuint programID;
-  GLenum drawMode = NULL;
+  GLenum drawMode = 0;
 
   GLenum readShaderType(std::string path);
   std::string shaderTypeToString(GLenum type);

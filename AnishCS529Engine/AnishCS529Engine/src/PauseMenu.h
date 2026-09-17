@@ -19,12 +19,11 @@
 
 #include "GameObject.h"
 #include "FirstPersonControllerComponent.h"
-#include "GamePad.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "Input.h"
-#include "stb/stb_image.h"
+#include "stb_image.h"
 #include <variant>
 
 class PauseMenu {
@@ -40,7 +39,6 @@ public:
 	void resetTimer();
 	void setInputSystem(Input* ip);
 	void setFramerateController(FFramerateController* _frc);
-	void setGamePad(GamePad* _gp);
 	void setPlayer(std::shared_ptr<GameObject> pl);
 	void setState(bool state);
 	bool gameIsPaused();
@@ -131,7 +129,6 @@ private:
 	Input* input;
 	MenuType menuType = MainPauseMenu;
 	FFramerateController* frc;
-	GamePad* gp;
 	std::shared_ptr<GameObject> player;
 
 	

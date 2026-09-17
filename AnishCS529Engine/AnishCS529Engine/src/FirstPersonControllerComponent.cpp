@@ -311,35 +311,46 @@ void FirstPersonControllerComponent::UpdateAnchorInfo()
 	if (anchorInfo.direction == 'r' || anchorInfo.direction == '0' || anchorInfo.direction == 'd') {
 		const Ray rightRay = Ray(currentPos, rightVector);
 		const Ray right45Ray = Ray(currentPos, (rightVector + forwardVector).normalized());
-		const bool isRightWall = RaycastManager::Instance().Raycast(rightRay, rightWallHit, rayDist, { GameObject::RUNNABLE_WALL }) ||
-			RaycastManager::Instance().Raycast(right45Ray, rightWallHit, rayDist, { GameObject::RUNNABLE_WALL });
-		const bool isRightWallRB = isRightWall && (rightWallHit.object->findComponent<RigidBody>() != nullptr);
-		if (isRightWallRB) {
-			anchorInfo.direction = 'r';
-			anchorInfo.object = rightWallHit.object;
-			anchorInfo.normal = rightWallHit.normal;
-			return;
-		}
-		else {
-			const Ray leftRay = Ray(currentPos, -rightVector);
-			const Ray left45Ray = Ray(currentPos, (-rightVector + forwardVector).normalized());
-			const bool isLeftWall = RaycastManager::Instance().Raycast(leftRay, leftWallHit, rayDist, { GameObject::RUNNABLE_WALL }) ||
-				RaycastManager::Instance().Raycast(left45Ray, leftWallHit, rayDist, { GameObject::RUNNABLE_WALL });
-			const bool isLeftWallRB = isLeftWall && (leftWallHit.object->findComponent<RigidBody>() != nullptr);
-			if (isLeftWallRB) {
-				anchorInfo.direction = 'l';
-				anchorInfo.object = leftWallHit.object;
-				anchorInfo.normal = leftWallHit.normal;
-				return;
-			}
-			else {
-				anchorInfo.Reset();
-				return;
-			}
-		}
-	}
-#pragma endregion
-#pragma region LeftWall
+    const bool isRightWall = RaycastManager::Instance().Raycast(
+                                  rightRay, rightWallHit, rayDist,
+                                  {GameObject::RUNNABLE_WALL}) ||
+                              RaycastManager::Instance().Raycast(
+                                  right45Ray, rightWallHit, rayDist,
+                                  {GameObject::RUNNABLE_WALL});
+    const bool isRightWallRB =
+        isRightWall &&
+        (rightWallHit.object->findComponent<RigidBody>() !=
+          nullptr);
+    if (isRightWallRB) {
+      anchorInfo.direction = 'r';
+      anchorInfo.object = rightWallHit.object;
+      anchorInfo.normal = rightWallHit.normal;
+      return;
+    } else {
+      const Ray leftRay = Ray(currentPos, -rightVector);
+      const Ray left45Ray = Ray(
+          currentPos, (-rightVector + forwardVector).normalized());
+      const bool isLeftWall = RaycastManager::Instance().Raycast(
+                                  leftRay, leftWallHit, rayDist,
+                                  {GameObject::RUNNABLE_WALL}) ||
+                              RaycastManager::Instance().Raycast(
+                                  left45Ray, leftWallHit, rayDist,
+                                  {GameObject::RUNNABLE_WALL});
+      const bool isLeftWallRB =
+          isLeftWall &&
+          (leftWallHit.object->findComponent<RigidBody>() !=
+            nullptr);
+      if (isLeftWallRB) {
+        anchorInfo.direction = 'l';
+        anchorInfo.object = leftWallHit.object;
+        anchorInfo.normal = leftWallHit.normal;
+        return;
+      } else {
+        anchorInfo.Reset();
+        return;
+      }
+    }
+  }
 	else if (anchorInfo.direction == 'l') {
 		const Ray leftRay = Ray(currentPos, -rightVector);
 		const Ray left45Ray = Ray(currentPos, (-rightVector + forwardVector).normalized());
@@ -447,65 +458,6 @@ void FirstPersonControllerComponent::update(float deltaTime)
 	float mouseYDelta = 0.0f;
 #pragma endregion
 
-	//GamePad Input
-#pragma region GamePad
-	if (gp != nullptr) {
-		if (gp->leftStickY != 0) {
-			forwardMotion = gp->leftStickY;
-			if (forwardMotion > 0) {
-				isMovingForward = true;
-				isMovingBackward = false;
-			}
-			else if (forwardMotion < 0) {
-				isMovingForward = false;
-				isMovingBackward = true;
-			}
-		}
-		if (gp->leftStickX != 0) {
-			lateralMotion = gp->leftStickX;
-			if (lateralMotion < 0) {
-				isMovingLeft = true;
-				isMovingRight = false;
-			}
-			else if (lateralMotion > 0) {
-				isMovingLeft = false;
-				isMovingRight = true;
-			}
-		}
-		if (gp->rightStickX != 0) {
-			mouseXDelta = static_cast<float>(gp->rightStickX) * gp->getRXSensitivity();
-			Quaternion currentBodyRotation = body->getLocalRotation();
-			Quaternion mouseRotation = Quaternion::axisAngleToQuaternion(Vector3(0.0f, 1.0f, 0.0f), (-mouseXDelta * 3.14159265f / 180.0f));
-			body->setLocalRotation(currentBodyRotation * mouseRotation);
-		}
-		if (gp->rightStickY != 0) {
-			mouseYDelta = -static_cast<float>(gp->rightStickY) * gp->getRYSensitivity();
-			//Rotate Camera
-			Quaternion currentCameraRoation = camera->getLocalRotation();
-			Vector3 currentEuler = currentCameraRoation.toEuler();
-			float newPitch = currentEuler.x + (-mouseYDelta * 3.14159265f / 180.0f);
-			newPitch = std::clamp(newPitch, -pitchLimit * (3.14159265f / 180.0f), pitchLimit * (3.14159265f / 180.0f)); // Convert degrees to radians
-			Quaternion newCameraRotation = Quaternion::fromEuler(Vector3(newPitch, currentEuler.y, currentEuler.z));
-			camera->setLocalRotation(newCameraRotation);
-		}
-		if (gp->isPressed(GamePadActionKey[Sprint]))
-			isSprinting = gp->isPressed(GamePadActionKey[Sprint]);
-		if (gp->isPressed(GamePadActionKey[Jump]))
-			isJumping = gp->isPressed(GamePadActionKey[Jump]);
-		if (gp->isPressed(GamePadActionKey[Slide]))
-			isSliding = gp->isPressed(GamePadActionKey[Slide]);
-		if (gp->isPressed(GamePadActionKey[Respawn]))
-			isRespawning = gp->isPressed(GamePadActionKey[Respawn]);
-		if (gp->isPressed(GamePadActionKey[Jump]) && gp->isPressed(GamePadActionKey[Slide]))
-			upMotion = gp->isPressed(GamePadActionKey[Jump]) - gp->isPressed(GamePadActionKey[Slide]);
-		if (gp->isReleased(GamePadActionKey[Creative]))
-			creative = gp->isReleased(GamePadActionKey[Creative]);
-		if (gp->isPressed(GamePadActionKey[Music]))
-			music = gp->isPressed(GamePadActionKey[Music]);
-		if (gp->isReleased(GamePadActionKey[Pause]))
-			pause = gp->isReleased(GamePadActionKey[Pause]);
-	}
-#pragma endregion
 	//Creative mode
 	if (isCreative) {
 		isSliding = false;
@@ -736,7 +688,6 @@ void FirstPersonControllerComponent::update(float deltaTime)
 #pragma region StateProcessing
 
 	//-----First Person Ground Movement-----//
-#pragma region GroundMovement
 	if (playerState == Grounded) {
 
 		const float movementForce = (isSprinting ? runForceMultiplier : 1.0f) * walkForce * 100.0f;
@@ -762,11 +713,9 @@ void FirstPersonControllerComponent::update(float deltaTime)
 			}
 		}
 	}
-#pragma endregion
 
 
 	//-----First Person Air Movement-----//
-#pragma region FreeMovement
 	else if (playerState == Free) {
 		//---Applying Movement Force---//
 		const float movementForce = (isSprinting ? runForceMultiplier : 1.0f) * walkForce * 50.0f;
@@ -786,10 +735,7 @@ void FirstPersonControllerComponent::update(float deltaTime)
 			physicsBody->applyForce(movementVector);
 		}
 	}
-#pragma endregion
-
 	//-----Handle Sliding-----//
-#pragma region Sliding
 	else if (playerState == Sliding) {
 		//Apply a Slide Force
 		//Forward
@@ -815,10 +761,8 @@ void FirstPersonControllerComponent::update(float deltaTime)
 		//Continue to Maintain Velocity
 		physicsBody->setVelocity(newSlideVector);
 	}
-#pragma endregion
 
 	//-----Handle Wallrunning-----//
-#pragma region WallRunning
 	else if (playerState == WallRunning) {
 		/* Todo: verify that this code works regardless of wall angle. */
 		/* Todo: consider wallrun max time */
@@ -842,7 +786,6 @@ void FirstPersonControllerComponent::update(float deltaTime)
 		body->setWorldPosition(correctedPosition);
 
 	} //End Wallrunning State
-#pragma endregion
 
 #pragma endregion
 
@@ -868,12 +811,6 @@ void FirstPersonControllerComponent::shutdown() {
 std::shared_ptr<FirstPersonControllerComponent>
 FirstPersonControllerComponent::setInputSystem(Input* _inputSystem) {
 	input = _inputSystem;
-	return shared_from_this();
-}
-
-std::shared_ptr<FirstPersonControllerComponent>
-FirstPersonControllerComponent::setGamePad(GamePad* _gp) {
-	gp = _gp;
 	return shared_from_this();
 }
 
@@ -952,12 +889,6 @@ FirstPersonControllerComponent::setSceneRoot(std::shared_ptr<Node> root) {
 std::shared_ptr<FirstPersonControllerComponent>
 FirstPersonControllerComponent::setActionKey(Action _action, Key _key) {
 	ActionKey[_action] = _key;
-	return shared_from_this();
-}
-
-std::shared_ptr<FirstPersonControllerComponent>
-FirstPersonControllerComponent::setGPActionKey(Action _action, WORD _key) {
-	GamePadActionKey[_action] = _key;
 	return shared_from_this();
 }
 

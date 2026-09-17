@@ -16,6 +16,7 @@
 #ifndef RAYCAST_MANAGER
 #define RAYCAST_MANAGER
 
+#include <cfloat>
 #pragma once
 
 #include "Ray.h"

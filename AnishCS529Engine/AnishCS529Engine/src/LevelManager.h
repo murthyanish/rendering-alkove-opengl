@@ -14,8 +14,6 @@
 
 #pragma once
 
-#include <windows.h>
-
 #include "AttachedCamera.h"
 #include "Audio.h"
 #include "Camera.h"
@@ -113,7 +111,6 @@ private:
 	GameWindow* mainWindow;
 	Renderer* mainRenderer;
 	Input* mainInput;
-	GamePad* gamepad;
 	FFramerateController* mainFramerateController;
 	SceneGraph mainSceneGraph;
 	std::shared_ptr<GameObject> cameraGameObject;

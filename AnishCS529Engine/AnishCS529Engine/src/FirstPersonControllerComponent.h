@@ -19,7 +19,6 @@
 #include "Audio.h"
 #include "Component.h"
 #include "GameObject.h"
-#include "GamePad.h"
 #include "Input.h"
 #include "PauseMenu.h"
 #include "PhysicsBody.h"
@@ -121,7 +120,7 @@ public:
 
     FirstPersonControllerComponent() : playerState(Free),
       anchorInfo(AnchorInfo()),
-        input(nullptr), physicsBody(nullptr), body(nullptr), camera(nullptr), gp(nullptr),
+        input(nullptr), physicsBody(nullptr), body(nullptr), camera(nullptr),
         walkForce(15), maxWalkSpeed(15.0f),
         runForceMultiplier(2.0f), maxRunSpeed(2 * maxWalkSpeed),
         jumpSpeed(40), airDrag(0.1f), anchoredDrag(0.6f),
@@ -151,8 +150,6 @@ public:
       setCameraRotation(Vector3 rotation);
     std::shared_ptr<FirstPersonControllerComponent>
       setSceneRoot(std::shared_ptr<Node> root);
-    std::shared_ptr<FirstPersonControllerComponent>
-        setGamePad(GamePad* _gp);
 
     void setMouseXSensivity(float var);
     void setMouseYSensivity(float var);
@@ -164,8 +161,6 @@ public:
     //Mapping the Actions to the Keys
     std::shared_ptr<FirstPersonControllerComponent>
         setActionKey(Action _action, Key _key);
-    std::shared_ptr<FirstPersonControllerComponent>
-        setGPActionKey(Action _action, WORD _key);
 
     //Setter for difficulty
     std::shared_ptr<FirstPersonControllerComponent> setDifficulty(Difficulty diff);
@@ -251,7 +246,6 @@ private:
 
     //Action Key Mapping
     std::unordered_map<Action, Key> ActionKey;
-    std::unordered_map<Action, WORD> GamePadActionKey;
 
     //PlayerMovement Members
     float walkForce;
@@ -290,9 +284,6 @@ private:
     bool hasSlidSinceAnchored = false;
 
     std::shared_ptr<Node> sceneRoot;
-
-    //GamePad
-    GamePad* gp;
 
     //Special States
     bool isCreative = false;

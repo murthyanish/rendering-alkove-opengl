@@ -132,7 +132,7 @@ protected:
   bool enabled;
   std::shared_ptr<Shader> shader;
   PropertyMap properties;
-  GLenum drawMode = NULL;
+  GLenum drawMode = 0;
 
   uint32_t renderMask = RenderMask::None;
 

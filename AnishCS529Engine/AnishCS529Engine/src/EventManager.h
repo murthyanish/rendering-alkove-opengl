@@ -21,7 +21,7 @@
 #include <queue>
 
 #include "Event.h"
-#include "EventListener.h"
+#include "IEventListener.h"
 #include "FramerateController.h"
 
 

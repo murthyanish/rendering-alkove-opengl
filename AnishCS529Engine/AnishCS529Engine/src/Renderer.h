@@ -67,6 +67,8 @@ public:
     GLenum srcFactor = GL_ONE;
     GLenum destFactor = GL_ONE;
 
+    BlendState(bool _enabled = false) : enabled(_enabled), equation(GL_FUNC_ADD), srcFactor(GL_ONE), destFactor(GL_ONE) {}
+
     bool operator==(const BlendState& other) const {
       return enabled == other.enabled &&
         equation == other.equation &&
@@ -79,6 +81,8 @@ public:
     bool testEnabled = true;
     bool writeEnabled = true;
     GLenum func = GL_LESS;
+
+    DepthState(bool _enabled = true) : testEnabled(_enabled), writeEnabled(true), func(GL_LESS) {}
 
     bool operator==(const DepthState& other) const {
       return testEnabled == other.testEnabled &&

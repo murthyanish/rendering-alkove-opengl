@@ -94,4 +94,5 @@ bool Sphere::raycastIntersect(const Ray& ray, RaycastHit& hit, float maxDistance
   hit.point = ray.getOrigin() + (ray.getDirection() * t);
   hit.normal = (hit.point - center).normalized();
 
+  return true;
 }

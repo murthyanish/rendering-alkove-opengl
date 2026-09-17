@@ -15,9 +15,9 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-#include "fmod/fmod.hpp"
+#include "fmod.hpp"
 #include "Vector3.h"
-#include "EventManager.h"
+#include "EventListener.h"
 
 
 class AudioEvent : public Event {
