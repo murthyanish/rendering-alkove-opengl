@@ -12,9 +12,9 @@ layout (local_size_x = 128, local_size_y = 1) in;
 layout(rgba32f, binding = 0) readonly uniform image2D imgInput;
 layout(rgba32f, binding = 1) writeonly uniform image2D imgOutput;
 
-layout(binding = 3) uniform moments {
+layout(std430, binding = 3) readonly buffer moments {
   float width;
-  float weights[101];
+  float weights[];   // unsized array ¿ the actual count comes from the buffer's size
 };
 
 shared vec4 v[128+101]; // Shared memory for the work group

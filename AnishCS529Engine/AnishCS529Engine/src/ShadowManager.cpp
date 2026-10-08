@@ -140,21 +140,20 @@ void ShadowManager::calculateMomentWeights(int width)
 {
   std::vector<float> weights;
   weights.reserve(width * 2 + 2);
-  weights.push_back(width);
+  weights.push_back(static_cast<float>(width));
 
   for (int i = -width; i < width + 1; ++i) {
     weights.push_back(
       expf(
-        -(1.0 / 2.0) *
-        powf(static_cast<float>(i) / (static_cast<float>(width) / 2.0), 2.0)));
+        -(1.0f / 2.0f) *
+        powf(static_cast<float>(i) / (static_cast<float>(width) / 2.0f), 2.0f)));
   }
 
   glGenBuffers(1, &momentUBO);
-  glBindBuffer(GL_UNIFORM_BUFFER, momentUBO);
-  glBindBufferBase(GL_UNIFORM_BUFFER, 3, momentUBO);
-  glBufferData(GL_UNIFORM_BUFFER, sizeof(float) * weights.size(), weights.data(), GL_STATIC_DRAW);
-  glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
+  glBindBuffer(GL_SHADER_STORAGE_BUFFER, momentUBO);
+  glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, momentUBO);
+  glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(float) * weights.size(), weights.data(), GL_STATIC_DRAW);
+  glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
 void ShadowManager::setMomentWidth(int width)
